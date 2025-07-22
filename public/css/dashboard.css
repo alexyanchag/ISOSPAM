@@ -1,0 +1,22 @@
+body {
+    background: linear-gradient(120deg, #0d1117, #1f2430);
+    color: #f8f9fa;
+    min-height: 100vh;
+}
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.card {
+    border: none;
+    background-color: #2c303a;
+}
+.card h5 {
+    color: #e2e8f0;
+}
+.menu-text {
+    transition: opacity 0.3s ease;
+}
+body.sidebar-collapsed .menu-text {
+    opacity: 0;
+}
