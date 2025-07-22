@@ -66,6 +66,11 @@
                     <i class="bi bi-info-circle-fill"></i> <span class="menu-text">Opción 3</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
+                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
