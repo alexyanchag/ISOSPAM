@@ -24,6 +24,7 @@ class ApiService
             $json = $response->json();
             Session::put('user', $json['persona'] ?? null);
             Session::put('token', $json['access_token'] ?? null);
+            Session::put('roles', $json['roles'] ?? []);
         }
 
         return $response;
