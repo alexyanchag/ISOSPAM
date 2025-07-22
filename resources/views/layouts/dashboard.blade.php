@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body { overflow-x: hidden; }
         main { margin-top: 56px; }
@@ -12,11 +13,18 @@
             #sidebarMenu { --bs-offcanvas-width: 220px; }
             main { margin-left: 220px; }
         }
+        body.sidebar-collapsed #sidebarMenu { --bs-offcanvas-width: 60px; }
+        body.sidebar-collapsed main { margin-left: 60px; }
+        body.sidebar-collapsed #sidebarMenu .offcanvas-title,
+        body.sidebar-collapsed #sidebarMenu .menu-text { display: none; }
     </style>
 </head>
 <body class="bg-dark text-light">
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
+        <button id="collapseToggle" class="navbar-toggler d-none d-lg-block me-2" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <button class="navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -37,10 +45,26 @@
     </div>
     <div class="offcanvas-body p-0">
         <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item"><a href="/" class="nav-link text-white">Inicio</a></li>
-            <li class="nav-item"><a href="#" class="nav-link text-white">Opción 1</a></li>
-            <li class="nav-item"><a href="#" class="nav-link text-white">Opción 2</a></li>
-            <li class="nav-item"><a href="#" class="nav-link text-white">Opción 3</a></li>
+            <li class="nav-item">
+                <a href="/" class="nav-link text-white">
+                    <i class="bi bi-house-fill"></i> <span class="menu-text">Inicio</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-grid"></i> <span class="menu-text">Opción 1</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-gear-fill"></i> <span class="menu-text">Opción 2</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-info-circle-fill"></i> <span class="menu-text">Opción 3</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -48,5 +72,10 @@
     @yield('content')
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('collapseToggle').addEventListener('click', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+</script>
 </body>
 </html>
