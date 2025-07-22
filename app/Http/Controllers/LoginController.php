@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use App\Services\ApiService;
 
 class LoginController extends Controller
 {
+    public function __construct(private ApiService $apiService)
+    {
+    }
     public function showLoginForm()
     {
         return view('login');
@@ -20,12 +23,9 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        $response = Http::post('http://186.46.31.211:9090/isospam/login', $data);
+        $response = $this->apiService->login($data);
 
         if ($response->successful()) {
-            $json = $response->json();
-            Session::put('user', $json['persona']);
-            Session::put('token', $json['access_token']);
             return redirect('/');
         }
 
