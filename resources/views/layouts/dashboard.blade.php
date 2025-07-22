@@ -52,18 +52,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-grid"></i> <span class="menu-text">Opción 1</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-gear-fill"></i> <span class="menu-text">Opción 2</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-info-circle-fill"></i> <span class="menu-text">Opción 3</span>
+                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
+                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
                 </a>
             </li>
         </ul>
