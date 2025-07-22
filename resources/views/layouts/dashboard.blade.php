@@ -32,6 +32,11 @@
         <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
         <ul class="navbar-nav flex-row ms-auto">
             @if(session('user'))
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link px-2" href="{{ route('embarcaciones.index') }}">
+                        <i class="bi bi-boat-fill"></i> Embarcaciones
+                    </a>
+                </li>
                 <li class="nav-item"><a class="nav-link px-2" href="/logout">Logout</a></li>
             @else
                 <li class="nav-item"><a class="nav-link px-2" href="/login">Login</a></li>
@@ -64,6 +69,11 @@
             <li class="nav-item">
                 <a href="#" class="nav-link text-white">
                     <i class="bi bi-info-circle-fill"></i> <span class="menu-text">Opción 3</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
+                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
                 </a>
             </li>
         </ul>
