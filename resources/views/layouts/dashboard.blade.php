@@ -1,87 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <style>
-        body { overflow-x: hidden; }
-        main { margin-top: 56px; }
-        @media (min-width: 992px) {
-            #sidebarMenu { --bs-offcanvas-width: 220px; }
-            main { margin-left: 220px; }
-        }
-        body.sidebar-collapsed #sidebarMenu { --bs-offcanvas-width: 60px; }
-        body.sidebar-collapsed main { margin-left: 60px; }
-        body.sidebar-collapsed #sidebarMenu .offcanvas-title,
-        body.sidebar-collapsed #sidebarMenu .menu-text { display: none; }
-    </style>
 </head>
-<body class="bg-dark text-light">
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <button id="collapseToggle" class="navbar-toggler d-none d-lg-block me-2" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <button class="navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
-        <ul class="navbar-nav flex-row ms-auto">
+<body class="hold-transition sidebar-mini layout-fixed dark-mode">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
             @if(session('user'))
                 <li class="nav-item d-lg-none">
-                    <a class="nav-link px-2" href="{{ route('embarcaciones.index') }}">
-                        <i class="bi bi-boat-fill"></i> Embarcaciones
+                    <a class="nav-link" href="{{ route('embarcaciones.index') }}">
+                        <i class="fas fa-ship"></i> Embarcaciones
                     </a>
                 </li>
-                <li class="nav-item"><a class="nav-link px-2" href="/logout">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
             @else
-                <li class="nav-item"><a class="nav-link px-2" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
             @endif
         </ul>
-    </div>
-</nav>
-<div id="sidebarMenu" class="offcanvas offcanvas-start offcanvas-lg bg-dark text-light" tabindex="-1">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menú</h5>
-        <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="/" class="nav-link text-white">
-                    <i class="bi bi-house-fill"></i> <span class="menu-text">Inicio</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
-                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
-                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('embarcaciones.index') }}" class="nav-link text-white">
-                    <i class="bi bi-boat-fill"></i> <span class="menu-text">Embarcaciones</span>
-                </a>
-            </li>
-        </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="/" class="brand-link">
+            <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
+        </a>
+        <div class="sidebar">
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <i class="nav-icon fas fa-home"></i>
+                            <p>Inicio</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('embarcaciones.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-ship"></i>
+                            <p>Embarcaciones</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content pt-3">
+            @yield('content')
+        </section>
     </div>
 </div>
-<main class="pt-3 pt-lg-5 px-3">
-    @yield('content')
-</main>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.getElementById('collapseToggle').addEventListener('click', () => {
-        document.body.classList.toggle('sidebar-collapsed');
-    });
-</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
 </html>
