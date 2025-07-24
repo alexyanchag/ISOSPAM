@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\ApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 class EmbarcacionController extends Controller
 {
@@ -24,7 +23,9 @@ class EmbarcacionController extends Controller
 
     public function create()
     {
-        return view('embarcaciones.form');
+        return view('embarcaciones.form', [
+            'tipos' => $this->getTiposEmbarcacion(),
+        ]);
     }
 
     public function store(Request $request)
@@ -56,6 +57,7 @@ class EmbarcacionController extends Controller
         $embarcacion = $response->json();
         return view('embarcaciones.form', [
             'embarcacion' => $embarcacion,
+            'tipos' => $this->getTiposEmbarcacion(),
         ]);
     }
 
@@ -88,5 +90,12 @@ class EmbarcacionController extends Controller
         }
 
         return back()->withErrors(['error' => 'Error al eliminar']);
+    }
+
+    private function getTiposEmbarcacion(): array
+    {
+        $response = $this->apiService->get('/tipo-embarcacion');
+
+        return $response->successful() ? $response->json() : [];
     }
 }

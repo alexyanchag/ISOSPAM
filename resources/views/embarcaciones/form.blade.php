@@ -20,8 +20,15 @@
         <input type="text" name="matricula" class="form-control" value="{{ old('matricula', $embarcacion['matricula'] ?? '') }}">
     </div>
     <div class="mb-3">
-        <label class="form-label">Tipo Embarcación ID</label>
-        <input type="number" name="tipo_embarcacion_id" class="form-control" value="{{ old('tipo_embarcacion_id', $embarcacion['tipo_embarcacion_id'] ?? '') }}">
+        <label class="form-label">Tipo Embarcación</label>
+        <select name="tipo_embarcacion_id" class="form-control">
+            <option value="">Seleccione...</option>
+            @foreach($tipos as $tipo)
+                <option value="{{ $tipo['id'] }}" @selected(old('tipo_embarcacion_id', $embarcacion['tipo_embarcacion_id'] ?? '') == $tipo['id'])>
+                    {{ $tipo['nombre'] ?? $tipo['descripcion'] ?? $tipo['id'] }}
+                </option>
+            @endforeach
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Eslora</label>
