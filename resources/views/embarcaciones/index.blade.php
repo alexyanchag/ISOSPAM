@@ -28,7 +28,7 @@
             <td>{{ $emb['nombre'] ?? '' }}</td>
             <td>{{ $emb['matricula'] ?? '' }}</td>
             <td>{{ $emb['eslora'] ?? '' }}</td>
-            <td class="text-end">
+            <td class="text-right">
                 <a href="{{ route('embarcaciones.edit', $emb['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
                 <form action="{{ route('embarcaciones.destroy', $emb['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
