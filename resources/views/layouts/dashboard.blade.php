@@ -65,6 +65,12 @@
                             <p>Puertos</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('muelles.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-water" ></i>
+                            <p>Muelles</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
