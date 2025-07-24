@@ -53,6 +53,12 @@
                             <p>Embarcaciones</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('campanias.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-bullhorn"></i>
+                            <p>Campañas</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
