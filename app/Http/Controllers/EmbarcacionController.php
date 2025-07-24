@@ -25,6 +25,7 @@ class EmbarcacionController extends Controller
     {
         return view('embarcaciones.form', [
             'tipos' => $this->getTiposEmbarcacion(),
+            'tiposMotor' => $this->getTiposMotor(),
         ]);
     }
 
@@ -58,6 +59,7 @@ class EmbarcacionController extends Controller
         return view('embarcaciones.form', [
             'embarcacion' => $embarcacion,
             'tipos' => $this->getTiposEmbarcacion(),
+            'tiposMotor' => $this->getTiposMotor(),
         ]);
     }
 
@@ -95,6 +97,13 @@ class EmbarcacionController extends Controller
     private function getTiposEmbarcacion(): array
     {
         $response = $this->apiService->get('/tipo-embarcacion');
+
+        return $response->successful() ? $response->json() : [];
+    }
+
+    private function getTiposMotor(): array
+    {
+        $response = $this->apiService->get('/tipo-motor');
 
         return $response->successful() ? $response->json() : [];
     }
