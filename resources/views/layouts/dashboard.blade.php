@@ -59,6 +59,12 @@
                             <p>Campañas</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('puertos.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-anchor"></i>
+                            <p>Puertos</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
