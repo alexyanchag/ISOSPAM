@@ -36,7 +36,14 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Tipo Motor ID</label>
-        <input type="number" name="tipo_motor_id" class="form-control" value="{{ old('tipo_motor_id', $embarcacion['tipo_motor_id'] ?? '') }}">
+        <select name="tipo_motor_id" class="form-control">
+            <option value="">Seleccione...</option>
+            @foreach($tiposMotor as $motor)
+                <option value="{{ $motor['id'] }}" @selected(old('tipo_motor_id', $embarcacion['tipo_motor_id'] ?? '') == $motor['id'])>
+                    {{ $motor['nombre'] ?? $motor['descripcion'] ?? $motor['id'] }}
+                </option>
+            @endforeach
+        </select>
     </div>
     @if($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
