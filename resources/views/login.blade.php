@@ -1,10 +1,15 @@
 @extends('layouts.app')
 
+@section('body-class', 'hold-transition login-page dark-mode')
+@section('container-class', 'login-box')
+
 @section('content')
-<div class="login-box">
-    <div class="card card-outline card-primary">
-        <div class="card-body login-card-body">
-            <p class="login-box-msg">Login</p>
+<div class="login-logo mb-2">
+    <a href="/"><b>{{ config('app.name') }}</b></a>
+</div>
+<div class="card card-outline card-primary">
+    <div class="card-body login-card-body">
+        <p class="login-box-msg">Login</p>
             <form method="POST" action="/login">
                 @csrf
                 <div class="form-group">
@@ -24,5 +29,4 @@
             </form>
         </div>
     </div>
-</div>
 @endsection

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition login-page dark-mode">
+<body class="@yield('body-class', 'hold-transition login-page dark-mode')">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
@@ -27,7 +27,7 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="@yield('container-class', 'container')">
         @yield('content')
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
