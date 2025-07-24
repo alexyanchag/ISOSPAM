@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmbarcacionController;
+use App\Http\Controllers\CampaniaController;
 
 Route::get('/', function () {
     return view('home');
@@ -14,4 +15,5 @@ Route::get('/logout', [LoginController::class, 'logout'])->middleware('ensure.lo
 
 Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('embarcaciones', EmbarcacionController::class)->except(['show']);
+    Route::resource('campanias', CampaniaController::class)->except(['show']);
 });
