@@ -77,6 +77,12 @@
                             <p>Tipos de Arte</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('tipoanzuelos.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-fish"></i>
+                            <p>Tipos de Anzuelo</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\CampaniaController;
 use App\Http\Controllers\PuertoController;
 use App\Http\Controllers\MuelleController;
 use App\Http\Controllers\TipoArteController;
+use App\Http\Controllers\TipoAnzueloController;
 
 Route::get('/', function () {
     return view('home');
@@ -22,4 +23,5 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('puertos', PuertoController::class)->except(['show']);
     Route::resource('muelles', MuelleController::class)->except(['show']);
     Route::resource('tipoartes', TipoArteController::class)->except(['show']);
+    Route::resource('tipoanzuelos', TipoAnzueloController::class)->except(['show']);
 });
