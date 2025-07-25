@@ -108,6 +108,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('tipotripulantes.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-user-friends"></i>
+                            <p>Tipos de Tripulante</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('unidadesinsumo.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-weight-hanging"></i>
                             <p>Unidades de Insumo</p>

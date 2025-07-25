@@ -13,6 +13,7 @@ use App\Http\Controllers\SitioController;
 use App\Http\Controllers\UnidadProfundidadController;
 use App\Http\Controllers\TipoInsumoController;
 use App\Http\Controllers\UnidadInsumoController;
+use App\Http\Controllers\TipoTripulanteController;
 
 Route::get('/', function () {
     return view('home');
@@ -33,5 +34,6 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('materialesmalla', MaterialMallaController::class)->except(['show']);
     Route::resource('sitios', SitioController::class)->except(['show']);
     Route::resource('unidadprofundidad', UnidadProfundidadController::class)->except(['show']);
+    Route::resource('tipotripulantes', TipoTripulanteController::class)->except(['show']);
     Route::resource('unidadesinsumo', UnidadInsumoController::class)->except(['show']);
 });
