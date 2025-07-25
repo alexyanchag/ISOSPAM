@@ -84,6 +84,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('tiposinsumo.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>Tipos de Insumo</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('materialesmalla.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-layer-group"></i>
                             <p>Materiales de Malla</p>
