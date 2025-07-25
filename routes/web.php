@@ -6,6 +6,7 @@ use App\Http\Controllers\EmbarcacionController;
 use App\Http\Controllers\CampaniaController;
 use App\Http\Controllers\PuertoController;
 use App\Http\Controllers\MuelleController;
+use App\Http\Controllers\TipoArteController;
 
 Route::get('/', function () {
     return view('home');
@@ -20,4 +21,5 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('campanias', CampaniaController::class)->except(['show']);
     Route::resource('puertos', PuertoController::class)->except(['show']);
     Route::resource('muelles', MuelleController::class)->except(['show']);
+    Route::resource('tipoartes', TipoArteController::class)->except(['show']);
 });

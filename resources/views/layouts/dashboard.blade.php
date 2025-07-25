@@ -71,6 +71,12 @@
                             <p>Muelles</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('tipoartes.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-palette"></i>
+                            <p>Tipos de Arte</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
