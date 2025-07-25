@@ -83,6 +83,12 @@
                             <p>Tipos de Anzuelo</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('materialesmalla.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-layer-group"></i>
+                            <p>Materiales de Malla</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\PuertoController;
 use App\Http\Controllers\MuelleController;
 use App\Http\Controllers\TipoArteController;
 use App\Http\Controllers\TipoAnzueloController;
+use App\Http\Controllers\MaterialMallaController;
 
 Route::get('/', function () {
     return view('home');
@@ -24,4 +25,5 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('muelles', MuelleController::class)->except(['show']);
     Route::resource('tipoartes', TipoArteController::class)->except(['show']);
     Route::resource('tipoanzuelos', TipoAnzueloController::class)->except(['show']);
+    Route::resource('materialesmalla', MaterialMallaController::class)->except(['show']);
 });
