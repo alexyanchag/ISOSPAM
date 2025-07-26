@@ -29,7 +29,7 @@ class TipoTripulanteController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre' => ['required', 'string'],
+            'descripcion' => ['required', 'string'],
         ]);
 
         $response = $this->apiService->post('/tipos-tripulante', $data);
@@ -56,7 +56,7 @@ class TipoTripulanteController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'nombre' => ['required', 'string'],
+            'descripcion' => ['required', 'string'],
         ]);
 
         $response = $this->apiService->put("/tipos-tripulante/{$id}", $data);

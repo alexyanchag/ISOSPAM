@@ -8,8 +8,8 @@
         @method('PUT')
     @endif
     <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" value="{{ old('nombre', $tipotripulante['nombre'] ?? '') }}" required>
+        <label class="form-label">Descripcion</label>
+        <input type="text" name="descripcion" class="form-control" value="{{ old('descripcion', $tipotripulante['descripcion'] ?? '') }}" required>
     </div>
     @if($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>

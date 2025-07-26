@@ -14,14 +14,14 @@
 <table class="table table-dark table-striped">
     <thead>
         <tr>
-            <th>Nombre</th>
+            <th>Descripcion</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
     @foreach($tipostripulante as $tipo)
         <tr>
-            <td>{{ $tipo['nombre'] ?? '' }}</td>
+            <td>{{ $tipo['descripcion'] ?? '' }}</td>
             <td class="text-right">
                 <a href="{{ route('tipotripulantes.edit', $tipo['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
                 <form action="{{ route('tipotripulantes.destroy', $tipo['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
