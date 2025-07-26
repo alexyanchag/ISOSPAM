@@ -126,6 +126,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('estadosmarea.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-tint"></i>
+                            <p>Estados de Marea</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('personas.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-id-card"></i>
                             <p>Personas</p>
