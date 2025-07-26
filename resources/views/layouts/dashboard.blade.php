@@ -120,6 +120,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('condicionesmar.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-water"></i>
+                            <p>Condiciones del Mar</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('personas.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-id-card"></i>
                             <p>Personas</p>
