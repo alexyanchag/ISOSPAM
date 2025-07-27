@@ -23,6 +23,7 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EstadoMareaController;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\EspecieController;
+use App\Http\Controllers\OrganizacionPesqueraController;
 
 Route::get('/', function () {
     return view('home');
@@ -54,4 +55,5 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('personas', PersonaController::class)->except(['show']);
     Route::resource('familias', FamiliaController::class)->except(['show']);
     Route::resource('especies', EspecieController::class)->except(['show']);
+    Route::resource('organizacionpesquera', OrganizacionPesqueraController::class)->except(['show']);
 });
