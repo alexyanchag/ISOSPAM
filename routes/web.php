@@ -42,6 +42,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('materialesmalla', MaterialMallaController::class)->except(['show']);
     Route::resource('sitios', SitioController::class)->except(['show']);
     Route::resource('unidadprofundidad', UnidadProfundidadController::class)->except(['show']);
+    Route::resource('unidadlongitud', UnidadLongitudController::class)->except(['show']);
     Route::resource('tipotripulantes', TipoTripulanteController::class)->except(['show']);
     Route::resource('tipomotores', TipoMotorController::class)->except(['show']);
     Route::resource('tipoobservador', TipoObservadorController::class)->except(['show']);

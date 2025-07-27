@@ -108,6 +108,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('unidadlongitud.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-ruler-horizontal"></i>
+                            <p>Unidades de Longitud</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('tipotripulantes.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-user-friends"></i>
                             <p>Tipos de Tripulante</p>
