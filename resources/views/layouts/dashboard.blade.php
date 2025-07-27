@@ -137,11 +137,28 @@
                             <p>Personas</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('familias.index') }}" class="nav-link">
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-fish"></i>
-                            <p>Familias</p>
+                            <p>
+                                Familias
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('familias.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Familias</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('especies.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Especies</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </nav>
