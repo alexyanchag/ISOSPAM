@@ -12,7 +12,7 @@
         <select name="organizacion_pesquera_id" class="form-control" required>
             <option value="">Seleccione...</option>
             @foreach($organizaciones as $org)
-                <option value="{{ $org['id'] }}" @selected(old('organizacion_pesquera_id', $asignacion['organizacion_pesquera_id'] ?? '') == $org['id'])>
+                <option value="{{ $org['id'] }}" @selected(old('organizacion_pesquera_id', $asignacion['organizacion_pesquera_id'] ?? ($selectedOrganizacion ?? '')) == $org['id'])>
                     {{ $org['nombre'] ?? $org['id'] }}
                 </option>
             @endforeach

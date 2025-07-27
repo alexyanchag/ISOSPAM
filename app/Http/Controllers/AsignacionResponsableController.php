@@ -21,11 +21,12 @@ class AsignacionResponsableController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         return view('asignacionresponsable.form', [
             'organizaciones' => $this->getOrganizaciones(),
             'personas' => $this->getPersonas(),
+            'selectedOrganizacion' => $request->query('organizacion_pesquera_id'),
         ]);
     }
 

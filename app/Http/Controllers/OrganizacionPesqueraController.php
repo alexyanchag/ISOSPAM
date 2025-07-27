@@ -52,8 +52,12 @@ class OrganizacionPesqueraController extends Controller
             abort(404);
         }
         $organizacion = $response->json();
+        $asignacionesResponse = $this->apiService->get("/asignaciones-responsables/organizacion/{$id}");
+        $asignaciones = $asignacionesResponse->successful() ? $asignacionesResponse->json() : [];
+
         return view('organizacionpesquera.form', [
             'organizacion' => $organizacion,
+            'asignaciones' => $asignaciones,
         ]);
     }
 
