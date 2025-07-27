@@ -16,6 +16,7 @@ use App\Http\Controllers\UnidadInsumoController;
 use App\Http\Controllers\CondicionMarController;
 use App\Http\Controllers\TipoTripulanteController;
 use App\Http\Controllers\TipoMotorController;
+use App\Http\Controllers\TipoObservadorController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EstadoMareaController;
 use App\Http\Controllers\FamiliaController;
@@ -42,6 +43,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('unidadprofundidad', UnidadProfundidadController::class)->except(['show']);
     Route::resource('tipotripulantes', TipoTripulanteController::class)->except(['show']);
     Route::resource('tipomotores', TipoMotorController::class)->except(['show']);
+    Route::resource('tipoobservador', TipoObservadorController::class)->except(['show']);
     Route::resource('unidadesinsumo', UnidadInsumoController::class)->except(['show']);
     Route::resource('condicionesmar', CondicionMarController::class)->except(['show']);
     Route::resource('estadosmarea', EstadoMareaController::class)->except(['show']);

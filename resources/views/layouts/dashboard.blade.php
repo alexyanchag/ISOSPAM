@@ -120,6 +120,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('tipoobservador.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-eye"></i>
+                            <p>Tipos de Observador</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('unidadesinsumo.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-weight-hanging"></i>
                             <p>Unidades de Insumo</p>
