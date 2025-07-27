@@ -132,6 +132,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('unidadventa.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-cash-register"></i>
+                            <p>Unidades de Venta</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('condicionesmar.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-water"></i>
                             <p>Condiciones del Mar</p>
