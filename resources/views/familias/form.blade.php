@@ -17,4 +17,35 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('familias.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>
+
+@isset($familia)
+    <hr>
+    <div class="d-flex justify-content-between mb-3 mt-4">
+        <h4>Peces</h4>
+        <a href="{{ route('especies.create', ['familia_id' => $familia['id']]) }}" class="btn btn-sm btn-primary">Nuevo Pez</a>
+    </div>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th class="text-right"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($especies ?? [] as $esp)
+                <tr>
+                    <td>{{ $esp['nombre'] ?? '' }}</td>
+                    <td class="text-right">
+                        <a href="{{ route('especies.edit', $esp['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                        <form action="{{ route('especies.destroy', $esp['id']) }}?familia_id={{ $familia['id'] }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endisset
 @endsection

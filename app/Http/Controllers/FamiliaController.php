@@ -48,8 +48,14 @@ class FamiliaController extends Controller
             abort(404);
         }
         $familia = $response->json();
+        $respEspecies = $this->apiService->get('/especies/por-familia', [
+            'familia_id' => $id,
+        ]);
+        $especies = $respEspecies->successful() ? $respEspecies->json() : [];
+
         return view('familias.form', [
             'familia' => $familia,
+            'especies' => $especies,
         ]);
     }
 
