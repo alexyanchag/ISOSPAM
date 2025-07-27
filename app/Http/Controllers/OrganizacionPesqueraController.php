@@ -34,6 +34,8 @@ class OrganizacionPesqueraController extends Controller
             'es_red_issopam' => ['required', 'boolean'],
         ]);
 
+        $data['es_red_issopam'] = (bool) $data['es_red_issopam'];
+
         $response = $this->apiService->post('/organizacion-pesquera', $data);
 
         if ($response->successful()) {
@@ -62,6 +64,8 @@ class OrganizacionPesqueraController extends Controller
             'zona' => ['required', 'string'],
             'es_red_issopam' => ['required', 'boolean'],
         ]);
+
+        $data['es_red_issopam'] = (bool) $data['es_red_issopam'];
 
         $response = $this->apiService->put("/organizacion-pesquera/{$id}", $data);
 
