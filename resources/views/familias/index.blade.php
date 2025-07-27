@@ -24,6 +24,7 @@
             <td>{{ $familia['nombre'] ?? '' }}</td>
             <td class="text-right">
                 <a href="{{ route('familias.edit', $familia['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('especies.index', ['familia_id' => $familia['id']]) }}" class="btn btn-sm btn-info">Especies</a>
                 <form action="{{ route('familias.destroy', $familia['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')

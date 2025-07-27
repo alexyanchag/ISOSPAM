@@ -18,6 +18,7 @@ use App\Http\Controllers\TipoTripulanteController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EstadoMareaController;
 use App\Http\Controllers\FamiliaController;
+use App\Http\Controllers\EspecieController;
 
 Route::get('/', function () {
     return view('home');
@@ -44,4 +45,5 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('estadosmarea', EstadoMareaController::class)->except(['show']);
     Route::resource('personas', PersonaController::class)->except(['show']);
     Route::resource('familias', FamiliaController::class)->except(['show']);
+    Route::resource('especies', EspecieController::class)->except(['show']);
 });
