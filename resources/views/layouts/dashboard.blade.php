@@ -156,6 +156,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('organizacionpesquera.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-sitemap"></i>
+                            <p>Organizaciones Pesqueras</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('estadodesarrollogonadal.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-heart"></i>
                             <p>Estado Des. Gonadal</p>
