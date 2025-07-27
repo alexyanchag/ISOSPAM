@@ -173,6 +173,12 @@
                             <p>Personas</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('asignacionresponsable.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-user-tie"></i>
+                            <p>Asignar Responsable</p>
+                        </a>
+                    </li>
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-fish"></i>
