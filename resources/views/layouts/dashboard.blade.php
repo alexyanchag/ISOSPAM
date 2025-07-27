@@ -114,6 +114,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('tipomotores.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-industry"></i>
+                            <p>Tipos de Motor</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('unidadesinsumo.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-weight-hanging"></i>
                             <p>Unidades de Insumo</p>
