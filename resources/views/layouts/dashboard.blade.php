@@ -137,6 +137,12 @@
                             <p>Personas</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('familias.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-fish"></i>
+                            <p>Familias</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
