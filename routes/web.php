@@ -11,6 +11,7 @@ use App\Http\Controllers\TipoAnzueloController;
 use App\Http\Controllers\MaterialMallaController;
 use App\Http\Controllers\SitioController;
 use App\Http\Controllers\UnidadProfundidadController;
+use App\Http\Controllers\UnidadLongitudController;
 use App\Http\Controllers\TipoInsumoController;
 use App\Http\Controllers\UnidadInsumoController;
 use App\Http\Controllers\UnidadVentaController;
@@ -42,6 +43,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('materialesmalla', MaterialMallaController::class)->except(['show']);
     Route::resource('sitios', SitioController::class)->except(['show']);
     Route::resource('unidadprofundidad', UnidadProfundidadController::class)->except(['show']);
+    Route::resource('unidadlongitud', UnidadLongitudController::class)->except(['show']);
     Route::resource('tipotripulantes', TipoTripulanteController::class)->except(['show']);
     Route::resource('tipomotores', TipoMotorController::class)->except(['show']);
     Route::resource('tipoobservador', TipoObservadorController::class)->except(['show']);
