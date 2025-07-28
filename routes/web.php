@@ -27,6 +27,10 @@ use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\EspecieController;
 use App\Http\Controllers\OrganizacionPesqueraController;
 use App\Http\Controllers\AsignacionResponsableController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\RolMenuController;
+use App\Http\Controllers\RolPersonaController;
 
 Route::get('/', function () {
     return view('home');
@@ -62,4 +66,14 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('especies', EspecieController::class)->except(['show']);
     Route::resource('organizacionpesquera', OrganizacionPesqueraController::class)->except(['show']);
     Route::resource('asignacionresponsable', AsignacionResponsableController::class)->except(['show']);
+
+    Route::resource('menus', MenuController::class)->except(['show']);
+    Route::resource('roles', RolController::class)->except(['show']);
+    Route::get('rolmenu/{idrol}/{idmenu}/edit', [RolMenuController::class, 'edit'])->name('rolmenu.edit');
+    Route::put('rolmenu/{idrol}/{idmenu}', [RolMenuController::class, 'update'])->name('rolmenu.update');
+    Route::delete('rolmenu/{idrol}/{idmenu}', [RolMenuController::class, 'destroy'])->name('rolmenu.destroy');
+    Route::resource('rolmenu', RolMenuController::class)->only(['index', 'create', 'store']);
+
+    Route::delete('rolpersona/{idpersona}/{idrol}', [RolPersonaController::class, 'destroy'])->name('rolpersona.destroy');
+    Route::resource('rolpersona', RolPersonaController::class)->only(['index', 'create', 'store']);
 });
