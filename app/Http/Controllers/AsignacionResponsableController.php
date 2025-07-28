@@ -56,6 +56,12 @@ class AsignacionResponsableController extends Controller
             abort(404);
         }
         $asignacion = $response->json();
+        if (isset($asignacion[0]) && is_array($asignacion[0])) {
+            $asignacion = $asignacion[0];
+        }
+        if (! is_array($asignacion)) {
+            abort(404);
+        }
 
         return view('asignacionresponsable.form', [
             'asignacion' => $asignacion,
