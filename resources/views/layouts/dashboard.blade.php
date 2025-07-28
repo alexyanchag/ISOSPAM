@@ -155,11 +155,28 @@
                             <p>Estados de Marea</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('organizacionpesquera.index') }}" class="nav-link">
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-sitemap"></i>
-                            <p>Organizaciones Pesqueras</p>
+                            <p>
+                                Organizaciones Pesqueras
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('organizacionpesquera.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Organizaciones</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('asignacionresponsable.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Asignar Responsable</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('estadodesarrollogonadal.index') }}" class="nav-link">
