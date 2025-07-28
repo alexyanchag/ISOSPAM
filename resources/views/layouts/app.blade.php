@@ -11,16 +11,16 @@
 <body class="@yield('body-class', 'hold-transition login-page dark-mode')">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/">{{ config('app.name', 'Laravel') }}</a>
+            <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
                     @if(session('user'))
                         <li class="nav-item">
-                            <a class="nav-link" href="/logout">Logout</a>
+                            <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="{{ url('/logout') }}">Login</a>
                         </li>
                     @endif
                 </ul>

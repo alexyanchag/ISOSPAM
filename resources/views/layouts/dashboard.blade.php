@@ -25,9 +25,9 @@
                         <i class="fas fa-ship"></i> Embarcaciones
                     </a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/logout') }}">Logout</a></li>
             @else
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
             @endif
         </ul>
     </nav>
@@ -35,7 +35,7 @@
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="/" class="brand-link">
+        <a href="{{ url('/') }}" class="brand-link">
             <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
         </a>
         <div class="sidebar">

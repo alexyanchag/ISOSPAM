@@ -10,7 +10,7 @@
 <div class="card card-outline card-primary">
     <div class="card-body login-card-body">
         <p class="login-box-msg">Login</p>
-            <form method="POST" action="/login">
+            <form method="POST" action="{{ url('/login') }}">
                 @csrf
                 <div class="form-group">
                     <label for="username">Usuario</label>
