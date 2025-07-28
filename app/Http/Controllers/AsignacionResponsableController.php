@@ -11,22 +11,39 @@ class AsignacionResponsableController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $response = $this->apiService->get('/asignaciones-responsables');
+        $organizacionId = $request->query('organizacion_pesquera_id');
+        if ($organizacionId) {
+            $response = $this->apiService->get("/asignaciones-responsables/organizacion/{$organizacionId}");
+        } else {
+            $response = $this->apiService->get('/asignaciones-responsables');
+        }
         $asignaciones = $response->successful() ? $response->json() : [];
+
+        $organizacion = null;
+        if ($organizacionId) {
+            $respOrg = $this->apiService->get("/organizacion-pesquera/{$organizacionId}");
+            if ($respOrg->successful()) {
+                $organizacion = $respOrg->json();
+            }
+        }
 
         return view('asignacionresponsable.index', [
             'asignaciones' => $asignaciones,
+            'organizacionId' => $organizacionId,
+            'organizacion' => $organizacion,
         ]);
     }
 
     public function create(Request $request)
     {
+        $orgId = $request->query('organizacion_pesquera_id');
         return view('asignacionresponsable.form', [
             'organizaciones' => $this->getOrganizaciones(),
             'personas' => $this->getPersonas(),
-            'selectedOrganizacion' => $request->query('organizacion_pesquera_id'),
+            'selectedOrganizacion' => $orgId,
+            'organizacionId' => $orgId,
         ]);
     }
 
@@ -43,7 +60,10 @@ class AsignacionResponsableController extends Controller
         $response = $this->apiService->post('/asignaciones-responsables', $data);
 
         if ($response->successful()) {
-            return redirect()->route('asignacionresponsable.index')->with('success', 'Asignación creada correctamente');
+            $redirect = $data['organizacion_pesquera_id']
+                ? route('asignacionresponsable.index', ['organizacion_pesquera_id' => $data['organizacion_pesquera_id']])
+                : route('asignacionresponsable.index');
+            return redirect($redirect)->with('success', 'Asignación creada correctamente');
         }
 
         return back()->withErrors(['error' => 'Error al crear'])->withInput();
@@ -67,6 +87,7 @@ class AsignacionResponsableController extends Controller
             'asignacion' => $asignacion,
             'organizaciones' => $this->getOrganizaciones(),
             'personas' => $this->getPersonas(),
+            'organizacionId' => $asignacion['organizacion_pesquera_id'] ?? null,
         ]);
     }
 
@@ -83,18 +104,25 @@ class AsignacionResponsableController extends Controller
         $response = $this->apiService->put("/asignaciones-responsables/{$id}", $data);
 
         if ($response->successful()) {
-            return redirect()->route('asignacionresponsable.index')->with('success', 'Asignación actualizada correctamente');
+            $redirect = $data['organizacion_pesquera_id']
+                ? route('asignacionresponsable.index', ['organizacion_pesquera_id' => $data['organizacion_pesquera_id']])
+                : route('asignacionresponsable.index');
+            return redirect($redirect)->with('success', 'Asignación actualizada correctamente');
         }
 
         return back()->withErrors(['error' => 'Error al actualizar'])->withInput();
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        $organizacionId = $request->query('organizacion_pesquera_id');
         $response = $this->apiService->delete("/asignaciones-responsables/{$id}");
 
         if ($response->successful()) {
-            return redirect()->route('asignacionresponsable.index')->with('success', 'Asignación eliminada');
+            $redirect = $organizacionId
+                ? route('asignacionresponsable.index', ['organizacion_pesquera_id' => $organizacionId])
+                : route('asignacionresponsable.index');
+            return redirect($redirect)->with('success', 'Asignación eliminada');
         }
 
         return back()->withErrors(['error' => 'Error al eliminar']);
