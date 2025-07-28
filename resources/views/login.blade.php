@@ -5,7 +5,9 @@
 
 @section('content')
 <div class="login-logo mb-2">
-    <a href="/"><b>{{ config('app.name') }}</b></a>
+    <a href="/">
+        <img src="{{ asset('images/Isospam-Logotipo_Blanco_Celeste.png') }}" alt="{{ config('app.name') }}" class="img-fluid" style="max-height: 100px;">
+    </a>
 </div>
 <div class="card card-outline card-primary">
     <div class="card-body login-card-body">
