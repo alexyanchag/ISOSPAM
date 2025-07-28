@@ -45,6 +45,10 @@
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="{{ route('asignacionresponsable.index') }}" class="btn btn-secondary">Cancelar</a>
+    @if($organizacionId)
+        <a href="{{ route('asignacionresponsable.index', ['organizacion_pesquera_id' => $organizacionId]) }}" class="btn btn-secondary">Cancelar</a>
+    @else
+        <a href="{{ route('asignacionresponsable.index') }}" class="btn btn-secondary">Cancelar</a>
+    @endif
 </form>
 @endsection

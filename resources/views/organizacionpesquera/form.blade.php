@@ -52,8 +52,8 @@
                     <td>{{ $asignacion['fecha_fin'] ?? '' }}</td>
                     <td>{{ $asignacion['estado'] ?? '' }}</td>
                     <td class="text-right">
-                        <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
-                        <form action="{{ route('asignacionresponsable.destroy', $asignacion['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                        <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}?organizacion_pesquera_id={{ $organizacion['id'] }}" class="btn btn-sm btn-secondary">Editar</a>
+                        <form action="{{ route('asignacionresponsable.destroy', $asignacion['id']) }}?organizacion_pesquera_id={{ $organizacion['id'] }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
