@@ -48,12 +48,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('embarcaciones.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-ship"></i>
-                            <p>Embarcaciones</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="{{ route('campanias.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-bullhorn"></i>
                             <p>Campañas</p>
@@ -125,11 +119,28 @@
                             <p>Tipos de Motor</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('tipoembarcaciones.index') }}" class="nav-link">
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-ship"></i>
-                            <p>Tipos de Embarcación</p>
+                            <p>
+                                Tipos de Embarcación
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('tipoembarcaciones.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tipos de Embarcación</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('embarcaciones.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Embarcaciones</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('tipoobservador.index') }}" class="nav-link">
