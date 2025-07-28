@@ -126,6 +126,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('tipoembarcaciones.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-ship"></i>
+                            <p>Tipos de Embarcación</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('tipoobservador.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-eye"></i>
                             <p>Tipos de Observador</p>
