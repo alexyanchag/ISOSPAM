@@ -35,8 +35,8 @@
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="{{ url('/') }}" class="brand-link">
-            <span class="brand-text font-weight-light">{{ config('app.name', 'Laravel') }}</span>
+        <a href="{{ url('/') }}" class="brand-link text-center">
+            <img src="{{ asset('images/Isospam-Logotipo_Blanco_Celeste.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="img-fluid" style="max-height: 40px;">
         </a>
         <div class="sidebar">
             <nav class="mt-2">
