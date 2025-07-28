@@ -48,8 +48,12 @@ class TipoEmbarcacionController extends Controller
             abort(404);
         }
         $tipo = $response->json();
+        $embarcacionesResponse = $this->apiService->get("/embarcaciones/tipo/{$id}");
+        $embarcaciones = $embarcacionesResponse->successful() ? $embarcacionesResponse->json() : [];
+
         return view('tipoembarcacion.form', [
             'tipoembarcacion' => $tipo,
+            'embarcaciones' => $embarcaciones,
         ]);
     }
 
