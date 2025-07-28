@@ -16,7 +16,7 @@
         <tr>
             <th>Nombre</th>
             <th>Zona</th>
-            <th>Es Red ISSOPAM</th>
+            <th>Es Red ISOSPAM</th>
             <th></th>
         </tr>
     </thead>

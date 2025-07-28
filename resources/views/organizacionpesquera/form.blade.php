@@ -18,7 +18,7 @@
     <div class="mb-3 form-check">
         <input type="hidden" name="es_red_issopam" value="0" />
         <input type="checkbox" name="es_red_issopam" value="1" class="form-check-input" id="es_red" {{ old('es_red_issopam', $organizacion['es_red_issopam'] ?? false) ? 'checked' : '' }}>
-        <label class="form-check-label" for="es_red">Pertenece a Red ISSOPAM</label>
+        <label class="form-check-label" for="es_red">Pertenece a Red ISOSPAM</label>
     </div>
     @if($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
