@@ -54,11 +54,22 @@
                             <p>Campañas</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('viajes.index') }}" class="nav-link">
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-route"></i>
-                            <p>Viajes</p>
+                            <p>
+                                Gesti&oacute;n de Viajes
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('viajes.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Viaje</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('puertos.index') }}" class="nav-link">
