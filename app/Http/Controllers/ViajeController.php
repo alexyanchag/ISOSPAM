@@ -123,6 +123,25 @@ class ViajeController extends Controller
         return back()->withErrors(['error' => 'Error al eliminar']);
     }
 
+    public function misPorFinalizar(Request $request)
+    {
+        $digitadorId = $request->query('digitador_id');
+
+        $digitadores = $this->getPersonasPorRol('CTF');
+
+        $viajes = [];
+        if ($digitadorId) {
+            $response = $this->apiService->get("/viajes/por-finalizar/{$digitadorId}");
+            $viajes = $response->successful() ? $response->json() : [];
+        }
+
+        return view('viajes.mis-por-finalizar', [
+            'viajes' => $viajes,
+            'digitadores' => $digitadores,
+            'digitadorId' => $digitadorId,
+        ]);
+    }
+
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');
