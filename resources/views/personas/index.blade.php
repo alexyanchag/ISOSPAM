@@ -1,25 +1,28 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="d-flex justify-content-between mb-3">
-    <h3>Personas</h3>
-    <a href="{{ route('personas.create') }}" class="btn btn-primary">Nueva</a>
-</div>
-<form method="GET" action="{{ route('personas.index') }}" class="mb-3">
-    <div class="input-group">
-        <input type="text" name="filtro" class="form-control" placeholder="Buscar" value="{{ $filtro }}">
-        <div class="input-group-append">
-            <button class="btn btn-secondary">Buscar</button>
-        </div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Personas</h3>
+        <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm">Nueva</a>
     </div>
-</form>
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if($errors->any())
-    <div class="alert alert-danger">{{ $errors->first() }}</div>
-@endif
-<table class="table table-dark table-striped">
+    <div class="card-body">
+        <form method="GET" action="{{ route('personas.index') }}" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="filtro" class="form-control" placeholder="Buscar" value="{{ $filtro }}">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary">Buscar</button>
+                </div>
+            </div>
+        </form>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if($errors->any())
+            <div class="alert alert-danger">{{ $errors->first() }}</div>
+        @endif
+        <div class="table-responsive">
+            <table class="table table-dark table-striped mb-0">
     <thead>
         <tr>
             <th>Identificación</th>
@@ -49,6 +52,12 @@
         </tr>
     @endforeach
     </tbody>
-</table>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-right">
+        <small class="text-muted mb-0">Total: {{ count($personas) }}</small>
+    </div>
+</div>
 @endsection
 
