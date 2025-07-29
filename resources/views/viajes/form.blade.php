@@ -121,6 +121,8 @@
     $(function() {
         $('#responsable-select').select2({
             width: '100%',
+            placeholder: 'Seleccione...',
+            allowClear: true,
             ajax: {
                 url: "{{ route('ajax.personas') }}",
                 dataType: 'json',
@@ -135,6 +137,8 @@
 
         $('#digitador-select').select2({
             width: '100%',
+            placeholder: 'Seleccione...',
+            allowClear: true,
             ajax: {
                 url: "{{ route('ajax.personas') }}",
                 dataType: 'json',
