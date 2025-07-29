@@ -1,30 +1,33 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="d-flex justify-content-between mb-3">
-    <h3>Viajes</h3>
-    <a href="{{ route('viajes.create') }}" class="btn btn-primary">Nuevo</a>
-</div>
-<form method="GET" action="{{ route('viajes.index') }}" class="mb-3">
-    <div class="form-row">
-        <div class="col">
-            <input type="date" name="fecha_inicio" class="form-control" value="{{ $fechaInicio }}">
-        </div>
-        <div class="col">
-            <input type="date" name="fecha_fin" class="form-control" value="{{ $fechaFin }}">
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-secondary">Filtrar</button>
-        </div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Viajes</h3>
+        <a href="{{ route('viajes.create') }}" class="btn btn-primary btn-sm">Nuevo</a>
     </div>
-</form>
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if($errors->any())
-    <div class="alert alert-danger">{{ $errors->first() }}</div>
-@endif
-<table class="table table-dark table-striped">
+    <div class="card-body">
+        <form method="GET" action="{{ route('viajes.index') }}" class="mb-3">
+            <div class="form-row">
+                <div class="col">
+                    <input type="date" name="fecha_inicio" class="form-control" value="{{ $fechaInicio }}">
+                </div>
+                <div class="col">
+                    <input type="date" name="fecha_fin" class="form-control" value="{{ $fechaFin }}">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-secondary">Filtrar</button>
+                </div>
+            </div>
+        </form>
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if($errors->any())
+            <div class="alert alert-danger">{{ $errors->first() }}</div>
+        @endif
+        <div class="table-responsive">
+            <table class="table table-dark table-striped mb-0">
     <thead>
         <tr>
             <th>Fecha Zarpe</th>
@@ -58,5 +61,8 @@
         </tr>
     @endforeach
     </tbody>
-</table>
+            </table>
+        </div>
+    </div>
+</div>
 @endsection
