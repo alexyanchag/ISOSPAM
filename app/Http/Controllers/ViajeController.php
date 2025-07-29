@@ -161,7 +161,10 @@ class ViajeController extends Controller
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
         if ($response->failed()) {
-            return back()->withErrors(['error' => 'Error al actualizar'])->withInput();
+            return redirect()
+                ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                ->withErrors(['error' => 'Error al actualizar'])
+                ->withInput();
         }
 
         $final = $this->apiService->post("/viajes/{$id}/finalizar");
@@ -171,9 +174,12 @@ class ViajeController extends Controller
                 ->with('success', 'Viaje finalizado correctamente');
         }
 
-        return back()->withErrors(['error' => 'Error al finalizar'])->withInput();
+        return redirect()
+            ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+            ->withErrors(['error' => 'Error al finalizar'])
+            ->withInput();
     }
-  
+
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');

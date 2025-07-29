@@ -52,7 +52,7 @@
                         <td>{{ $v['campania_descripcion'] ?? '' }}</td>
                         <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
                         <td class="text-right">
-                            <a href="{{ route('viajes.edit', $v['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                            <a href="{{ route('viajes.edit', ['viaje' => $v['id'], 'por_finalizar' => 1]) }}" class="btn btn-sm btn-secondary">Editar</a>
                         </td>
                     </tr>
                 @endforeach
