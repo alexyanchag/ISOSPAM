@@ -1,12 +1,16 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<h3>{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
-<form method="POST" action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
-    @csrf
-    @if(isset($viaje))
-        @method('PUT')
-    @endif
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title mb-0">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
+    </div>
+    <div class="card-body">
+    <form method="POST" action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
+        @csrf
+        @if(isset($viaje))
+            @method('PUT')
+        @endif
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label">Fecha Zarpe</label>
@@ -107,7 +111,9 @@
     @endif
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
-</form>
+    </form>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
