@@ -56,7 +56,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Responsable</label>
-        <select name="persona_idpersona" class="form-control">
+        <select name="persona_idpersona" class="form-control select2">
             <option value="">Seleccione...</option>
             @foreach($responsables as $per)
                 <option value="{{ $per['idpersona'] }}" @selected(old('persona_idpersona', $viaje['persona_idpersona'] ?? '') == $per['idpersona'])>{{ $per['nombres'] ?? '' }} {{ $per['apellidos'] ?? '' }}</option>
@@ -74,7 +74,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Digitador</label>
-        <select name="digitador_id" class="form-control">
+        <select name="digitador_id" class="form-control select2">
             <option value="">Seleccione...</option>
             @foreach($digitadores as $d)
                 <option value="{{ $d['idpersona'] }}" @selected(old('digitador_id', $viaje['digitador_id'] ?? '') == $d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
@@ -96,4 +96,12 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({width: '100%'});
+    });
+</script>
 @endsection
