@@ -31,6 +31,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\RolMenuController;
 use App\Http\Controllers\RolPersonaController;
+use App\Http\Controllers\ViajeController;
 
 Route::get('/', function () {
     return view('home');
@@ -66,6 +67,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('especies', EspecieController::class)->except(['show']);
     Route::resource('organizacionpesquera', OrganizacionPesqueraController::class)->except(['show']);
     Route::resource('asignacionresponsable', AsignacionResponsableController::class)->except(['show']);
+    Route::resource('viajes', ViajeController::class)->except(['show']);
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
