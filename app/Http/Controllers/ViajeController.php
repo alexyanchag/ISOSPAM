@@ -44,18 +44,18 @@ class ViajeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'fecha_zarpe' => ['nullable', 'date'],
-            'hora_zarpe' => ['nullable'],
+            'fecha_zarpe' => ['required', 'date'],
+            'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date'],
             'hora_arribo' => ['nullable'],
-            'observaciones' => ['nullable', 'string'],
+            'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
             'puerto_zarpe_id' => ['nullable', 'integer'],
             'puerto_arribo_id' => ['nullable', 'integer'],
-            'persona_idpersona' => ['nullable', 'integer'],
-            'embarcacion_id' => ['nullable', 'integer'],
-            'digitador_id' => ['nullable', 'integer'],
-            'campania_id' => ['nullable', 'integer'],
+            'persona_idpersona' => ['required', 'integer'],
+            'embarcacion_id' => ['required', 'integer'],
+            'digitador_id' => ['required', 'integer'],
+            'campania_id' => ['required', 'integer'],
         ]);
 
         $response = $this->apiService->post('/viajes', $data);
@@ -89,18 +89,18 @@ class ViajeController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'fecha_zarpe' => ['nullable', 'date'],
-            'hora_zarpe' => ['nullable'],
+            'fecha_zarpe' => ['required', 'date'],
+            'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date'],
             'hora_arribo' => ['nullable'],
-            'observaciones' => ['nullable', 'string'],
+            'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
             'puerto_zarpe_id' => ['nullable', 'integer'],
             'puerto_arribo_id' => ['nullable', 'integer'],
-            'persona_idpersona' => ['nullable', 'integer'],
-            'embarcacion_id' => ['nullable', 'integer'],
-            'digitador_id' => ['nullable', 'integer'],
-            'campania_id' => ['nullable', 'integer'],
+            'persona_idpersona' => ['required', 'integer'],
+            'embarcacion_id' => ['required', 'integer'],
+            'digitador_id' => ['required', 'integer'],
+            'campania_id' => ['required', 'integer'],
         ]);
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
