@@ -95,7 +95,7 @@ class ViajeController extends Controller
             'hora_arribo' => ['nullable'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
-            'puerto_zarpe_id' => ['nullable', 'integer'],
+            'puerto_zarpe_id' => ['required', 'integer'],
             'puerto_arribo_id' => ['nullable', 'integer'],
             'persona_idpersona' => ['required', 'integer'],
             'embarcacion_id' => ['required', 'integer'],
