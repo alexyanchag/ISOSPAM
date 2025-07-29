@@ -119,6 +119,11 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Guardar</button>
+                @isset($viaje)
+                    @if(request()->boolean('por_finalizar'))
+                        <button type="submit" formaction="{{ route('viajes.por-finalizar.update', $viaje['id']) }}" class="btn btn-warning">Finalizar</button>
+                    @endif
+                @endisset
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </div>

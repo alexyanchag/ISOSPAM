@@ -123,6 +123,63 @@ class ViajeController extends Controller
         return back()->withErrors(['error' => 'Error al eliminar']);
     }
 
+    public function misPorFinalizar(Request $request)
+    {
+        $digitadorId = $request->query('digitador_id');
+
+        $digitadores = $this->getPersonasPorRol('CTF');
+
+        $viajes = [];
+        if ($digitadorId) {
+            $response = $this->apiService->get("/viajes/por-finalizar/{$digitadorId}");
+            $viajes = $response->successful() ? $response->json() : [];
+        }
+
+        return view('viajes.mis-por-finalizar', [
+            'viajes' => $viajes,
+            'digitadores' => $digitadores,
+            'digitadorId' => $digitadorId,
+        ]);
+    }
+
+    public function updatePorFinalizar(Request $request, string $id)
+    {
+        $data = $request->validate([
+            'fecha_zarpe' => ['required', 'date'],
+            'hora_zarpe' => ['required'],
+            'fecha_arribo' => ['required', 'date'],
+            'hora_arribo' => ['required'],
+            'observaciones' => ['required', 'string'],
+            'muelle_id' => ['nullable', 'integer'],
+            'puerto_zarpe_id' => ['required', 'integer'],
+            'puerto_arribo_id' => ['required', 'integer'],
+            'persona_idpersona' => ['required', 'integer'],
+            'embarcacion_id' => ['required', 'integer'],
+            'digitador_id' => ['required', 'integer'],
+            'campania_id' => ['required', 'integer'],
+        ]);
+
+        $response = $this->apiService->put("/viajes/{$id}", $data);
+        if ($response->failed()) {
+            return redirect()
+                ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                ->withErrors(['error' => 'Error al actualizar'])
+                ->withInput();
+        }
+
+        $final = $this->apiService->post("/viajes/{$id}/finalizar");
+        if ($final->successful()) {
+            return redirect()
+                ->route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']])
+                ->with('success', 'Viaje finalizado correctamente');
+        }
+
+        return redirect()
+            ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+            ->withErrors(['error' => 'Error al finalizar'])
+            ->withInput();
+    }
+
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');

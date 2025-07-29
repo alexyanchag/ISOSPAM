@@ -69,6 +69,12 @@
                                     <p>Viaje</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('viajes.mis-por-finalizar') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Mis viajes por finalizar</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
