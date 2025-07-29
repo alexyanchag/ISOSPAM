@@ -2,9 +2,11 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title mb-0">Personas</h3>
-        <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm">Nueva</a>
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h3 class="card-title mb-0">Personas</h3>
+            <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm ms-auto">Nueva</a>
+        </div>
     </div>
     <div class="card-body">
         <form method="GET" action="{{ route('personas.index') }}" class="mb-3">
