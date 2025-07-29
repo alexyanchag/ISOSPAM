@@ -98,4 +98,21 @@ class PersonaController extends Controller
 
         return back()->withErrors(['error' => 'Error al eliminar']);
     }
+
+    public function buscarPorRol(Request $request)
+    {
+        $rol = $request->query('rol');
+        $filtro = $request->query('filtro');
+        if (! $rol) {
+            return response()->json([]);
+        }
+
+        $resp = $this->apiService->get("/buscar-personas/{$rol}", [
+            'filtro' => $filtro,
+        ]);
+
+        $data = $resp->successful() ? $resp->json() : [];
+
+        return response()->json($data);
+    }
 }
