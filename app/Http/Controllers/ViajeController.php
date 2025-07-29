@@ -89,23 +89,34 @@ class ViajeController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'fecha_zarpe' => ['nullable', 'date'],
-            'hora_zarpe' => ['nullable'],
-            'fecha_arribo' => ['nullable', 'date'],
-            'hora_arribo' => ['nullable'],
-            'observaciones' => ['nullable', 'string'],
+            'fecha_zarpe' => ['required', 'date'],
+            'hora_zarpe' => ['required'],
+            'fecha_arribo' => ['required', 'date'],
+            'hora_arribo' => ['required'],
+            'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
-            'puerto_zarpe_id' => ['nullable', 'integer'],
-            'puerto_arribo_id' => ['nullable', 'integer'],
-            'persona_idpersona' => ['nullable', 'integer'],
-            'embarcacion_id' => ['nullable', 'integer'],
-            'digitador_id' => ['nullable', 'integer'],
-            'campania_id' => ['nullable', 'integer'],
+            'puerto_zarpe_id' => ['required', 'integer'],
+            'puerto_arribo_id' => ['required', 'integer'],
+            'persona_idpersona' => ['required', 'integer'],
+            'embarcacion_id' => ['required', 'integer'],
+            'digitador_id' => ['required', 'integer'],
+            'campania_id' => ['required', 'integer'],
         ]);
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
 
         if ($response->successful()) {
+            if ($request->has('finalizar')) {
+                $final = $this->apiService->post("/viajes/{$id}/finalizar");
+                if ($final->failed()) {
+                    return back()->withErrors(['error' => 'Error al finalizar'])->withInput();
+                }
+
+                return redirect()
+                    ->route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']])
+                    ->with('success', 'Viaje finalizado correctamente');
+            }
+
             return redirect()->route('viajes.index')->with('success', 'Viaje actualizado correctamente');
         }
 
@@ -121,6 +132,25 @@ class ViajeController extends Controller
         }
 
         return back()->withErrors(['error' => 'Error al eliminar']);
+    }
+
+    public function misPorFinalizar(Request $request)
+    {
+        $digitadorId = $request->query('digitador_id');
+
+        $digitadores = $this->getPersonasPorRol('CTF');
+
+        $viajes = [];
+        if ($digitadorId) {
+            $response = $this->apiService->get("/viajes/por-finalizar/{$digitadorId}");
+            $viajes = $response->successful() ? $response->json() : [];
+        }
+
+        return view('viajes.mis-por-finalizar', [
+            'viajes' => $viajes,
+            'digitadores' => $digitadores,
+            'digitadorId' => $digitadorId,
+        ]);
     }
 
     private function getMuelles(): array
