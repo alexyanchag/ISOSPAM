@@ -142,6 +142,38 @@ class ViajeController extends Controller
         ]);
     }
 
+    public function updatePorFinalizar(Request $request, string $id)
+    {
+        $data = $request->validate([
+            'fecha_zarpe' => ['required', 'date'],
+            'hora_zarpe' => ['required'],
+            'fecha_arribo' => ['required', 'date'],
+            'hora_arribo' => ['required'],
+            'observaciones' => ['required', 'string'],
+            'muelle_id' => ['nullable', 'integer'],
+            'puerto_zarpe_id' => ['required', 'integer'],
+            'puerto_arribo_id' => ['required', 'integer'],
+            'persona_idpersona' => ['required', 'integer'],
+            'embarcacion_id' => ['required', 'integer'],
+            'digitador_id' => ['required', 'integer'],
+            'campania_id' => ['required', 'integer'],
+        ]);
+
+        $response = $this->apiService->put("/viajes/{$id}", $data);
+        if ($response->failed()) {
+            return back()->withErrors(['error' => 'Error al actualizar'])->withInput();
+        }
+
+        $final = $this->apiService->post("/viajes/{$id}/finalizar");
+        if ($final->successful()) {
+            return redirect()
+                ->route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']])
+                ->with('success', 'Viaje finalizado correctamente');
+        }
+
+        return back()->withErrors(['error' => 'Error al finalizar'])->withInput();
+    }
+  
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');

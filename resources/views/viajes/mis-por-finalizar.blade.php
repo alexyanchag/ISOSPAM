@@ -38,6 +38,7 @@
                         <th>Embarcación</th>
                         <th>Campaña</th>
                         <th>Responsable</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,9 @@
                         <td>{{ $v['embarcacion_nombre'] ?? '' }}</td>
                         <td>{{ $v['campania_descripcion'] ?? '' }}</td>
                         <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
+                        <td class="text-right">
+                            <a href="{{ route('viajes.edit', $v['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
