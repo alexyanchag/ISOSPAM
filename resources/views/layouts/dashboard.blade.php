@@ -54,6 +54,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('viajes.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-route"></i>
+                            <p>Viajes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('puertos.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-anchor"></i>
                             <p>Puertos</p>
