@@ -56,7 +56,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Responsable</label>
-        <select name="persona_idpersona" class="form-control select2">
+        <select id="responsable-select" name="persona_idpersona" class="form-control select2">
             <option value="">Seleccione...</option>
             @foreach($responsables as $per)
                 <option value="{{ $per['idpersona'] }}" @selected(old('persona_idpersona', $viaje['persona_idpersona'] ?? '') == $per['idpersona'])>{{ $per['nombres'] ?? '' }} {{ $per['apellidos'] ?? '' }}</option>
@@ -74,7 +74,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Digitador</label>
-        <select name="digitador_id" class="form-control select2">
+        <select id="digitador-select" name="digitador_id" class="form-control select2">
             <option value="">Seleccione...</option>
             @foreach($digitadores as $d)
                 <option value="{{ $d['idpersona'] }}" @selected(old('digitador_id', $viaje['digitador_id'] ?? '') == $d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
@@ -100,8 +100,34 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        $('.select2').select2({width: '100%'});
+    $(function() {
+        $('#responsable-select').select2({
+            width: '100%',
+            ajax: {
+                url: "{{ route('ajax.personas') }}",
+                dataType: 'json',
+                delay: 250,
+                data: params => ({ filtro: params.term, rol: 'RESPVJ' }),
+                processResults: data => ({
+                    results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                }),
+                cache: true
+            }
+        });
+
+        $('#digitador-select').select2({
+            width: '100%',
+            ajax: {
+                url: "{{ route('ajax.personas') }}",
+                dataType: 'json',
+                delay: 250,
+                data: params => ({ filtro: params.term, rol: 'CTF' }),
+                processResults: data => ({
+                    results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                }),
+                cache: true
+            }
+        });
     });
 </script>
 @endsection
