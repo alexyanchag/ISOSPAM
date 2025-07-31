@@ -70,6 +70,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('viajes.pendientes') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Viajes pendientes</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('viajes.mis-por-finalizar') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Mis viajes por finalizar</p>

@@ -70,6 +70,9 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('asignacionresponsable', AsignacionResponsableController::class)->except(['show']);
     Route::get('mis-viajes-por-finalizar', [ViajeController::class, 'misPorFinalizar'])->name('viajes.mis-por-finalizar');
     Route::put('viajes/{viaje}/por-finalizar', [ViajeController::class, 'updatePorFinalizar'])->name('viajes.por-finalizar.update');
+    Route::get('viajes/pendientes', [ViajeController::class, 'pendientes'])->name('viajes.pendientes');
+    Route::get('viajes/{viaje}/mostrar', [ViajeController::class, 'mostrar'])->name('viajes.mostrar');
+    Route::post('viajes/{viaje}/seleccionar', [ViajeController::class, 'seleccionar'])->name('viajes.seleccionar');
     Route::resource('viajes', ViajeController::class)->except(['show']);
 
     Route::resource('menus', MenuController::class)->except(['show']);
