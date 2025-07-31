@@ -180,6 +180,45 @@ class ViajeController extends Controller
             ->withInput();
     }
 
+    public function pendientes()
+    {
+        $response = $this->apiService->get('/viajes/pendientes');
+        $viajes = $response->successful() ? $response->json() : [];
+
+        return view('viajes.pendientes', [
+            'viajes' => $viajes,
+        ]);
+    }
+
+    public function mostrar(string $id)
+    {
+        $response = $this->apiService->get("/viajes/{$id}");
+        if (! $response->successful()) {
+            abort(404);
+        }
+
+        return view('viajes.mostrar', [
+            'viaje' => $response->json(),
+        ]);
+    }
+
+    public function seleccionar(string $id)
+    {
+        $digitadorId = session('user.idpersona');
+
+        $response = $this->apiService->post(
+            "/viajes/{$id}/seleccionar?viaje_id={$id}&digitador_id={$digitadorId}"
+        );
+
+        if ($response->successful()) {
+            return redirect()
+                ->route('viajes.pendientes')
+                ->with('success', 'Viaje asignado correctamente');
+        }
+
+        return back()->withErrors(['error' => 'Error al seleccionar el viaje']);
+    }
+
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');
