@@ -20,3 +20,16 @@ body {
 body.sidebar-collapsed .menu-text {
     opacity: 0;
 }
+.dark-mode .select2-container--default .select2-selection--single
+{
+    background-color: #343a40;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: white;
+}
+.select2-container .select2-selection--single
+{
+    height: 35px;
+}
