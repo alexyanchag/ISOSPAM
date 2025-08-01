@@ -153,10 +153,27 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm mt-2" id="agregar-captura">Agregar</button>
+                            <tbody>
+                            @foreach($capturas ?? [] as $c)
+                                <tr>
+                                    <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                                    <td>{{ $c['numero_individuos'] ?? '' }}</td>
+                                    <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <a href="{{ route('capturas.edit', $c['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                                        <form action="{{ route('capturas.destroy', $c['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="viaje_id" value="{{ $viaje['id'] }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <a href="{{ route('capturas.create', ['viaje_id' => $viaje['id']]) }}" class="btn btn-primary btn-sm mt-2">Agregar</a>
                 </div>
             </div>
         @endif
