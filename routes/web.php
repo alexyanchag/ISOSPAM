@@ -32,6 +32,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\RolMenuController;
 use App\Http\Controllers\RolPersonaController;
 use App\Http\Controllers\ViajeController;
+use App\Http\Controllers\CapturaController;
 
 Route::get('/', function () {
     return view('home');
@@ -74,6 +75,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::get('viajes/{viaje}/mostrar', [ViajeController::class, 'mostrar'])->name('viajes.mostrar');
     Route::post('viajes/{viaje}/seleccionar', [ViajeController::class, 'seleccionar'])->name('viajes.seleccionar');
     Route::resource('viajes', ViajeController::class)->except(['show']);
+    Route::resource('capturas', CapturaController::class)->except(['show']);
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
