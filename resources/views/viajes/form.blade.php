@@ -9,6 +9,15 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
+                <div class="card-tools">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    @isset($viaje)
+                        @if(request()->boolean('por_finalizar'))
+                            <button type="submit" formaction="{{ route('viajes.por-finalizar.update', $viaje['id']) }}" class="btn btn-warning">Finalizar</button>
+                        @endif
+                    @endisset
+                    <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -24,29 +33,26 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Fecha Zarpe</label>
-                        <input type="date" name="fecha_zarpe" class="form-control"
-                            value="{{ old('fecha_zarpe', $viaje['fecha_zarpe'] ?? '') }}">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Responsable Viaje</label>
+                        <select id="responsable-select" name="persona_idpersona" class="form-control select2">
+                            <option value="">Seleccione...</option>
+                            @foreach($responsables as $per)
+                                <option value="{{ $per['idpersona'] }}" @selected(old('persona_idpersona', $viaje['persona_idpersona'] ?? '') == $per['idpersona'])>{{ $per['nombres'] ?? '' }}
+                                    {{ $per['apellidos'] ?? '' }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Hora Zarpe</label>
-                        <input type="time" name="hora_zarpe" class="form-control"
-                            value="{{ old('hora_zarpe', $viaje['hora_zarpe'] ?? '') }}">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Digitador</label>
+                        <select id="digitador-select" name="digitador_id" class="form-control select2">
+                            <option value="">Seleccione...</option>
+                            @foreach($digitadores as $d)
+                                <option value="{{ $d['idpersona'] }}" @selected(old('digitador_id', $viaje['digitador_id'] ?? '') == $d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Fecha Arribo</label>
-                        <input type="date" name="fecha_arribo" class="form-control"
-                            value="{{ old('fecha_arribo', $viaje['fecha_arribo'] ?? '') }}">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Hora Arribo</label>
-                        <input type="time" name="hora_arribo" class="form-control"
-                            value="{{ old('hora_arribo', $viaje['hora_arribo'] ?? '') }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">Embarcación</label>
                         <select name="embarcacion_id" class="form-control">
                             <option value="">Seleccione...</option>
@@ -55,17 +61,20 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Muelle</label>
-                        <select name="muelle_id" class="form-control">
-                            <option value="">Seleccione...</option>
-                            @foreach($muelles as $m)
-                                <option value="{{ $m['id'] }}" @selected(old('muelle_id', $viaje['muelle_id'] ?? '') == $m['id'])>
-                                    {{ $m['nombre'] ?? '' }}</option>
-                            @endforeach
-                        </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 col-lg-2 mb-3">
+                        <label class="form-label">Fecha Zarpe</label>
+                        <input type="date" name="fecha_zarpe" class="form-control"
+                            value="{{ old('fecha_zarpe', $viaje['fecha_zarpe'] ?? '') }}">
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 col-lg-2 mb-3">
+                        <label class="form-label">Hora Zarpe</label>
+                        <input type="time" name="hora_zarpe" class="form-control"
+                            value="{{ old('hora_zarpe', $viaje['hora_zarpe'] ?? '') }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">Puerto Zarpe</label>
                         <select name="puerto_zarpe_id" class="form-control">
                             <option value="">Seleccione...</option>
@@ -74,7 +83,20 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 mb-3">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 col-lg-2 mb-3">
+                        <label class="form-label">Fecha Arribo</label>
+                        <input type="date" name="fecha_arribo" class="form-control"
+                            value="{{ old('fecha_arribo', $viaje['fecha_arribo'] ?? '') }}">
+                    </div>
+                    <div class="col-md-3 col-lg-2 mb-3">
+                        <label class="form-label">Hora Arribo</label>
+                        <input type="time" name="hora_arribo" class="form-control"
+                            value="{{ old('hora_arribo', $viaje['hora_arribo'] ?? '') }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">Puerto Arribo</label>
                         <select name="puerto_arribo_id" class="form-control">
                             <option value="">Seleccione...</option>
@@ -85,22 +107,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Responsable</label>
-                        <select id="responsable-select" name="persona_idpersona" class="form-control select2">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Muelle</label>
+                        <select name="muelle_id" class="form-control">
                             <option value="">Seleccione...</option>
-                            @foreach($responsables as $per)
-                                <option value="{{ $per['idpersona'] }}" @selected(old('persona_idpersona', $viaje['persona_idpersona'] ?? '') == $per['idpersona'])>{{ $per['nombres'] ?? '' }}
-                                    {{ $per['apellidos'] ?? '' }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Digitador</label>
-                        <select id="digitador-select" name="digitador_id" class="form-control select2">
-                            <option value="">Seleccione...</option>
-                            @foreach($digitadores as $d)
-                                <option value="{{ $d['idpersona'] }}" @selected(old('digitador_id', $viaje['digitador_id'] ?? '') == $d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
+                            @foreach($muelles as $m)
+                                <option value="{{ $m['id'] }}" @selected(old('muelle_id', $viaje['muelle_id'] ?? '') == $m['id'])>
+                                    {{ $m['nombre'] ?? '' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -116,15 +129,6 @@
                 @if($errors->any())
                     <div class="alert alert-danger">{{ $errors->first() }}</div>
                 @endif
-            </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                @isset($viaje)
-                    @if(request()->boolean('por_finalizar'))
-                        <button type="submit" formaction="{{ route('viajes.por-finalizar.update', $viaje['id']) }}" class="btn btn-warning">Finalizar</button>
-                    @endif
-                @endisset
-                <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </div>
     </form>
