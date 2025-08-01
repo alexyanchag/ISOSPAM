@@ -125,7 +125,7 @@ class ViajeController extends Controller
 
     public function misPorFinalizar(Request $request)
     {
-        $digitadorId = $request->query('digitador_id');
+        $digitadorId = $request->query('digitador_id', session('user.idpersona'));
 
         $digitadores = $this->getPersonasPorRol('CTF');
 

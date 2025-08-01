@@ -16,6 +16,7 @@
             <table class="table table-dark table-striped mb-0">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Fecha Zarpe</th>
                         <th>Hora Zarpe</th>
                         <th>Fecha Arribo</th>
@@ -29,6 +30,7 @@
                 <tbody>
                 @foreach($viajes as $v)
                     <tr>
+                        <td>{{ $v['id'] ?? '' }}</td>
                         <td>{{ $v['fecha_zarpe'] ?? '' }}</td>
                         <td>{{ $v['hora_zarpe'] ?? '' }}</td>
                         <td>{{ $v['fecha_arribo'] ?? '' }}</td>
