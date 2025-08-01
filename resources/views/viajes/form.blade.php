@@ -153,10 +153,27 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm mt-2" id="agregar-captura">Agregar</button>
+                            <tbody>
+                            @foreach($capturas ?? [] as $c)
+                                <tr>
+                                    <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                                    <td>{{ $c['numero_individuos'] ?? '' }}</td>
+                                    <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <a href="{{ route('capturas.edit', $c['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                                        <form action="{{ route('capturas.destroy', $c['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="viaje_id" value="{{ $viaje['id'] }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <a href="{{ route('capturas.create', ['viaje_id' => $viaje['id']]) }}" class="btn btn-primary btn-sm mt-2">Agregar</a>
                 </div>
             </div>
         @endif
@@ -197,104 +214,6 @@
                     cache: true
                 }
             });
-            const apiBase = 'http://186.46.31.211:9090';
-            const token = '{{ session('token') }}';
-            const viajeId = {{ $viaje['id'] ?? 'null' }};
-
-            function authHeaders() {
-                return token ? { Authorization: `Bearer ${token}` } : {};
-            }
-
-            function cargarCapturas() {
-                $.ajax({
-                    url: `${apiBase}/isospam/capturas-viaje`,
-                    data: { viaje_id: viajeId },
-                    headers: authHeaders(),
-                    success: data => {
-                        const tbody = $('#capturas-table tbody').empty();
-                        data.forEach(c => {
-                            const row = `<tr>
-                                <td>${c.nombre_comun ?? ''}</td>
-                                <td>${c.numero_individuos ?? ''}</td>
-                                <td>${c.peso_estimado ?? ''}</td>
-                                <td class="text-right">
-                                    <button class="btn btn-sm btn-secondary editar-captura" data-id="${c.id}">Editar</button>
-                                    <button class="btn btn-sm btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>
-                                </td>
-                            </tr>`;
-                            tbody.append(row);
-                        });
-                    }
-                });
-            }
-
-            function crearCaptura() {
-                const nombre = prompt('Nombre común');
-                if (nombre === null) return;
-                const num = prompt('Número de individuos');
-                const peso = prompt('Peso estimado');
-                $.ajax({
-                    url: `${apiBase}/isospam/capturas`,
-                    method: 'POST',
-                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
-                    data: JSON.stringify({
-                        nombre_comun: nombre,
-                        numero_individuos: num,
-                        peso_estimado: peso,
-                        viaje_id: viajeId
-                    }),
-                    success: cargarCapturas
-                });
-            }
-
-            function editarCaptura(id) {
-                $.ajax({
-                    url: `${apiBase}/isospam/capturas/${id}`,
-                    headers: authHeaders(),
-                    success: data => {
-                        const nombre = prompt('Nombre común', data.nombre_comun);
-                        if (nombre === null) return;
-                        const num = prompt('Número de individuos', data.numero_individuos);
-                        const peso = prompt('Peso estimado', data.peso_estimado);
-                        $.ajax({
-                            url: `${apiBase}/isospam/capturas/${id}`,
-                            method: 'PUT',
-                            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
-                            data: JSON.stringify({
-                                nombre_comun: nombre,
-                                numero_individuos: num,
-                                peso_estimado: peso,
-                                peso_contado: data.peso_contado,
-                                especie_id: data.especie_id,
-                                viaje_id: viajeId,
-                                es_incidental: data.es_incidental,
-                                es_descartada: data.es_descartada,
-                                tipo_numero_individuos: data.tipo_numero_individuos,
-                                tipo_peso: data.tipo_peso,
-                                estado_producto: data.estado_producto
-                            }),
-                            success: cargarCapturas
-                        });
-                    }
-                });
-            }
-
-            function eliminarCaptura(id) {
-                if (!confirm('¿Eliminar captura?')) return;
-                $.ajax({
-                    url: `${apiBase}/isospam/capturas/${id}`,
-                    method: 'DELETE',
-                    headers: authHeaders(),
-                    success: cargarCapturas
-                });
-            }
-
-            if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
-                cargarCapturas();
-                $('#agregar-captura').on('click', crearCaptura);
-                $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
-                $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
-            }
         });
     </script>
 @endsection

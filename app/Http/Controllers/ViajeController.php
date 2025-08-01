@@ -75,8 +75,12 @@ class ViajeController extends Controller
         }
         $viaje = $response->json();
 
+        $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
+        $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
+
         return view('viajes.form', [
             'viaje' => $viaje,
+            'capturas' => $capturas,
             'muelles' => $this->getMuelles(),
             'puertos' => $this->getPuertos(),
             'embarcaciones' => $this->getEmbarcaciones(),
