@@ -214,19 +214,13 @@
                     cache: true
                 }
             });
-            const apiBase = 'http://186.46.31.211:9090';
-            const token = '{{ session('token') }}';
+            const ajaxBase = '{{ url('ajax') }}';
             const viajeId = {{ $viaje['id'] ?? 'null' }};
-
-            function authHeaders() {
-                return token ? { Authorization: `Bearer ${token}` } : {};
-            }
 
             function cargarCapturas() {
                 $.ajax({
-                    url: `${apiBase}/isospam/capturas-viaje`,
+                    url: `${ajaxBase}/capturas-viaje`,
                     data: { viaje_id: viajeId },
-                    headers: authHeaders(),
                     success: data => {
                         const tbody = $('#capturas-table tbody').empty();
                         data.forEach(c => {
@@ -251,9 +245,9 @@
                 const num = prompt('Número de individuos');
                 const peso = prompt('Peso estimado');
                 $.ajax({
-                    url: `${apiBase}/isospam/capturas`,
+                    url: `${ajaxBase}/capturas`,
                     method: 'POST',
-                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
+                    contentType: 'application/json',
                     data: JSON.stringify({
                         nombre_comun: nombre,
                         numero_individuos: num,
@@ -266,17 +260,16 @@
 
             function editarCaptura(id) {
                 $.ajax({
-                    url: `${apiBase}/isospam/capturas/${id}`,
-                    headers: authHeaders(),
+                    url: `${ajaxBase}/capturas/${id}`,
                     success: data => {
                         const nombre = prompt('Nombre común', data.nombre_comun);
                         if (nombre === null) return;
                         const num = prompt('Número de individuos', data.numero_individuos);
                         const peso = prompt('Peso estimado', data.peso_estimado);
                         $.ajax({
-                            url: `${apiBase}/isospam/capturas/${id}`,
+                            url: `${ajaxBase}/capturas/${id}`,
                             method: 'PUT',
-                            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders()),
+                            contentType: 'application/json',
                             data: JSON.stringify({
                                 nombre_comun: nombre,
                                 numero_individuos: num,
@@ -299,9 +292,8 @@
             function eliminarCaptura(id) {
                 if (!confirm('¿Eliminar captura?')) return;
                 $.ajax({
-                    url: `${apiBase}/isospam/capturas/${id}`,
+                    url: `${ajaxBase}/capturas/${id}`,
                     method: 'DELETE',
-                    headers: authHeaders(),
                     success: cargarCapturas
                 });
             }

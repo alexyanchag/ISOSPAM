@@ -33,6 +33,7 @@ use App\Http\Controllers\RolMenuController;
 use App\Http\Controllers\RolPersonaController;
 use App\Http\Controllers\ViajeController;
 use App\Http\Controllers\CapturaController;
+use App\Http\Controllers\CapturaAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -76,6 +77,11 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('viajes/{viaje}/seleccionar', [ViajeController::class, 'seleccionar'])->name('viajes.seleccionar');
     Route::resource('viajes', ViajeController::class)->except(['show']);
     Route::resource('capturas', CapturaController::class)->except(['show']);
+    Route::get('ajax/capturas-viaje', [CapturaAjaxController::class, 'index'])->name('ajax.capturas-viaje');
+    Route::get('ajax/capturas/{id}', [CapturaAjaxController::class, 'show'])->name('ajax.capturas.show');
+    Route::post('ajax/capturas', [CapturaAjaxController::class, 'store'])->name('ajax.capturas.store');
+    Route::put('ajax/capturas/{id}', [CapturaAjaxController::class, 'update'])->name('ajax.capturas.update');
+    Route::delete('ajax/capturas/{id}', [CapturaAjaxController::class, 'destroy'])->name('ajax.capturas.destroy');
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
