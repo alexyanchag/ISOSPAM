@@ -174,20 +174,77 @@
                                     <td>{{ $c['tipo_peso'] ?? '' }}</td>
                                     <td>{{ $c['estado_producto'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <a href="{{ route('capturas.edit', $c['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
-                                        <form action="{{ route('capturas.destroy', $c['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="viaje_id" value="{{ $viaje['id'] }}">
-                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                                        </form>
+                                        <button class="btn btn-sm btn-secondary editar-captura" data-id="{{ $c['id'] }}">Editar</button>
+                                        <button class="btn btn-sm btn-danger eliminar-captura" data-id="{{ $c['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                        </table>
                    </div>
-                    <a href="{{ route('capturas.create', ['viaje_id' => $viaje['id']]) }}" class="btn btn-primary btn-sm mt-2">Agregar</a>
+                    <button id="agregar-captura" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="captura-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="captura-form">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Captura</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="captura-id">
+                                <div class="form-group">
+                                    <label>Nombre común</label>
+                                    <input type="text" class="form-control" id="nombre_comun">
+                                </div>
+                                <div class="form-group">
+                                    <label>Especie ID</label>
+                                    <input type="number" class="form-control" id="especie_id">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nº Individuos</label>
+                                    <input type="number" class="form-control" id="numero_individuos">
+                                </div>
+                                <div class="form-group">
+                                    <label>Peso Estimado</label>
+                                    <input type="number" step="any" class="form-control" id="peso_estimado">
+                                </div>
+                                <div class="form-group">
+                                    <label>Peso Contado</label>
+                                    <input type="number" step="any" class="form-control" id="peso_contado">
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="es_incidental">
+                                    <label class="form-check-label" for="es_incidental">Incidental</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="es_descartada">
+                                    <label class="form-check-label" for="es_descartada">Descartada</label>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label>Tipo Nº Individuos</label>
+                                    <input type="text" class="form-control" id="tipo_numero_individuos">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo Peso</label>
+                                    <input type="text" class="form-control" id="tipo_peso">
+                                </div>
+                                <div class="form-group">
+                                    <label>Estado Producto</label>
+                                    <input type="text" class="form-control" id="estado_producto">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         @endif
@@ -260,53 +317,25 @@
                 });
             }
 
-            function crearCaptura() {
-                const nombre = prompt('Nombre común');
-                if (nombre === null) return;
-                const num = prompt('Número de individuos');
-                const peso = prompt('Peso estimado');
-                $.ajax({
-                    url: `${ajaxBase}/capturas`,
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        nombre_comun: nombre,
-                        numero_individuos: num,
-                        peso_estimado: peso,
-                        viaje_id: viajeId
-                    }),
-                    success: cargarCapturas
-                });
+            function abrirModal(data = {}) {
+                $('#captura-id').val(data.id || '');
+                $('#nombre_comun').val(data.nombre_comun || '');
+                $('#especie_id').val(data.especie_id || '');
+                $('#numero_individuos').val(data.numero_individuos || '');
+                $('#peso_estimado').val(data.peso_estimado || '');
+                $('#peso_contado').val(data.peso_contado || '');
+                $('#es_incidental').prop('checked', data.es_incidental || false);
+                $('#es_descartada').prop('checked', data.es_descartada || false);
+                $('#tipo_numero_individuos').val(data.tipo_numero_individuos || '');
+                $('#tipo_peso').val(data.tipo_peso || '');
+                $('#estado_producto').val(data.estado_producto || '');
+                $('#captura-modal').modal('show');
             }
 
             function editarCaptura(id) {
                 $.ajax({
                     url: `${ajaxBase}/capturas/${id}`,
-                    success: data => {
-                        const nombre = prompt('Nombre común', data.nombre_comun);
-                        if (nombre === null) return;
-                        const num = prompt('Número de individuos', data.numero_individuos);
-                        const peso = prompt('Peso estimado', data.peso_estimado);
-                        $.ajax({
-                            url: `${ajaxBase}/capturas/${id}`,
-                            method: 'PUT',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                nombre_comun: nombre,
-                                numero_individuos: num,
-                                peso_estimado: peso,
-                                peso_contado: data.peso_contado,
-                                especie_id: data.especie_id,
-                                viaje_id: viajeId,
-                                es_incidental: data.es_incidental,
-                                es_descartada: data.es_descartada,
-                                tipo_numero_individuos: data.tipo_numero_individuos,
-                                tipo_peso: data.tipo_peso,
-                                estado_producto: data.estado_producto
-                            }),
-                            success: cargarCapturas
-                        });
-                    }
+                    success: data => abrirModal(data)
                 });
             }
 
@@ -319,9 +348,39 @@
                 });
             }
 
+            $('#captura-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#captura-id').val();
+                const payload = {
+                    nombre_comun: $('#nombre_comun').val(),
+                    numero_individuos: $('#numero_individuos').val(),
+                    peso_estimado: $('#peso_estimado').val(),
+                    peso_contado: $('#peso_contado').val(),
+                    especie_id: $('#especie_id').val(),
+                    viaje_id: viajeId,
+                    es_incidental: $('#es_incidental').is(':checked'),
+                    es_descartada: $('#es_descartada').is(':checked'),
+                    tipo_numero_individuos: $('#tipo_numero_individuos').val(),
+                    tipo_peso: $('#tipo_peso').val(),
+                    estado_producto: $('#estado_producto').val()
+                };
+                const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url,
+                    method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: () => {
+                        $('#captura-modal').modal('hide');
+                        cargarCapturas();
+                    }
+                });
+            });
+
             if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
                 cargarCapturas();
-                $('#agregar-captura').on('click', crearCaptura);
+                $('#agregar-captura').on('click', () => abrirModal());
                 $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
                 $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
             }
