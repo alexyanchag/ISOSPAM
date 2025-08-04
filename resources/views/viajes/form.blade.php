@@ -132,6 +132,52 @@
             </div>
         </div>
     </form>
+
+    @isset($viaje)
+        @if(request()->boolean('por_finalizar'))
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">Capturas</h3>
+                    <button class="btn btn-tool" type="button" data-toggle="collapse" data-target="#capturas-collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="capturas-collapse">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped mb-0" id="capturas-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre común</th>
+                                    <th>Nº Individuos</th>
+                                    <th>Peso Estimado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($capturas ?? [] as $c)
+                                <tr>
+                                    <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                                    <td>{{ $c['numero_individuos'] ?? '' }}</td>
+                                    <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <a href="{{ route('capturas.edit', $c['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                                        <form action="{{ route('capturas.destroy', $c['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="viaje_id" value="{{ $viaje['id'] }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <a href="{{ route('capturas.create', ['viaje_id' => $viaje['id']]) }}" class="btn btn-primary btn-sm mt-2">Agregar</a>
+                </div>
+            </div>
+        @endif
+    @endisset
 @endsection
 
 @section('scripts')
