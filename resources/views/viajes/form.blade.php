@@ -148,8 +148,15 @@
                             <thead>
                                 <tr>
                                     <th>Nombre común</th>
+                                    <th>Especie</th>
                                     <th>Nº Individuos</th>
                                     <th>Peso Estimado</th>
+                                    <th>Peso Contado</th>
+                                    <th>Incidental</th>
+                                    <th>Descartada</th>
+                                    <th>Tipo Nº Individuos</th>
+                                    <th>Tipo Peso</th>
+                                    <th>Estado Producto</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -157,8 +164,15 @@
                             @foreach($capturas ?? [] as $c)
                                 <tr>
                                     <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                                    <td>{{ $c['especie_nombre'] ?? '' }}</td>
                                     <td>{{ $c['numero_individuos'] ?? '' }}</td>
                                     <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                                    <td>{{ $c['peso_contado'] ?? '' }}</td>
+                                    <td>{{ ($c['es_incidental'] ?? false) ? 'Sí' : 'No' }}</td>
+                                    <td>{{ ($c['es_descartada'] ?? false) ? 'Sí' : 'No' }}</td>
+                                    <td>{{ $c['tipo_numero_individuos'] ?? '' }}</td>
+                                    <td>{{ $c['tipo_peso'] ?? '' }}</td>
+                                    <td>{{ $c['estado_producto'] ?? '' }}</td>
                                     <td class="text-right">
                                         <a href="{{ route('capturas.edit', $c['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
                                         <form action="{{ route('capturas.destroy', $c['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
@@ -226,8 +240,15 @@
                         data.forEach(c => {
                             const row = `<tr>
                                 <td>${c.nombre_comun ?? ''}</td>
+                                <td>${c.especie_nombre ?? ''}</td>
                                 <td>${c.numero_individuos ?? ''}</td>
                                 <td>${c.peso_estimado ?? ''}</td>
+                                <td>${c.peso_contado ?? ''}</td>
+                                <td>${c.es_incidental ? 'Sí' : 'No'}</td>
+                                <td>${c.es_descartada ? 'Sí' : 'No'}</td>
+                                <td>${c.tipo_numero_individuos ?? ''}</td>
+                                <td>${c.tipo_peso ?? ''}</td>
+                                <td>${c.estado_producto ?? ''}</td>
                                 <td class="text-right">
                                     <button class="btn btn-sm btn-secondary editar-captura" data-id="${c.id}">Editar</button>
                                     <button class="btn btn-sm btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>
