@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'api' => [
+        'base_url' => env('ISOSPAM_API_BASE', 'http://186.46.31.211:9090/isospam'),
+    ],
+
 ];
