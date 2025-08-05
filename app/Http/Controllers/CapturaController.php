@@ -30,7 +30,6 @@ class CapturaController extends Controller
         $viajeId = $request->query('viaje_id');
         return view('capturas.form', [
             'viajeId' => $viajeId,
-            'especies' => $this->getEspecies(),
         ]);
     }
 
@@ -67,7 +66,6 @@ class CapturaController extends Controller
         $captura = $resp->json();
         return view('capturas.form', [
             'captura' => $captura,
-            'especies' => $this->getEspecies(),
             'viajeId' => $captura['viaje_id'] ?? null,
         ]);
     }
@@ -110,9 +108,4 @@ class CapturaController extends Controller
         return back()->withErrors(['error' => 'Error al eliminar']);
     }
 
-    private function getEspecies(): array
-    {
-        $resp = $this->apiService->get('/especies');
-        return $resp->successful() ? $resp->json() : [];
-    }
 }
