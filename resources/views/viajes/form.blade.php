@@ -203,8 +203,10 @@
                                     <input type="text" class="form-control" id="nombre_comun">
                                 </div>
                                 <div class="form-group">
-                                    <label>Especie ID</label>
-                                    <input type="number" class="form-control" id="especie_id">
+                                    <label>Especie</label>
+                                    <select class="form-control" id="especie_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Nº Individuos</label>
@@ -288,6 +290,20 @@
             const ajaxBase = '{{ url('ajax') }}';
             const viajeId = {{ $viaje['id'] ?? 'null' }};
 
+            function cargarEspecies(selected = '') {
+                const select = $('#especie_id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/especies')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(e => {
+                            const opt = new Option(e.nombre, e.id, false, String(e.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar especies:', err));
+            }
+
             function cargarCapturas() {
                 $.ajax({
                     url: `${ajaxBase}/capturas-viaje`,
@@ -320,7 +336,7 @@
             function abrirModal(data = {}) {
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
-                $('#especie_id').val(data.especie_id || '');
+                cargarEspecies(data.especie_id || '');
                 $('#numero_individuos').val(data.numero_individuos || '');
                 $('#peso_estimado').val(data.peso_estimado || '');
                 $('#peso_contado').val(data.peso_contado || '');
