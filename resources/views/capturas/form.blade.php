@@ -22,11 +22,8 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Especie</label>
-        <select name="especie_id" class="form-control">
+        <select name="especie_id" id="especie_id" class="form-control">
             <option value="">Seleccione...</option>
-            @foreach($especies as $e)
-                <option value="{{ $e['id'] }}" @selected(old('especie_id', $captura['especie_id'] ?? '') == $e['id'])>{{ $e['nombre'] ?? '' }}</option>
-            @endforeach
         </select>
     </div>
     <div class="form-check mb-3">
@@ -43,4 +40,28 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('viajes.edit', ['viaje' => old('viaje_id', $viajeId ?? $captura['viaje_id'] ?? ''), 'por_finalizar' => 1]) }}" class="btn btn-secondary">Cancelar</a>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('especie_id');
+    const selected = @json(old('especie_id', $captura['especie_id'] ?? ''));
+
+    fetch('http://186.46.31.211:9090/isospam/especies')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.id;
+                opt.textContent = e.nombre;
+                if (String(e.id) === String(selected)) {
+                    opt.selected = true;
+                }
+                select.appendChild(opt);
+            });
+        })
+        .catch(err => console.error('Error al cargar especies:', err));
+});
+</script>
 @endsection
