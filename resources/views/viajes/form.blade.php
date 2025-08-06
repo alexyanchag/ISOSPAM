@@ -224,7 +224,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Nº Individuos</label>
-                                            <input type="number" class="form-control" id="numero_individuos">
+                                            <input type="number" min="0" step="1" class="form-control no-negative" id="numero_individuos">
                                         </div>
 
                                         <div class="form-group col-md-6">
@@ -237,7 +237,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Peso de captura</label>
-                                            <input type="number" step="any" class="form-control" id="peso_estimado">
+                                            <input type="number" step="any" min="0" class="form-control no-negative" id="peso_estimado">
                                         </div>
 
                                         <div class="form-group col-md-6">
@@ -282,6 +282,17 @@
 @section('scripts')
     <script>
         $(function () {
+            // Evitar números negativos tanto al escribir como con las flechas
+            $('.no-negative')
+                .on('keydown', function (e) {
+                    if (e.key === '-' || e.key === '+') {
+                        e.preventDefault();
+                    }
+                })
+                .on('input', function () {
+                    this.value = this.value.replace(/-/g, '');
+                });
+
             $('#responsable-select').select2({
                 width: '100%',
             placeholder: 'Seleccione...',
