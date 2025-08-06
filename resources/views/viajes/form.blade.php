@@ -187,7 +187,7 @@
             </div>
 
             <div class="modal fade" id="captura-modal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document"> <!-- Ampliado horizontalmente -->
                     <div class="modal-content">
                         <form id="captura-form">
                             <div class="modal-header">
@@ -196,51 +196,76 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
+
+                            <!-- Scroll interno en el cuerpo -->
+                            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                                 <input type="hidden" id="captura-id">
-                                <div class="form-group">
-                                    <label>Nombre común</label>
-                                    <input type="text" class="form-control" id="nombre_comun">
-                                </div>
-                                <div class="form-group">
-                                    <label>Especie</label>
-                                    <select class="form-control" id="especie_id">
-                                        <option value="">Seleccione...</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Nº Individuos</label>
-                                    <input type="number" class="form-control" id="numero_individuos">
-                                </div>
-                                <div class="form-group">
-                                    <label>Peso Estimado</label>
-                                    <input type="number" step="any" class="form-control" id="peso_estimado">
-                                </div>
-                                <div class="form-group">
-                                    <label>Peso Contado</label>
-                                    <input type="number" step="any" class="form-control" id="peso_contado">
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="es_incidental">
-                                    <label class="form-check-label" for="es_incidental">Incidental</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="es_descartada">
-                                    <label class="form-check-label" for="es_descartada">Descartada</label>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label>Tipo Nº Individuos</label>
-                                    <input type="text" class="form-control" id="tipo_numero_individuos">
-                                </div>
-                                <div class="form-group">
-                                    <label>Tipo Peso</label>
-                                    <input type="text" class="form-control" id="tipo_peso">
-                                </div>
-                                <div class="form-group">
-                                    <label>Estado Producto</label>
-                                    <input type="text" class="form-control" id="estado_producto">
+
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Nombre común</label>
+                                            <input type="text" class="form-control" id="nombre_comun">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Especie</label>
+                                            <select class="form-control" id="especie_id">
+                                                <option value="">Seleccione...</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Tipo Nº Individuos</label>
+                                            <select class="form-control" id="tipo_numero_individuos">
+                                                <option value="">Seleccione...</option>
+                                                <option value="ESTIMADO">Estimado</option>
+                                                <option value="MEDIDO">Medido</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Nº Individuos</label>
+                                            <input type="number" class="form-control" id="numero_individuos">
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Tipo Peso</label>
+                                            <select class="form-control" id="tipo_peso">
+                                                <option value="">Seleccione...</option>
+                                                <option value="ESTIMADO">Estimado</option>
+                                                <option value="MEDIDO">Medido</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Peso de captura</label>
+                                            <input type="number" step="any" class="form-control" id="peso_estimado">
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Estado Producto</label>
+                                            <select class="form-control" id="estado_producto">
+                                                <option value="">Seleccione...</option>
+                                                <option value="EVISCERADO">Eviscerado</option>
+                                                <option value="ENTERO">Entero</option>
+                                                <option value="SIN CABEZA">Sin cabeza</option>
+                                                <option value="En cola (camaron)">En cola (camaron)</option>
+                                                <option value="Pulpa(concha)">Pulpa(concha)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6 d-flex align-items-center">
+                                            <div class="form-check mr-3">
+                                                <input type="checkbox" class="form-check-input" id="es_incidental">
+                                                <label class="form-check-label" for="es_incidental">Es Incidental</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="es_descartada">
+                                                <label class="form-check-label" for="es_descartada">Es Descartada</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Guardar</button>
@@ -249,6 +274,7 @@
                     </div>
                 </div>
             </div>
+
         @endif
     @endisset
 @endsection
