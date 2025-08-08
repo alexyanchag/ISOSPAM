@@ -34,6 +34,8 @@ use App\Http\Controllers\RolPersonaController;
 use App\Http\Controllers\ViajeController;
 use App\Http\Controllers\CapturaController;
 use App\Http\Controllers\CapturaAjaxController;
+use App\Http\Controllers\ObservadorViajeController;
+use App\Http\Controllers\ObservadorViajeAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -82,6 +84,13 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/capturas', [CapturaAjaxController::class, 'store'])->name('ajax.capturas.store');
     Route::put('ajax/capturas/{id}', [CapturaAjaxController::class, 'update'])->name('ajax.capturas.update');
     Route::delete('ajax/capturas/{id}', [CapturaAjaxController::class, 'destroy'])->name('ajax.capturas.destroy');
+
+    Route::resource('observadores-viaje', ObservadorViajeController::class)->except(['show']);
+    Route::get('ajax/observadores-viaje', [ObservadorViajeAjaxController::class, 'index'])->name('ajax.observadores-viaje');
+    Route::get('ajax/observadores-viaje/{id}', [ObservadorViajeAjaxController::class, 'show'])->name('ajax.observadores-viaje.show');
+    Route::post('ajax/observadores-viaje', [ObservadorViajeAjaxController::class, 'store'])->name('ajax.observadores-viaje.store');
+    Route::put('ajax/observadores-viaje/{id}', [ObservadorViajeAjaxController::class, 'update'])->name('ajax.observadores-viaje.update');
+    Route::delete('ajax/observadores-viaje/{id}', [ObservadorViajeAjaxController::class, 'destroy'])->name('ajax.observadores-viaje.destroy');
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);

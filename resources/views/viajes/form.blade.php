@@ -136,6 +136,86 @@
     @isset($viaje)
         @if(request()->boolean('por_finalizar'))
             <div class="card mt-3">
+                <div class="card-header border-0 bg-dark">
+                    <h3 class="card-title">
+                        <i class="fas fa-users mr-1"></i>
+                        Observadores
+                    </h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body collapse show" id="observadores-collapse">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped mb-0" id="observadores-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Persona</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($observadores ?? [] as $o)
+                                <tr>
+                                    <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
+                                    <td>{{ $o['persona_nombres'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-sm btn-secondary editar-observador" data-id="{{ $o['id'] }}">Editar</button>
+                                        <button class="btn btn-sm btn-danger eliminar-observador" data-id="{{ $o['id'] }}">Eliminar</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <button id="agregar-observador" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="observador-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="observador-form">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Observador</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="hidden" id="observador-id">
+
+                                <div class="form-group">
+                                    <label>Tipo de Observador</label>
+                                    <select class="form-control" id="tipo_observador_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Persona</label>
+                                    <select class="form-control" id="persona_idpersona">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
                 
                 <div class="card-header border-0 bg-dark">
                     <h3 class="card-title">
@@ -388,6 +468,22 @@
                     cache: true
                 }
             });
+
+            $('#persona_idpersona').select2({
+                width: '100%',
+            placeholder: 'Seleccione...',
+            allowClear: true,
+                ajax: {
+                    url: "{{ route('ajax.personas') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: params => ({ filtro: params.term, rol: 'OBS' }),
+                    processResults: data => ({
+                        results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                    }),
+                    cache: true
+                }
+            });
             const ajaxBase = '{{ url('ajax') }}';
             const viajeId = {{ $viaje['id'] ?? 'null' }};
 
@@ -403,6 +499,20 @@
                         });
                     })
                     .catch(err => console.error('Error al cargar especies:', err));
+            }
+
+            function cargarTiposObservador(selected = '') {
+                const select = $('#tipo_observador_id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/tipo-observador')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(t => {
+                            const opt = new Option(t.descripcion, t.id, false, String(t.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar tipos de observador:', err));
             }
 
             function cargarCapturas() {
@@ -434,6 +544,27 @@
                 });
             }
 
+            function cargarObservadores() {
+                $.ajax({
+                    url: `${ajaxBase}/observadores-viaje`,
+                    data: { viaje_id: viajeId },
+                    success: data => {
+                        const tbody = $('#observadores-table tbody').empty();
+                        data.forEach(o => {
+                            const row = `<tr>
+                                <td>${o.tipo_observador_descripcion ?? ''}</td>
+                                <td>${o.persona_nombres ?? ''}</td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-secondary editar-observador" data-id="${o.id}">Editar</button>
+                                    <button class="btn btn-sm btn-danger eliminar-observador" data-id="${o.id}">Eliminar</button>
+                                </td>
+                            </tr>`;
+                            tbody.append(row);
+                        });
+                    }
+                });
+            }
+
             function abrirModal(data = {}) {
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
@@ -449,10 +580,30 @@
                 $('#captura-modal').modal('show');
             }
 
+            function abrirObservadorModal(data = {}) {
+                $('#observador-id').val(data.id || '');
+                cargarTiposObservador(data.tipo_observador_id || '');
+                const personaSelect = $('#persona_idpersona');
+                if (data.persona_idpersona) {
+                    const opt = new Option(data.persona_nombres || '', data.persona_idpersona, true, true);
+                    personaSelect.append(opt).trigger('change');
+                } else {
+                    personaSelect.val(null).trigger('change');
+                }
+                $('#observador-modal').modal('show');
+            }
+
             function editarCaptura(id) {
                 $.ajax({
                     url: `${ajaxBase}/capturas/${id}`,
                     success: data => abrirModal(data)
+                });
+            }
+
+            function editarObservador(id) {
+                $.ajax({
+                    url: `${ajaxBase}/observadores-viaje/${id}`,
+                    success: data => abrirObservadorModal(data)
                 });
             }
 
@@ -462,6 +613,15 @@
                     url: `${ajaxBase}/capturas/${id}`,
                     method: 'DELETE',
                     success: cargarCapturas
+                });
+            }
+
+            function eliminarObservador(id) {
+                if (!confirm('¿Eliminar observador?')) return;
+                $.ajax({
+                    url: `${ajaxBase}/observadores-viaje/${id}`,
+                    method: 'DELETE',
+                    success: cargarObservadores
                 });
             }
 
@@ -496,11 +656,37 @@
                 });
             });
 
+            $('#observador-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#observador-id').val();
+                const payload = {
+                    viaje_id: viajeId,
+                    tipo_observador_id: $('#tipo_observador_id').val(),
+                    persona_idpersona: $('#persona_idpersona').val()
+                };
+                const url = id ? `${ajaxBase}/observadores-viaje/${id}` : `${ajaxBase}/observadores-viaje`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url,
+                    method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: () => {
+                        $('#observador-modal').modal('hide');
+                        cargarObservadores();
+                    }
+                });
+            });
+
             if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
                 cargarCapturas();
+                cargarObservadores();
                 $('#agregar-captura').on('click', () => abrirModal());
                 $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
                 $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
+                $('#agregar-observador').on('click', () => abrirObservadorModal());
+                $('#observadores-table').on('click', '.editar-observador', function () { editarObservador($(this).data('id')); });
+                $('#observadores-table').on('click', '.eliminar-observador', function () { eliminarObservador($(this).data('id')); });
             }
         });
     </script>
