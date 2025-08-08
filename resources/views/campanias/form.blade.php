@@ -26,3 +26,47 @@
     <a href="{{ route('campanias.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>
 @endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    const fechainicio = form.querySelector('input[name="fechainicio"]');
+    const fechafin = form.querySelector('input[name="fechafin"]');
+
+    function updateLimits() {
+        if (fechainicio.value) {
+            fechafin.min = fechainicio.value;
+        }
+        if (fechafin.value) {
+            fechainicio.max = fechafin.value;
+        }
+    }
+
+    fechainicio.addEventListener('change', function () {
+        updateLimits();
+        if (fechafin.value && fechainicio.value > fechafin.value) {
+            alert('La fecha de inicio no puede ser mayor a la fecha fin.');
+            fechainicio.value = '';
+        }
+    });
+
+    fechafin.addEventListener('change', function () {
+        updateLimits();
+        if (fechainicio.value && fechafin.value < fechainicio.value) {
+            alert('La fecha fin no puede ser menor a la fecha inicio.');
+            fechafin.value = '';
+        }
+    });
+
+    form.addEventListener('submit', function (e) {
+        if (fechainicio.value && fechafin.value && fechainicio.value > fechafin.value) {
+            e.preventDefault();
+            alert('La fecha de inicio no puede ser mayor a la fecha fin.');
+        }
+    });
+
+    updateLimits();
+});
+</script>
+@endsection
