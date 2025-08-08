@@ -46,7 +46,7 @@ class ViajeController extends Controller
         $data = $request->validate([
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['nullable', 'date'],
+            'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['nullable'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
@@ -57,6 +57,14 @@ class ViajeController extends Controller
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
         ]);
+
+        if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
+            && $data['fecha_arribo'] === $data['fecha_zarpe']
+            && $data['hora_arribo'] <= $data['hora_zarpe']) {
+            return back()->withErrors([
+                'error' => 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.',
+            ])->withInput();
+        }
 
         $response = $this->apiService->post('/viajes', $data);
 
@@ -95,7 +103,7 @@ class ViajeController extends Controller
         $data = $request->validate([
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['nullable', 'date'],
+            'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['nullable'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
@@ -106,6 +114,14 @@ class ViajeController extends Controller
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
         ]);
+
+        if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
+            && $data['fecha_arribo'] === $data['fecha_zarpe']
+            && $data['hora_arribo'] <= $data['hora_zarpe']) {
+            return back()->withErrors([
+                'error' => 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.',
+            ])->withInput();
+        }
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
 
@@ -149,9 +165,9 @@ class ViajeController extends Controller
     public function updatePorFinalizar(Request $request, string $id)
     {
         $data = $request->validate([
-            'fecha_zarpe' => ['required', 'date'],
+            'fecha_zarpe' => ['required', 'date', 'before_or_equal:fecha_arribo'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['required', 'date'],
+            'fecha_arribo' => ['required', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['required'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
@@ -162,6 +178,15 @@ class ViajeController extends Controller
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
         ]);
+
+        if ($data['fecha_arribo'] === $data['fecha_zarpe'] && $data['hora_arribo'] <= $data['hora_zarpe']) {
+            return redirect()
+                ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                ->withErrors([
+                    'error' => 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.',
+                ])
+                ->withInput();
+        }
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
         if ($response->failed()) {
