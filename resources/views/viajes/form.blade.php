@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <form method="POST" action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
+    <form id="viaje-form" method="POST" action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
         @csrf
         @if(isset($viaje))
             @method('PUT')
@@ -66,7 +66,7 @@
                 <div class="row">
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Fecha Zarpe</label>
-                        <input type="date" name="fecha_zarpe" class="form-control"
+                        <input type="date" name="fecha_zarpe" id="fecha_zarpe" class="form-control"
                             value="{{ old('fecha_zarpe', $viaje['fecha_zarpe'] ?? '') }}">
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Fecha Arribo</label>
-                        <input type="date" name="fecha_arribo" class="form-control"
+                        <input type="date" name="fecha_arribo" id="fecha_arribo" class="form-control"
                             value="{{ old('fecha_arribo', $viaje['fecha_arribo'] ?? '') }}">
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
@@ -290,6 +290,35 @@
 @section('scripts')
     <script>
         $(function () {
+            // Validación de fechas de zarpe y arribo
+            const fechaZarpe = document.getElementById('fecha_zarpe');
+            const fechaArribo = document.getElementById('fecha_arribo');
+            const form = document.getElementById('viaje-form');
+
+            function actualizarRestricciones() {
+                if (fechaArribo.value) {
+                    fechaZarpe.max = fechaArribo.value;
+                } else {
+                    fechaZarpe.removeAttribute('max');
+                }
+                if (fechaZarpe.value) {
+                    fechaArribo.min = fechaZarpe.value;
+                } else {
+                    fechaArribo.removeAttribute('min');
+                }
+            }
+
+            fechaZarpe.addEventListener('change', actualizarRestricciones);
+            fechaArribo.addEventListener('change', actualizarRestricciones);
+            form.addEventListener('submit', function (e) {
+                if (fechaZarpe.value && fechaArribo.value && fechaZarpe.value > fechaArribo.value) {
+                    e.preventDefault();
+                    alert('La fecha de arribo debe ser mayor o igual a la fecha de zarpe.');
+                }
+            });
+
+            actualizarRestricciones();
+
             // Evitar números negativos tanto al escribir como con las flechas
             $('.no-negative')
                 .on('keydown', function (e) {
