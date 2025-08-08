@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Hora Zarpe</label>
-                        <input type="time" name="hora_zarpe" class="form-control"
+                        <input type="time" name="hora_zarpe" id="hora_zarpe" class="form-control"
                             value="{{ old('hora_zarpe', $viaje['hora_zarpe'] ?? '') }}">
                     </div>
                     <div class="col-md-4 mb-3">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Hora Arribo</label>
-                        <input type="time" name="hora_arribo" class="form-control"
+                        <input type="time" name="hora_arribo" id="hora_arribo" class="form-control"
                             value="{{ old('hora_arribo', $viaje['hora_arribo'] ?? '') }}">
                     </div>
                     <div class="col-md-4 mb-3">
@@ -290,9 +290,11 @@
 @section('scripts')
     <script>
         $(function () {
-            // Validación de fechas de zarpe y arribo
+            // Validación de fechas y horas de zarpe y arribo
             const fechaZarpe = document.getElementById('fecha_zarpe');
             const fechaArribo = document.getElementById('fecha_arribo');
+            const horaZarpe = document.getElementById('hora_zarpe');
+            const horaArribo = document.getElementById('hora_arribo');
             const form = document.getElementById('viaje-form');
 
             function actualizarRestricciones() {
@@ -306,14 +308,39 @@
                 } else {
                     fechaArribo.removeAttribute('min');
                 }
+
+                if (fechaZarpe.value && fechaArribo.value && fechaZarpe.value === fechaArribo.value) {
+                    if (horaArribo.value) {
+                        horaZarpe.max = horaArribo.value;
+                    } else {
+                        horaZarpe.removeAttribute('max');
+                    }
+                    if (horaZarpe.value) {
+                        horaArribo.min = horaZarpe.value;
+                    } else {
+                        horaArribo.removeAttribute('min');
+                    }
+                } else {
+                    horaZarpe.removeAttribute('max');
+                    horaArribo.removeAttribute('min');
+                }
             }
 
             fechaZarpe.addEventListener('change', actualizarRestricciones);
             fechaArribo.addEventListener('change', actualizarRestricciones);
+            horaZarpe.addEventListener('change', actualizarRestricciones);
+            horaArribo.addEventListener('change', actualizarRestricciones);
             form.addEventListener('submit', function (e) {
-                if (fechaZarpe.value && fechaArribo.value && fechaZarpe.value > fechaArribo.value) {
-                    e.preventDefault();
-                    alert('La fecha de arribo debe ser mayor o igual a la fecha de zarpe.');
+                if (fechaZarpe.value && fechaArribo.value) {
+                    if (fechaZarpe.value > fechaArribo.value) {
+                        e.preventDefault();
+                        alert('La fecha de arribo debe ser mayor o igual a la fecha de zarpe.');
+                        return;
+                    }
+                    if (fechaZarpe.value === fechaArribo.value && horaZarpe.value && horaArribo.value && horaZarpe.value >= horaArribo.value) {
+                        e.preventDefault();
+                        alert('La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.');
+                    }
                 }
             });
 
