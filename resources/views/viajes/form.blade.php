@@ -136,12 +136,20 @@
     @isset($viaje)
         @if(request()->boolean('por_finalizar'))
             <div class="card mt-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">Capturas</h3>
-                    <button class="btn btn-tool" type="button" data-toggle="collapse" data-target="#capturas-collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
+                
+                <div class="card-header border-0 bg-dark">
+                    <h3 class="card-title">
+                        <i class="fas fa-th mr-1"></i>
+                        Capturas
+                    </h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
+
                 <div class="card-body collapse show" id="capturas-collapse">
                     <div class="table-responsive">
                         <table class="table table-dark table-striped mb-0" id="capturas-table">
@@ -417,6 +425,7 @@
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
                 };
+                console.log(payload)
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
                 $.ajax({

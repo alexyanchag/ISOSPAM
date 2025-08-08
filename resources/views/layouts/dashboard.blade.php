@@ -7,7 +7,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 </head>
@@ -44,7 +44,7 @@
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                     <li class="nav-item">
-                        <a href="/" class="nav-link">
+                        <a href="{{ url('/') }}" class="nav-link">
                             <i class="nav-icon fas fa-home"></i>
                             <p>Inicio</p>
                         </a>
@@ -154,7 +154,7 @@
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-ship"></i>
                             <p>
-                                Tipos de Embarcación
+                                Embarcaciones
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -221,7 +221,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('asignacionresponsable.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Asignar Responsable</p>
+                                    <p>Asignar Presidente</p>
                                 </a>
                             </li>
                         </ul>

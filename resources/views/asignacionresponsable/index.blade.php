@@ -15,7 +15,7 @@
     <thead>
         <tr>
             <th>Organización</th>
-            <th>Responsable</th>
+            <th>Presidente</th>
             <th>Inicio</th>
             <th>Fin</th>
             <th>Estado</th>

@@ -19,7 +19,7 @@
         </select>
     </div>
     <div class="mb-3">
-        <label class="form-label">Persona Responsable</label>
+        <label class="form-label">Persona Presidente</label>
         <select name="persona_idpersona" class="form-control" required>
             <option value="">Seleccione...</option>
             @foreach($personas as $per)

@@ -37,7 +37,7 @@
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Responsable</th>
+                    <th>Presidente</th>
                     <th>Inicio</th>
                     <th>Fin</th>
                     <th>Estado</th>
