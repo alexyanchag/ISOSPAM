@@ -46,7 +46,7 @@ class ViajeController extends Controller
         $data = $request->validate([
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['nullable', 'date'],
+            'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['nullable'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
@@ -95,7 +95,7 @@ class ViajeController extends Controller
         $data = $request->validate([
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['nullable', 'date'],
+            'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['nullable'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
@@ -149,9 +149,9 @@ class ViajeController extends Controller
     public function updatePorFinalizar(Request $request, string $id)
     {
         $data = $request->validate([
-            'fecha_zarpe' => ['required', 'date'],
+            'fecha_zarpe' => ['required', 'date', 'before_or_equal:fecha_arribo'],
             'hora_zarpe' => ['required'],
-            'fecha_arribo' => ['required', 'date'],
+            'fecha_arribo' => ['required', 'date', 'after_or_equal:fecha_zarpe'],
             'hora_arribo' => ['required'],
             'observaciones' => ['required', 'string'],
             'muelle_id' => ['nullable', 'integer'],
