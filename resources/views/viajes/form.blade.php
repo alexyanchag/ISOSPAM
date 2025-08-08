@@ -471,8 +471,9 @@
 
             $('#persona_idpersona').select2({
                 width: '100%',
-            placeholder: 'Seleccione...',
-            allowClear: true,
+                dropdownParent: $('#observador-modal'),
+                placeholder: 'Seleccione...',
+                allowClear: true,
                 ajax: {
                     url: "{{ route('ajax.personas') }}",
                     dataType: 'json',
