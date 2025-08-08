@@ -29,9 +29,12 @@ class CampaniaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'fechainicio' => ['nullable', 'date'],
-            'fechafin' => ['nullable', 'date'],
+            'fechainicio' => ['nullable', 'date', 'before_or_equal:fechafin'],
+            'fechafin' => ['nullable', 'date', 'after_or_equal:fechainicio'],
             'descripcion' => ['nullable', 'string'],
+        ], [
+            'fechainicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha fin.',
+            'fechafin.after_or_equal' => 'La fecha fin no puede ser menor a la fecha inicio.',
         ]);
 
         $response = $this->apiService->post('/campanias', $data);
@@ -58,9 +61,12 @@ class CampaniaController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'fechainicio' => ['nullable', 'date'],
-            'fechafin' => ['nullable', 'date'],
+            'fechainicio' => ['nullable', 'date', 'before_or_equal:fechafin'],
+            'fechafin' => ['nullable', 'date', 'after_or_equal:fechainicio'],
             'descripcion' => ['nullable', 'string'],
+        ], [
+            'fechainicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha fin.',
+            'fechafin.after_or_equal' => 'La fecha fin no puede ser menor a la fecha inicio.',
         ]);
 
         $response = $this->apiService->put("/campanias/{$id}", $data);
