@@ -36,6 +36,8 @@ use App\Http\Controllers\CapturaController;
 use App\Http\Controllers\CapturaAjaxController;
 use App\Http\Controllers\ObservadorViajeController;
 use App\Http\Controllers\ObservadorViajeAjaxController;
+use App\Http\Controllers\TripulanteViajeController;
+use App\Http\Controllers\TripulanteViajeAjaxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportesOperativosController;
 use App\Http\Controllers\CapturasController;
@@ -94,6 +96,13 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/capturas', [CapturaAjaxController::class, 'store'])->name('ajax.capturas.store');
     Route::put('ajax/capturas/{id}', [CapturaAjaxController::class, 'update'])->name('ajax.capturas.update');
     Route::delete('ajax/capturas/{id}', [CapturaAjaxController::class, 'destroy'])->name('ajax.capturas.destroy');
+
+    Route::resource('tripulantes-viaje', TripulanteViajeController::class)->except(['show']);
+    Route::get('ajax/tripulantes-viaje', [TripulanteViajeAjaxController::class, 'index'])->name('ajax.tripulantes-viaje');
+    Route::get('ajax/tripulantes-viaje/{id}', [TripulanteViajeAjaxController::class, 'show'])->name('ajax.tripulantes-viaje.show');
+    Route::post('ajax/tripulantes-viaje', [TripulanteViajeAjaxController::class, 'store'])->name('ajax.tripulantes-viaje.store');
+    Route::put('ajax/tripulantes-viaje/{id}', [TripulanteViajeAjaxController::class, 'update'])->name('ajax.tripulantes-viaje.update');
+    Route::delete('ajax/tripulantes-viaje/{id}', [TripulanteViajeAjaxController::class, 'destroy'])->name('ajax.tripulantes-viaje.destroy');
 
     Route::resource('observadores-viaje', ObservadorViajeController::class)->except(['show']);
     Route::get('ajax/observadores-viaje', [ObservadorViajeAjaxController::class, 'index'])->name('ajax.observadores-viaje');
