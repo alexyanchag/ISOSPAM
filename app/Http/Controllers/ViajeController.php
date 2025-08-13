@@ -255,8 +255,23 @@ class ViajeController extends Controller
             abort(404);
         }
 
+        $viaje = $response->json();
+
+        if (! empty($viaje['campania_id'] ?? null)) {
+            $respMulti = $this->apiService->get('/respuestas-multifinalitaria', [
+                'campania_id' => $viaje['campania_id'],
+                'tabla_relacionada' => 'viaje',
+                'relacion_id' => $viaje['id'] ?? $id,
+            ]);
+            $viaje['respuestas_multifinalitaria'] = $respMulti->successful()
+                ? $respMulti->json()
+                : [];
+        } else {
+            $viaje['respuestas_multifinalitaria'] = [];
+        }
+
         return view('viajes.mostrar', [
-            'viaje' => $response->json(),
+            'viaje' => $viaje,
         ]);
     }
 
