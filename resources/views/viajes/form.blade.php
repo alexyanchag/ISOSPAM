@@ -1344,19 +1344,20 @@
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
                 };
-                const respuestas = [];
-                $('#campos-dinamicos-captura').children().each(function () {
-                    const respuesta = $(this).find('[name$="[respuesta]"]').val();
-                    const tablaId = $(this).find('[name$="[tabla_multifinalitaria_id]"]').val();
-                    if (!tablaId) return;
-                    const item = { tabla_multifinalitaria_id: tablaId, respuesta };
-                    const respId = $(this).find('[name$="[id]"]').val();
-                    if (respId) item.id = respId;
-                    respuestas.push(item);
-                });
-                if (respuestas.length) {
-                    payload.respuestas_multifinalitaria = respuestas;
-                }
+                const respuestas = $('#campos-dinamicos-captura')
+                    .find('[name$="[tabla_multifinalitaria_id]"]')
+                    .map(function () {
+                        const wrap = $(this).closest('.col-md-4');
+                        const item = {
+                            tabla_multifinalitaria_id: $(this).val(),
+                            respuesta: wrap.find('[name$="[respuesta]"]').val()
+                        };
+                        const respId = wrap.find('[name$="[id]"]').val();
+                        if (respId) item.id = respId;
+                        return item;
+                    })
+                    .get();
+                payload.respuestas_multifinalitaria = respuestas;
                 console.log(payload)
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
