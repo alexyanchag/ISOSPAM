@@ -1271,6 +1271,10 @@
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
                 };
+                // Para campos dinámicos agregue un arreglo `respuestas_multifinalitaria`:
+                // payload.respuestas_multifinalitaria = [
+                //   { tabla_multifinalitaria_id: 1, respuesta: 'valor', id: null }
+                // ];
                 console.log(payload)
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
