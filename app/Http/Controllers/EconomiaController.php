@@ -7,7 +7,7 @@ class EconomiaController extends Controller {
   public function resumenPorViaje(Request $req) {
     $viaje_id = $req->get('viaje_id');
 
-    $ingresos = DB::table('public.economia_ventas as ev')
+    $ingresos = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->whereIn('c.viaje_id', function($q) use ($viaje_id){
         $q->select('id')->from('public.viaje');
@@ -15,7 +15,7 @@ class EconomiaController extends Controller {
       })
       ->sum('ev.precio');
 
-    $costos = DB::table('public.economia_insumo as ei')
+    $costos = DB::connection('reportes')->table('public.economia_insumo as ei')
       ->whereIn('ei.viaje_id', function($q) use ($viaje_id){
         $q->select('id')->from('public.viaje');
         if ($viaje_id) $q->where('id',$viaje_id);
@@ -31,7 +31,7 @@ class EconomiaController extends Controller {
     $destino = $req->get('destino');
     $periodo = $req->get('periodo');
 
-    $q = DB::table('public.economia_ventas as ev')
+    $q = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
@@ -49,7 +49,7 @@ class EconomiaController extends Controller {
     $arte = $req->get('arte');
     $puerto = $req->get('puerto');
 
-    $ing = \DB::table('public.economia_ventas as ev')
+    $ing = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.arte_pesca as ap','ap.viaje_id','=','v.id')
@@ -60,7 +60,7 @@ class EconomiaController extends Controller {
       ->selectRaw('coalesce(ta.nombre,coalesce(p.nombre,'Total')) as grupo, sum(ev.precio) as ingresos')
       ->groupBy('grupo');
 
-    $cos = \DB::table('public.economia_insumo as ei')
+    $cos = DB::connection('reportes')->table('public.economia_insumo as ei')
       ->join('public.viaje as v','v.id','=','ei.viaje_id')
       ->leftJoin('public.arte_pesca as ap','ap.viaje_id','=','v.id')
       ->leftJoin('public.tipo_arte as ta','ta.id','=','ap.tipo_arte_id')
@@ -87,7 +87,7 @@ class EconomiaController extends Controller {
     $especie = $req->get('especie');
     $periodo = $req->get('periodo');
 
-    $q = DB::table('public.economia_ventas as ev')
+    $q = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
@@ -106,7 +106,7 @@ class EconomiaController extends Controller {
     $periodo = $req->get('periodo');
     $arte = $req->get('arte');
 
-    $q = DB::table('public.economia_insumo as ei')
+    $q = DB::connection('reportes')->table('public.economia_insumo as ei')
       ->join('public.viaje as v','v.id','=','ei.viaje_id')
       ->leftJoin('public.arte_pesca as ap','ap.viaje_id','=','v.id')
       ->leftJoin('public.tipo_arte as ta','ta.id','=','ap.tipo_arte_id')

@@ -9,7 +9,7 @@ class FlotaController extends Controller {
     $motor = $req->get('motor');
     $estado = $req->get('estado'); // si existiese
 
-    $q = DB::table('public.embarcacion as e')
+    $q = DB::connection('reportes')->table('public.embarcacion as e')
       ->leftJoin('public.tipo_embarcacion as te','te.id','=','e.tipo_embarcacion_id')
       ->leftJoin('public.tipo_motor as tm','tm.id','=','e.tipo_motor_id')
       ->when($tipo, fn($qq)=>$qq->whereRaw('lower(te.nombre)=lower(?)',[$tipo]))
@@ -23,7 +23,7 @@ class FlotaController extends Controller {
     $emb = $req->get('embarcacion');
     $periodo = $req->get('periodo');
 
-    $q = DB::table('public.viaje as v')
+    $q = DB::connection('reportes')->table('public.viaje as v')
       ->leftJoin('public.embarcacion as e','e.id','=','v.embarcacion_id')
       ->leftJoin('public.captura as c','c.viaje_id','=','v.id')
       ->when($emb, fn($qq)=>$qq->whereRaw('lower(e.nombre)=lower(?)',[$emb]))
@@ -43,7 +43,7 @@ class FlotaController extends Controller {
     $periodo = $req->get('periodo');
     $emb = $req->get('embarcacion');
 
-    $q = DB::table('public.tripulante_viaje as tv')
+    $q = DB::connection('reportes')->table('public.tripulante_viaje as tv')
       ->join('public.viaje as v','v.id','=','tv.viaje_id')
       ->leftJoin('public.tipo_tripulante as tt','tt.id','=','tv.tipo_tripulante_id')
       ->leftJoin('public.embarcacion as e','e.id','=','v.embarcacion_id')

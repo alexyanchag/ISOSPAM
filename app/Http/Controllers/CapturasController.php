@@ -9,7 +9,7 @@ class CapturasController extends Controller {
     $puerto = $req->get('puerto');
     $arte = $req->get('arte');
 
-    $q = DB::table('public.captura as c')
+    $q = DB::connection('reportes')->table('public.captura as c')
       ->leftJoin('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
       ->leftJoin('public.arte_pesca as ap','ap.viaje_id','=','v.id')
@@ -38,7 +38,7 @@ class CapturasController extends Controller {
     $viaje_id = $req->get('viaje_id');
     $emb = $req->get('embarcacion');
 
-    $q = DB::table('public.captura as c')
+    $q = DB::connection('reportes')->table('public.captura as c')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.embarcacion as em','em.id','=','v.embarcacion_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
@@ -59,7 +59,7 @@ class CapturasController extends Controller {
     $periodo = $req->get('periodo'); // YYYY-MM
     $puerto = $req->get('puerto');
 
-    $q = DB::table('public.datos_biologicos as b')
+    $q = DB::connection('reportes')->table('public.datos_biologicos as b')
       ->join('public.captura as c','c.id','=','b.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
