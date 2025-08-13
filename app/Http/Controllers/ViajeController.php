@@ -104,9 +104,7 @@ class ViajeController extends Controller
         $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
         $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
 
-        $respRespuestas = $this->apiService->get("/respuestas-multifinalitaria/viaje/{$id}");
-        $respuestasMulti = $respRespuestas->successful() ? $respRespuestas->json() : [];
-        $viaje['respuestas_multifinalitaria'] = $respuestasMulti;
+        $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
 
         $camposDinamicos = collect($respuestasMulti)
             ->map(fn($r) => [
