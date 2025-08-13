@@ -25,4 +25,19 @@
         <a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
     </div>
 </div>
+@if(!empty($viaje['respuestas_multifinalitaria']))
+    <div class="card mt-3">
+        <div class="card-header">
+            <h3 class="card-title">Campos dinámicos</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                @foreach($viaje['respuestas_multifinalitaria'] as $r)
+                    <dt class="col-sm-4">{{ $r['nombre_pregunta'] ?? '' }}</dt>
+                    <dd class="col-sm-8">{{ $r['respuesta'] ?? '' }}</dd>
+                @endforeach
+            </dl>
+        </div>
+    </div>
+@endif
 @endsection

@@ -29,8 +29,11 @@ class ViajeController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $campaniaId = $request->query('campania_id');
+        $camposDinamicos = $campaniaId ? $this->getCamposDinamicos((int) $campaniaId) : [];
+
         return view('viajes.form', [
             'muelles' => $this->getMuelles(),
             'puertos' => $this->getPuertos(),
@@ -38,6 +41,7 @@ class ViajeController extends Controller
             'campanias' => $this->getCampanias(),
             'responsables' => $this->getPersonasPorRol('RESPVJ'),
             'digitadores' => $this->getPersonasPorRol('CTF'),
+            'camposDinamicos' => $camposDinamicos,
         ]);
     }
 
@@ -57,6 +61,8 @@ class ViajeController extends Controller
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
         ]);
+
+        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -98,6 +104,10 @@ class ViajeController extends Controller
         $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
         $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
 
+        $camposDinamicos = ! empty($viaje['campania_id'])
+            ? $this->getCamposDinamicos((int) $viaje['campania_id'])
+            : [];
+
         return view('viajes.form', [
             'viaje' => $viaje,
             'tripulantes' => $tripulantes,
@@ -111,6 +121,7 @@ class ViajeController extends Controller
             'campanias' => $this->getCampanias(),
             'responsables' => $this->getPersonasPorRol('RESPVJ'),
             'digitadores' => $this->getPersonasPorRol('CTF'),
+            'camposDinamicos' => $camposDinamicos,
         ]);
     }
 
@@ -130,6 +141,8 @@ class ViajeController extends Controller
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
         ]);
+
+        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -291,6 +304,16 @@ class ViajeController extends Controller
     private function getPersonasPorRol(string $codigoRol): array
     {
         $response = $this->apiService->get("/buscar-personas/{$codigoRol}");
+        return $response->successful() ? $response->json() : [];
+    }
+
+    private function getCamposDinamicos(int $campaniaId): array
+    {
+        $response = $this->apiService->get('/tabla-multifinalitaria', [
+            'campania_id' => $campaniaId,
+            'tabla_relacionada' => 'viaje',
+        ]);
+
         return $response->successful() ? $response->json() : [];
     }
 }
