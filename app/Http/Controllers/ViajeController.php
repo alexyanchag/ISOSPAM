@@ -73,7 +73,20 @@ class ViajeController extends Controller
 
         $data = $request->validate($rules);
 
-        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
+        $campoMap = collect($campos)->keyBy('id');
+        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
+            ->map(function ($resp) use ($campoMap) {
+                $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
+                $campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $resp['tabla_multifinalitaria_id'] ?? null;
+                unset($campo['id']);
+
+                return array_merge($campo, [
+                    'id' => $resp['id'] ?? null,
+                    'respuesta' => $resp['respuesta'] ?? null,
+                    'tabla_relacionada_id' => null,
+                ]);
+            })
+            ->all();
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -148,14 +161,9 @@ class ViajeController extends Controller
     public function update(Request $request, string $id)
     {
         $respViaje = $this->apiService->get("/viajes/{$id}");
-        $campos = [];
-        if ($respViaje->successful()) {
-            $campos = collect($respViaje->json()['respuestas_multifinalitaria'] ?? [])
-                ->map(fn($r) => [
-                    'id' => $r['tabla_multifinalitaria_id'] ?? null,
-                    'requerido' => $r['requerido'] ?? false,
-                ])->all();
-        }
+        $campos = $respViaje->successful()
+            ? ($respViaje->json()['respuestas_multifinalitaria'] ?? [])
+            : [];
 
         $rules = [
             'fecha_zarpe' => ['required', 'date'],
@@ -181,7 +189,19 @@ class ViajeController extends Controller
 
         $data = $request->validate($rules);
 
-        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
+        $campoMap = collect($campos)->keyBy('tabla_multifinalitaria_id');
+        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
+            ->map(function ($resp) use ($campoMap, $id) {
+                $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
+                $campo['tabla_multifinalitaria_id'] = $campo['tabla_multifinalitaria_id']
+                    ?? $resp['tabla_multifinalitaria_id'];
+                return array_merge($campo, [
+                    'id' => $resp['id'] ?? ($campo['id'] ?? null),
+                    'respuesta' => $resp['respuesta'] ?? null,
+                    'tabla_relacionada_id' => (int) $id,
+                ]);
+            })
+            ->all();
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
