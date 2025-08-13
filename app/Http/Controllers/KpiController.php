@@ -21,7 +21,7 @@ class KpiController extends Controller {
     $q = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
-      ->selectRaw('coalesce(e.nombre,'(sin especie)') as especie, sum(ev.precio) as ingreso_total, avg(ev.precio) as ingreso_prom')
+      ->selectRaw("coalesce(e.nombre,'(sin especie)') as especie, sum(ev.precio) as ingreso_total, avg(ev.precio) as ingreso_prom")
       ->groupBy('especie')
       ->orderByDesc('ingreso_total')
       ->limit(10);

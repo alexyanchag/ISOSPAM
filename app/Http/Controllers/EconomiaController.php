@@ -57,7 +57,7 @@ class EconomiaController extends Controller {
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
       ->when($arte, fn($qq)=>$qq->whereRaw('lower(ta.nombre)=lower(?)',[$arte]))
       ->when($puerto, fn($qq)=>$qq->whereRaw('lower(p.nombre)=lower(?)',[$puerto]))
-      ->selectRaw('coalesce(ta.nombre,coalesce(p.nombre,'Total')) as grupo, sum(ev.precio) as ingresos')
+      ->selectRaw("coalesce(ta.nombre,coalesce(p.nombre,'Total')) as grupo, sum(ev.precio) as ingresos")
       ->groupBy('grupo');
 
     $cos = DB::connection('reportes')->table('public.economia_insumo as ei')
@@ -67,7 +67,7 @@ class EconomiaController extends Controller {
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
       ->when($arte, fn($qq)=>$qq->whereRaw('lower(ta.nombre)=lower(?)',[$arte]))
       ->when($puerto, fn($qq)=>$qq->whereRaw('lower(p.nombre)=lower(?)',[$puerto]))
-      ->selectRaw('coalesce(ta.nombre,coalesce(p.nombre,'Total')) as grupo, sum(ei.cantidad) as costos')
+      ->selectRaw("coalesce(ta.nombre,coalesce(p.nombre,'Total')) as grupo, sum(ei.cantidad) as costos")
       ->groupBy('grupo');
 
     $ing = collect($ing->get())->keyBy('grupo');
@@ -114,9 +114,9 @@ class EconomiaController extends Controller {
       ->when($tipo, fn($qq)=>$qq->whereRaw('lower(ti.nombre)=lower(?)',[$tipo]))
       ->when($periodo, fn($qq)=>$qq->whereRaw("to_char(v.fecha_arribo,'YYYY-MM') = ?",[$periodo]))
       ->when($arte, fn($qq)=>$qq->whereRaw('lower(ta.nombre)=lower(?)',[$arte]))
-      ->selectRaw('coalesce(ti.nombre,'Total') as tipo, sum(ei.cantidad) as costo_total,
+      ->selectRaw("coalesce(ti.nombre,'Total') as tipo, sum(ei.cantidad) as costo_total,
                   avg(EXTRACT(EPOCH FROM (v.hora_arribo - v.hora_zarpe))/3600.0) as horas,
-                  sum(ei.cantidad)/nullif(sum(EXTRACT(EPOCH FROM (v.hora_arribo - v.hora_zarpe))/3600.0),0) as costo_por_hora')
+                  sum(ei.cantidad)/nullif(sum(EXTRACT(EPOCH FROM (v.hora_arribo - v.hora_zarpe))/3600.0),0) as costo_por_hora")
       ->groupBy('tipo')
       ->orderByDesc('costo_total');
     $rows = $q->get();
