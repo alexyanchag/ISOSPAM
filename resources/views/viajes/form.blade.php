@@ -495,6 +495,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="campos-dinamicos-captura" class="row"></div>
                                 </div>
                             </div>
 
@@ -867,6 +868,59 @@
                 });
             }
 
+            function renderCamposDinamicosCaptura(campos = [], respuestas = []) {
+                const row = $('#campos-dinamicos-captura');
+                row.empty();
+                if (!campos.length) {
+                    row.append('<p class="col-12 mb-0">No hay campos dinámicos para la campaña seleccionada.</p>');
+                    return;
+                }
+                const respMap = {};
+                (respuestas || []).forEach(r => {
+                    respMap[r.tabla_multifinalitaria_id] = r;
+                });
+                campos.forEach(function (campo, index) {
+                    var control = '';
+                    var requerido = campo.requerido ? 'required' : '';
+                    var resp = respMap[campo.id] || {};
+                    switch (campo.tipo_pregunta) {
+                        case 'COMBO':
+                            var opciones = [];
+                            try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) {}
+                            control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
+                            opciones.forEach(function(opt){
+                                var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
+                                var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                                var selected = (resp.respuesta || '') == value ? ' selected' : '';
+                                control += '<option value="' + value + '"' + selected + '>' + text + '</option>';
+                            });
+                            control += '</select>';
+                            break;
+                        case 'INTEGER':
+                            control = '<input type="number" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]" value="' + (resp.respuesta || '') + '">';
+                            break;
+                        case 'DATE':
+                            control = '<input type="date" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]" value="' + (resp.respuesta || '') + '">';
+                            break;
+                        case 'TIME':
+                            control = '<input type="time" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]" value="' + (resp.respuesta || '') + '">';
+                            break;
+                        default:
+                            control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]" value="' + (resp.respuesta || '') + '">';
+                    }
+                    if (campo.id != null) {
+                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
+                    }
+                    if (resp.id != null) {
+                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][id]" value="' + resp.id + '">';
+                    }
+                    var col = $('<div class="col-md-4 mb-3"></div>');
+                    col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
+                    col.append(control);
+                    row.append(col);
+                });
+            }
+
             $('select[name="campania_id"]').on('change', function () {
                 var campaniaId = $(this).val();
                 if (!campaniaId) {
@@ -1167,6 +1221,7 @@
             });
 
             function abrirModal(data = {}) {
+                const campaniaId = $('select[name="campania_id"]').val();
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
                 cargarEspecies(data.especie_id || '');
@@ -1178,6 +1233,21 @@
                 $('#tipo_numero_individuos').val(data.tipo_numero_individuos || '');
                 $('#tipo_peso').val(data.tipo_peso || '');
                 $('#estado_producto').val(data.estado_producto || '');
+                renderCamposDinamicosCaptura([]);
+                if (data.id) {
+                    const campos = (data.respuestas_multifinalitaria || []).map(r => ({
+                        id: r.tabla_multifinalitaria_id,
+                        nombre_pregunta: r.tabla_multifinalitaria_nombre_pregunta || r.nombre_pregunta,
+                        tipo_pregunta: r.tabla_multifinalitaria_tipo_pregunta || r.tipo_pregunta,
+                        opciones: r.tabla_multifinalitaria_opciones || r.opciones,
+                        requerido: r.tabla_multifinalitaria_requerido || r.requerido,
+                    }));
+                    renderCamposDinamicosCaptura(campos, data.respuestas_multifinalitaria || []);
+                } else if (campaniaId) {
+                    $.get('{{ url('ajax/campos-dinamicos') }}', { campania_id: campaniaId, tabla_relacionada: 'captura' }, function (campos) {
+                        renderCamposDinamicosCaptura(campos || []);
+                    });
+                }
                 $('#captura-modal').modal('show');
             }
 
@@ -1271,10 +1341,19 @@
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
                 };
-                // Para campos dinámicos agregue un arreglo `respuestas_multifinalitaria`:
-                // payload.respuestas_multifinalitaria = [
-                //   { tabla_multifinalitaria_id: 1, respuesta: 'valor', id: null }
-                // ];
+                const respuestas = [];
+                $('#campos-dinamicos-captura [name^="respuestas_multifinalitaria"]').each(function () {
+                    const match = this.name.match(/respuestas_multifinalitaria\[(\d+)\]\[(.+)\]/);
+                    if (match) {
+                        const idx = match[1];
+                        const key = match[2];
+                        respuestas[idx] = respuestas[idx] || {};
+                        respuestas[idx][key] = $(this).val();
+                    }
+                });
+                if (respuestas.length) {
+                    payload.respuestas_multifinalitaria = respuestas.filter(r => r);
+                }
                 console.log(payload)
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
