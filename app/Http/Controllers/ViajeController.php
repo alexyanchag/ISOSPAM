@@ -68,7 +68,7 @@ class ViajeController extends Controller
             $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
                 ? ['required']
                 : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
         }
 
         $data = $request->validate($rules);
@@ -184,7 +184,7 @@ class ViajeController extends Controller
             $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
                 ? ['required']
                 : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
         }
 
         $data = $request->validate($rules);

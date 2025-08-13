@@ -182,7 +182,9 @@
                                 @default
                                     <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                             @endswitch
-                            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
+                            @if(!empty($campo['id']))
+                                <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
+                            @endif
                             @if(isset($resp['id']))
                                 <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][id]" value="{{ $resp['id'] }}">
                             @endif
@@ -855,7 +857,9 @@
                         default:
                             control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                     }
-                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
+                    if (campo.id != null) {
+                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
+                    }
                     var col = $('<div class="col-md-4 mb-3"></div>');
                     col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
                     col.append(control);
