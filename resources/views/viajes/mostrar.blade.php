@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="card">
+<div class="card mb-3">
     <div class="card-header">
         <h3 class="card-title">Detalle del viaje</h3>
     </div>
@@ -21,12 +21,9 @@
             <dd class="col-sm-8">{{ $viaje['observaciones'] ?? '' }}</dd>
         </dl>
     </div>
-    <div class="card-footer">
-        <a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
-    </div>
 </div>
 @if(!empty($viaje['respuestas_multifinalitaria']))
-    <div class="card mt-3">
+    <div class="card mb-3">
         <div class="card-header">
             <h3 class="card-title">Campos dinámicos</h3>
         </div>
@@ -40,4 +37,6 @@
         </div>
     </div>
 @endif
+
+<a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
 @endsection
