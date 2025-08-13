@@ -470,6 +470,34 @@
             sidebar.addEventListener('scroll', () => {
                 sessionStorage.setItem('sidebar-scroll', sidebar.scrollTop);
             });
+
+            const treeviews = Array.from(sidebar.querySelectorAll('.nav-item.has-treeview'));
+            const openMenuIndexes = JSON.parse(sessionStorage.getItem('sidebar-open-menus') || '[]');
+
+            openMenuIndexes.forEach(index => {
+                const element = treeviews[index];
+                if (element) {
+                    element.classList.add('menu-open');
+                    const link = element.querySelector(':scope > a');
+                    if (link) {
+                        link.classList.add('active');
+                    }
+                }
+            });
+
+            treeviews.forEach((element, idx) => {
+                const link = element.querySelector(':scope > a');
+                if (link) {
+                    link.addEventListener('click', () => {
+                        requestAnimationFrame(() => {
+                            const openIndexes = treeviews
+                                .map((tv, index) => tv.classList.contains('menu-open') ? index : null)
+                                .filter(i => i !== null);
+                            sessionStorage.setItem('sidebar-open-menus', JSON.stringify(openIndexes));
+                        });
+                    });
+                }
+            });
         }
     </script>
     @yield('scripts')
