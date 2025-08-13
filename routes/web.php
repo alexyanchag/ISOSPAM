@@ -114,12 +114,14 @@ Route::middleware('ensure.logged.in')->group(function () {
 });
 
 
-function runReporte(string $file) {
-    $path = public_path("reportes/{$file}");
-    abort_unless(is_file($path), 404, 'Reporte no encontrado');
-    ob_start();
-    include $path;     // ejecuta rXX.php
-    return response(ob_get_clean());
+if (!function_exists('runReporte')) {
+    function runReporte(string $file) {
+        $path = public_path("reportes/{$file}");
+        abort_unless(is_file($path), 404, 'Reporte no encontrado');
+        ob_start();
+        include $path;     // ejecuta rXX.php
+        return response(ob_get_clean());
+    }
 }
 
 // Operativos
