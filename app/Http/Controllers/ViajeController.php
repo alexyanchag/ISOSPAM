@@ -47,7 +47,9 @@ class ViajeController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $campos = $this->getCamposDinamicos((int) $request->input('campania_id'));
+
+        $rules = [
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
@@ -60,9 +62,18 @@ class ViajeController extends Controller
             'embarcacion_id' => ['required', 'integer'],
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
-        ]);
+        ];
 
-        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
+        foreach ($campos as $i => $campo) {
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+                ? ['required']
+                : ['nullable'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+        }
+
+        $data = $request->validate($rules);
+
+        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -114,6 +125,7 @@ class ViajeController extends Controller
                 'opciones' => is_array($r['opciones'] ?? null)
                     ? json_encode($r['opciones'])
                     : ($r['opciones'] ?? '[]'),
+                'requerido' => $r['requerido'] ?? false,
             ])->all();
 
         return view('viajes.form', [
@@ -135,7 +147,9 @@ class ViajeController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $data = $request->validate([
+        $campos = $this->getCamposDinamicos((int) $request->input('campania_id'));
+
+        $rules = [
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
@@ -148,9 +162,18 @@ class ViajeController extends Controller
             'embarcacion_id' => ['required', 'integer'],
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
-        ]);
+        ];
 
-        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
+        foreach ($campos as $i => $campo) {
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+                ? ['required']
+                : ['nullable'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+        }
+
+        $data = $request->validate($rules);
+
+        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']

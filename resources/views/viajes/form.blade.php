@@ -143,13 +143,16 @@
                 @endphp
                 <div class="row">
                     @forelse($camposDinamicos ?? [] as $campo)
-                        @php $resp = $respuestas->get($campo['id'], []); @endphp
+                        @php
+                            $resp = $respuestas->get($campo['id'], []);
+                            $required = !empty($campo['requerido']) ? 'required' : '';
+                        @endphp
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }}</label>
                             @switch($campo['tipo_pregunta'])
                                 @case('COMBO')
                                     @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
-                                    <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control">
+                                    <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" {{ $required }}>
                                         <option value="">Seleccione...</option>
                                         @foreach($opciones as $opt)
                                             @php
@@ -161,17 +164,17 @@
                                     </select>
                                     @break
                                 @case('INTEGER')
-                                    <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                                     @break
                                 @case('DATE')
-                                    <input type="date" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    <input type="date" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                                     @break
                                 @case('TIME')
-                                    <input type="time" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    <input type="time" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                                     @break
                                 @case('INPUT')
                                 @default
-                                    <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                             @endswitch
                             <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
                             @if(isset($resp['id']))
@@ -821,25 +824,30 @@
                 }
                 campos.forEach(function (campo, index) {
                     var control = '';
+                    var requerido = campo.requerido ? 'required' : '';
                     switch (campo.tipo_pregunta) {
                         case 'COMBO':
                             var opciones = [];
                             try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) {}
-                            control = '<select class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
-                            opciones.forEach(function(opt){ control += '<option value="' + opt + '">' + opt + '</option>'; });
+                            control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
+                              opciones.forEach(function(opt){
+                                var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
+                                var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                                control += '<option value="' + value + '">' + text + '</option>';
+                            });
                             control += '</select>';
                             break;
                         case 'INTEGER':
-                            control = '<input type="number" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            control = '<input type="number" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                             break;
-                    case 'DATE':
-                            control = '<input type="date" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                        case 'DATE':
+                            control = '<input type="date" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                             break;
                         case 'TIME':
-                            control = '<input type="time" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            control = '<input type="time" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                             break;
                         default:
-                            control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                     }
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
                     var col = $('<div class="col-md-4 mb-3"></div>');
