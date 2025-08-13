@@ -88,4 +88,35 @@ class CampaniaController extends Controller
 
         return back()->withErrors(['error' => 'Error al eliminar']);
     }
+
+    public function camposDinamicos(Request $request)
+    {
+        $campaniaId = $request->input('campania_id');
+        $tabla = $request->input('tabla_relacionada');
+
+        if (!$campaniaId || !$tabla) {
+            return response()->json([]);
+        }
+
+        $response = $this->apiService->get("/campanias/{$campaniaId}");
+        if (!$response->successful()) {
+            return response()->json([]);
+        }
+
+        $campania = $response->json();
+        $campos = $campania['campos'] ?? [];
+
+        $filtrados = collect($campos)
+            ->filter(fn($c) => ($c['tabla_relacionada'] ?? '') === $tabla)
+            ->map(function ($c) {
+                $c['opciones'] = is_array($c['opciones'] ?? null)
+                    ? json_encode($c['opciones'])
+                    : ($c['opciones'] ?? '[]');
+                return $c;
+            })
+            ->values()
+            ->all();
+
+        return response()->json($filtrados);
+    }
 }

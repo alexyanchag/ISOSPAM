@@ -869,7 +869,7 @@
                     renderCamposDinamicos([]);
                     return;
                 }
-                $.get('/ajax/campos-dinamicos', { campania_id: campaniaId, tabla_relacionada: 'viaje' }, function (data) {
+                $.get('{{ url('ajax/campos-dinamicos') }}', { campania_id: campaniaId, tabla_relacionada: 'viaje' }, function (data) {
                     renderCamposDinamicos(data);
                 });
             });
