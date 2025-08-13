@@ -24,11 +24,6 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 @if(session('user'))
-                    <li class="nav-item d-lg-none">
-                        <a class="nav-link" href="{{ route('embarcaciones.index') }}">
-                            <i class="fas fa-ship"></i> Embarcaciones
-                        </a>
-                    </li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('/logout') }}">Logout</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
