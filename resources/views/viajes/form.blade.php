@@ -138,6 +138,86 @@
             <div class="card mt-3">
                 <div class="card-header border-0 bg-dark">
                     <h3 class="card-title">
+                        <i class="fas fa-user-friends mr-1"></i>
+                        Tripulantes
+                    </h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body collapse show" id="tripulantes-collapse">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped mb-0" id="tripulantes-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Persona</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($tripulantes ?? [] as $t)
+                                <tr>
+                                    <td>{{ $t['tipo_tripulante_nombre'] ?? '' }}</td>
+                                    <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-sm btn-secondary editar-tripulante" data-id="{{ $t['id'] }}">Editar</button>
+                                        <button class="btn btn-sm btn-danger eliminar-tripulante" data-id="{{ $t['id'] }}">Eliminar</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <button id="agregar-tripulante" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="tripulante-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="tripulante-form">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tripulante</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="hidden" id="tripulante-id">
+
+                                <div class="form-group">
+                                    <label>Tipo de Tripulante</label>
+                                    <select class="form-control" id="tipo_tripulante_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Persona</label>
+                                    <select class="form-control" id="persona_tripulante_idpersona">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header border-0 bg-dark">
+                    <h3 class="card-title">
                         <i class="fas fa-users mr-1"></i>
                         Observadores
                     </h3>
@@ -485,6 +565,23 @@
                     cache: true
                 }
             });
+
+            $('#persona_tripulante_idpersona').select2({
+                width: '100%',
+                dropdownParent: $('#tripulante-modal'),
+                placeholder: 'Seleccione...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('ajax.personas') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: params => ({ filtro: params.term, rol: 'TRIP' }),
+                    processResults: data => ({
+                        results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                    }),
+                    cache: true
+                }
+            });
             const ajaxBase = '{{ url('ajax') }}';
             const viajeId = {{ $viaje['id'] ?? 'null' }};
 
@@ -514,6 +611,41 @@
                         });
                     })
                     .catch(err => console.error('Error al cargar tipos de observador:', err));
+            }
+
+            function cargarTiposTripulante(selected = '') {
+                const select = $('#tipo_tripulante_id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/tipos-tripulante')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(t => {
+                            const opt = new Option(t.descripcion, t.id, false, String(t.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar tipos de tripulante:', err));
+            }
+
+            function cargarTripulantes() {
+                $.ajax({
+                    url: `${ajaxBase}/tripulantes-viaje`,
+                    data: { viaje_id: viajeId },
+                    success: data => {
+                        const tbody = $('#tripulantes-table tbody').empty();
+                        data.forEach(t => {
+                            const row = `<tr>
+                                <td>${t.tipo_tripulante_nombre ?? ''}</td>
+                                <td>${t.tripulante_nombres ?? ''}</td>
+                                <td class=\"text-right\">
+                                    <button class=\"btn btn-sm btn-secondary editar-tripulante\" data-id=\"${t.id}\">Editar</button>
+                                    <button class=\"btn btn-sm btn-danger eliminar-tripulante\" data-id=\"${t.id}\">Eliminar</button>
+                                </td>
+                            </tr>`;
+                            tbody.append(row);
+                        });
+                    }
+                });
             }
 
             function cargarCapturas() {
@@ -594,6 +726,19 @@
                 $('#observador-modal').modal('show');
             }
 
+            function abrirTripulanteModal(data = {}) {
+                $('#tripulante-id').val(data.id || '');
+                cargarTiposTripulante(data.tipo_tripulante_id || '');
+                const personaSelect = $('#persona_tripulante_idpersona');
+                if (data.persona_idpersona) {
+                    const opt = new Option(data.tripulante_nombres || '', data.persona_idpersona, true, true);
+                    personaSelect.append(opt).trigger('change');
+                } else {
+                    personaSelect.val(null).trigger('change');
+                }
+                $('#tripulante-modal').modal('show');
+            }
+
             function editarCaptura(id) {
                 $.ajax({
                     url: `${ajaxBase}/capturas/${id}`,
@@ -605,6 +750,13 @@
                 $.ajax({
                     url: `${ajaxBase}/observadores-viaje/${id}`,
                     success: data => abrirObservadorModal(data)
+                });
+            }
+
+            function editarTripulante(id) {
+                $.ajax({
+                    url: `${ajaxBase}/tripulantes-viaje/${id}`,
+                    success: data => abrirTripulanteModal(data)
                 });
             }
 
@@ -623,6 +775,15 @@
                     url: `${ajaxBase}/observadores-viaje/${id}`,
                     method: 'DELETE',
                     success: cargarObservadores
+                });
+            }
+
+            function eliminarTripulante(id) {
+                if (!confirm('¿Eliminar tripulante?')) return;
+                $.ajax({
+                    url: `${ajaxBase}/tripulantes-viaje/${id}`,
+                    method: 'DELETE',
+                    success: cargarTripulantes
                 });
             }
 
@@ -679,15 +840,41 @@
                 });
             });
 
+            $('#tripulante-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#tripulante-id').val();
+                const payload = {
+                    viaje_id: viajeId,
+                    tipo_tripulante_id: $('#tipo_tripulante_id').val(),
+                    persona_idpersona: $('#persona_tripulante_idpersona').val()
+                };
+                const url = id ? `${ajaxBase}/tripulantes-viaje/${id}` : `${ajaxBase}/tripulantes-viaje`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url,
+                    method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: () => {
+                        $('#tripulante-modal').modal('hide');
+                        cargarTripulantes();
+                    }
+                });
+            });
+
             if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
                 cargarCapturas();
                 cargarObservadores();
+                cargarTripulantes();
                 $('#agregar-captura').on('click', () => abrirModal());
                 $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
                 $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
                 $('#agregar-observador').on('click', () => abrirObservadorModal());
                 $('#observadores-table').on('click', '.editar-observador', function () { editarObservador($(this).data('id')); });
                 $('#observadores-table').on('click', '.eliminar-observador', function () { eliminarObservador($(this).data('id')); });
+                $('#agregar-tripulante').on('click', () => abrirTripulanteModal());
+                $('#tripulantes-table').on('click', '.editar-tripulante', function () { editarTripulante($(this).data('id')); });
+                $('#tripulantes-table').on('click', '.eliminar-tripulante', function () { eliminarTripulante($(this).data('id')); });
             }
         });
     </script>
