@@ -104,9 +104,15 @@ class ViajeController extends Controller
         $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
         $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
 
-        $camposDinamicos = ! empty($viaje['campania_id'])
-            ? $this->getCamposDinamicos((int) $viaje['campania_id'])
-            : [];
+        $camposDinamicos = collect($viaje['respuestas_multifinalitaria'] ?? [])
+            ->map(fn($r) => [
+                'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
+                'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
+                'opciones' => is_array($r['opciones'] ?? null)
+                    ? json_encode($r['opciones'])
+                    : ($r['opciones'] ?? '[]'),
+            ])->all();
 
         return view('viajes.form', [
             'viaje' => $viaje,
@@ -324,11 +330,23 @@ class ViajeController extends Controller
 
     private function getCamposDinamicos(int $campaniaId): array
     {
-        $response = $this->apiService->get('/tabla-multifinalitaria', [
-            'campania_id' => $campaniaId,
-            'tabla_relacionada' => 'viaje',
-        ]);
+        $response = $this->apiService->get("/campanias/{$campaniaId}");
+        if (! $response->successful()) {
+            return [];
+        }
 
-        return $response->successful() ? $response->json() : [];
+        $campania = $response->json();
+        $campos = $campania['campos'] ?? [];
+
+        return collect($campos)
+            ->filter(fn($c) => ($c['tabla_relacionada'] ?? '') === 'viaje')
+            ->map(function ($c) {
+                $c['opciones'] = is_array($c['opciones'] ?? null)
+                    ? json_encode($c['opciones'])
+                    : ($c['opciones'] ?? '[]');
+                return $c;
+            })
+            ->values()
+            ->all();
     }
 }
