@@ -540,6 +540,86 @@
                 </div>
             </div>
 
+            <div class="card mt-3">
+                <div class="card-header border-0 bg-dark">
+                    <h3 class="card-title">
+                        <i class="fas fa-coins mr-1"></i>
+                        Economía de Insumos
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="economia-insumo-collapse">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped mb-0" id="economia-insumo-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($economiaInsumos ?? [] as $e)
+                                <tr>
+                                    <td>{{ $e['nombre_tipo'] ?? '' }}</td>
+                                    <td>{{ $e['nombre_unidad'] ?? '' }}</td>
+                                    <td>{{ $e['cantidad'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-sm btn-secondary editar-economia-insumo" data-id="{{ $e['id'] }}">Editar</button>
+                                        <button class="btn btn-sm btn-danger eliminar-economia-insumo" data-id="{{ $e['id'] }}">Eliminar</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="agregar-economia-insumo" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="economia-insumo-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="economia-insumo-form">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Economía de Insumo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="economia-insumo-id">
+                                <div class="form-group">
+                                    <label>Tipo de Insumo</label>
+                                    <select class="form-control" id="tipo_insumo_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Unidad de Insumo</label>
+                                    <select class="form-control" id="unidad_insumo_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cantidad</label>
+                                    <input type="number" step="any" class="form-control" id="cantidad">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         @endif
     @endisset
 @endsection
@@ -875,6 +955,98 @@
                 });
             }
 
+            function cargarEconomiaInsumo() {
+                $.ajax({
+                    url: `${ajaxBase}/economia-insumo`,
+                    data: { viaje_id: viajeId },
+                    success: data => {
+                        const tbody = $('#economia-insumo-table tbody').empty();
+                        data.forEach(e => {
+                            const row = `<tr>
+                                <td>${e.nombre_tipo ?? ''}</td>
+                                <td>${e.nombre_unidad ?? ''}</td>
+                                <td>${e.cantidad ?? ''}</td>
+                                <td class="text-right">
+                                    <button class=\"btn btn-sm btn-secondary editar-economia-insumo\" data-id=\"${e.id}\">Editar</button>
+                                    <button class=\"btn btn-sm btn-danger eliminar-economia-insumo\" data-id=\"${e.id}\">Eliminar</button>
+                                </td>
+                            </tr>`;
+                            tbody.append(row);
+                        });
+                    }
+                });
+            }
+
+            function cargarTiposInsumo(selected = '') {
+                const select = $('#tipo_insumo_id').empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/tipos-insumo')
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(t => {
+                            const opt = new Option(t.nombre, t.id, false, String(t.id) === String(selected));
+                            select.append(opt);
+                        });
+                    });
+            }
+
+            function cargarUnidadesInsumo(selected = '') {
+                const select = $('#unidad_insumo_id').empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/unidades-insumo')
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(u => {
+                            const opt = new Option(u.nombre, u.id, false, String(u.id) === String(selected));
+                            select.append(opt);
+                        });
+                    });
+            }
+
+            function abrirEconomiaInsumoModal(data = {}) {
+                $('#economia-insumo-id').val(data.id || '');
+                $('#cantidad').val(data.cantidad || '');
+                cargarTiposInsumo(data.tipo_insumo_id || '');
+                cargarUnidadesInsumo(data.unidad_insumo_id || '');
+                $('#economia-insumo-modal').modal('show');
+            }
+
+            function editarEconomiaInsumo(id) {
+                $.ajax({
+                    url: `${ajaxBase}/economia-insumo/${id}`,
+                    success: data => abrirEconomiaInsumoModal(data)
+                });
+            }
+
+            function eliminarEconomiaInsumo(id) {
+                if (!confirm('¿Eliminar insumo?')) return;
+                $.ajax({
+                    url: `${ajaxBase}/economia-insumo/${id}`,
+                    method: 'DELETE',
+                    success: cargarEconomiaInsumo
+                });
+            }
+
+            $('#economia-insumo-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#economia-insumo-id').val();
+                const payload = {
+                    viaje_id: viajeId,
+                    tipo_insumo_id: $('#tipo_insumo_id').val(),
+                    unidad_insumo_id: $('#unidad_insumo_id').val(),
+                    cantidad: $('#cantidad').val()
+                };
+                const url = id ? `${ajaxBase}/economia-insumo/${id}` : `${ajaxBase}/economia-insumo`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: payload,
+                    success: () => {
+                        $('#economia-insumo-modal').modal('hide');
+                        cargarEconomiaInsumo();
+                    }
+                });
+            });
+
             function abrirModal(data = {}) {
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
@@ -1070,6 +1242,7 @@
                 cargarObservadores();
                 cargarTripulantes();
                 cargarParametrosAmbientales();
+                cargarEconomiaInsumo();
                 $('#agregar-captura').on('click', () => abrirModal());
                 $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
                 $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
@@ -1082,6 +1255,9 @@
                 $('#agregar-parametro').on('click', () => abrirParametroModal());
                 $('#parametros-ambientales-table').on('click', '.editar-parametro', function () { editarParametro($(this).data('id')); });
                 $('#parametros-ambientales-table').on('click', '.eliminar-parametro', function () { eliminarParametro($(this).data('id')); });
+                $('#agregar-economia-insumo').on('click', () => abrirEconomiaInsumoModal());
+                $('#economia-insumo-table').on('click', '.editar-economia-insumo', function () { editarEconomiaInsumo($(this).data('id')); });
+                $('#economia-insumo-table').on('click', '.eliminar-economia-insumo', function () { eliminarEconomiaInsumo($(this).data('id')); });
             }
         });
     </script>
