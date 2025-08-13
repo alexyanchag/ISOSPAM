@@ -44,11 +44,13 @@ use App\Http\Controllers\CapturasController;
 use App\Http\Controllers\BiologiaController;
 use App\Http\Controllers\ZonasController;
 use App\Http\Controllers\EconomiaController;
+use App\Http\Controllers\EconomiaInsumoController;
 use App\Http\Controllers\FlotaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\AlertasController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ParametroAmbientalAjaxController;
+use App\Http\Controllers\EconomiaInsumoAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -117,6 +119,13 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/parametros-ambientales', [ParametroAmbientalAjaxController::class, 'store'])->name('ajax.parametros-ambientales.store');
     Route::put('ajax/parametros-ambientales/{id}', [ParametroAmbientalAjaxController::class, 'update'])->name('ajax.parametros-ambientales.update');
     Route::delete('ajax/parametros-ambientales/{id}', [ParametroAmbientalAjaxController::class, 'destroy'])->name('ajax.parametros-ambientales.destroy');
+
+    Route::resource('economia-insumo', EconomiaInsumoController::class)->except(['show']);
+    Route::get('ajax/economia-insumo', [EconomiaInsumoAjaxController::class, 'index'])->name('ajax.economia-insumo');
+    Route::get('ajax/economia-insumo/{id}', [EconomiaInsumoAjaxController::class, 'show'])->name('ajax.economia-insumo.show');
+    Route::post('ajax/economia-insumo', [EconomiaInsumoAjaxController::class, 'store'])->name('ajax.economia-insumo.store');
+    Route::put('ajax/economia-insumo/{id}', [EconomiaInsumoAjaxController::class, 'update'])->name('ajax.economia-insumo.update');
+    Route::delete('ajax/economia-insumo/{id}', [EconomiaInsumoAjaxController::class, 'destroy'])->name('ajax.economia-insumo.destroy');
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
