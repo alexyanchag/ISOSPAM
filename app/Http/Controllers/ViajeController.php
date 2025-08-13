@@ -147,7 +147,15 @@ class ViajeController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $campos = $this->getCamposDinamicos((int) $request->input('campania_id'));
+        $respViaje = $this->apiService->get("/viajes/{$id}");
+        $campos = [];
+        if ($respViaje->successful()) {
+            $campos = collect($respViaje->json()['respuestas_multifinalitaria'] ?? [])
+                ->map(fn($r) => [
+                    'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                    'requerido' => $r['requerido'] ?? false,
+                ])->all();
+        }
 
         $rules = [
             'fecha_zarpe' => ['required', 'date'],
