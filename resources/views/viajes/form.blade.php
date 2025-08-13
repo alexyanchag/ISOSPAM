@@ -22,7 +22,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">Campaña</label>
+                        <label class="form-label">Campaña <span class="text-danger">*</span></label>
                         <select name="campania_id" class="form-control">
                             <option value="">Seleccione...</option>
                             @foreach($campanias as $c)
@@ -34,7 +34,7 @@
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Responsable Viaje</label>
+                        <label class="form-label">Responsable Viaje <span class="text-danger">*</span></label>
                         <select id="responsable-select" name="persona_idpersona" class="form-control select2">
                             <option value="">Seleccione...</option>
                             @foreach($responsables as $per)
@@ -44,7 +44,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Digitador</label>
+                        <label class="form-label">Digitador <span class="text-danger">*</span></label>
                         <select id="digitador-select" name="digitador_id" class="form-control select2">
                             <option value="">Seleccione...</option>
                             @foreach($digitadores as $d)
@@ -53,7 +53,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Embarcación</label>
+                        <label class="form-label">Embarcación <span class="text-danger">*</span></label>
                         <select name="embarcacion_id" class="form-control">
                             <option value="">Seleccione...</option>
                             @foreach($embarcaciones as $e)
@@ -65,17 +65,17 @@
 
                 <div class="row">
                     <div class="col-md-3 col-lg-2 mb-3">
-                        <label class="form-label">Fecha Zarpe</label>
+                        <label class="form-label">Fecha Zarpe <span class="text-danger">*</span></label>
                         <input type="date" name="fecha_zarpe" id="fecha_zarpe" class="form-control"
                             value="{{ old('fecha_zarpe', $viaje['fecha_zarpe'] ?? '') }}">
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
-                        <label class="form-label">Hora Zarpe</label>
+                        <label class="form-label">Hora Zarpe <span class="text-danger">*</span></label>
                         <input type="time" name="hora_zarpe" id="hora_zarpe" class="form-control"
                             value="{{ old('hora_zarpe', $viaje['hora_zarpe'] ?? '') }}">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Puerto Zarpe</label>
+                        <label class="form-label">Puerto Zarpe <span class="text-danger">*</span></label>
                         <select name="puerto_zarpe_id" class="form-control">
                             <option value="">Seleccione...</option>
                             @foreach($puertos as $p)
@@ -87,17 +87,17 @@
 
                 <div class="row">
                     <div class="col-md-3 col-lg-2 mb-3">
-                        <label class="form-label">Fecha Arribo</label>
+                        <label class="form-label">Fecha Arribo <span class="text-danger">*</span></label>
                         <input type="date" name="fecha_arribo" id="fecha_arribo" class="form-control"
                             value="{{ old('fecha_arribo', $viaje['fecha_arribo'] ?? '') }}">
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
-                        <label class="form-label">Hora Arribo</label>
+                        <label class="form-label">Hora Arribo <span class="text-danger">*</span></label>
                         <input type="time" name="hora_arribo" id="hora_arribo" class="form-control"
                             value="{{ old('hora_arribo', $viaje['hora_arribo'] ?? '') }}">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Puerto Arribo</label>
+                        <label class="form-label">Puerto Arribo <span class="text-danger">*</span></label>
                         <select name="puerto_arribo_id" class="form-control">
                             <option value="">Seleccione...</option>
                             @foreach($puertos as $p)
@@ -121,7 +121,7 @@
                 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label class="form-label">Observaciones</label>
+                        <label class="form-label">Observaciones <span class="text-danger">*</span></label>
                         <textarea name="observaciones"
                             class="form-control">{{ old('observaciones', $viaje['observaciones'] ?? '') }}</textarea>
                     </div>
@@ -148,7 +148,7 @@
                             $required = !empty($campo['requerido']) ? 'required' : '';
                         @endphp
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }}</label>
+                            <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }} @if($required)<span class="text-danger">*</span>@endif</label>
                             @switch($campo['tipo_pregunta'])
                                 @case('COMBO')
                                     @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
