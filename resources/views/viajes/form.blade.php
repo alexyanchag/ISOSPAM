@@ -131,6 +131,55 @@
                 @endif
             </div>
         </div>
+
+        <div class="card mt-3" id="campos-dinamicos-card">
+            <div class="card-header">
+                <h3 class="card-title">Campos dinámicos</h3>
+            </div>
+            <div class="card-body" id="campos-dinamicos-body">
+                @php
+                    $respuestas = collect(old('respuestas_multifinalitaria', $viaje['respuestas_multifinalitaria'] ?? []))
+                        ->keyBy('tabla_multifinalitaria_id');
+                @endphp
+                <div class="row">
+                    @forelse($camposDinamicos ?? [] as $campo)
+                        @php $resp = $respuestas->get($campo['id'], []); @endphp
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }}</label>
+                            @switch($campo['tipo_pregunta'])
+                                @case('COMBO')
+                                    @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
+                                    <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control">
+                                        <option value="">Seleccione...</option>
+                                        @foreach($opciones as $opt)
+                                            <option value="{{ $opt }}" @selected(($resp['respuesta'] ?? '') == $opt)>{{ $opt }}</option>
+                                        @endforeach
+                                    </select>
+                                    @break
+                                @case('INTEGER')
+                                    <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    @break
+                                @case('DATE')
+                                    <input type="date" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    @break
+                                @case('TIME')
+                                    <input type="time" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                                    @break
+                                @case('INPUT')
+                                @default
+                                    <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}">
+                            @endswitch
+                            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
+                            @if(isset($resp['id']))
+                                <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][id]" value="{{ $resp['id'] }}">
+                            @endif
+                        </div>
+                    @empty
+                        <p class="col-12 mb-0">No hay campos dinámicos para la campaña seleccionada.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
     </form>
 
     @isset($viaje)
@@ -759,6 +808,54 @@
                     cache: true
                 }
             });
+            function renderCamposDinamicos(campos) {
+                const row = $('#campos-dinamicos-body .row');
+                row.empty();
+                if (!campos.length) {
+                    row.append('<p class="col-12 mb-0">No hay campos dinámicos para la campaña seleccionada.</p>');
+                    return;
+                }
+                campos.forEach(function (campo, index) {
+                    var control = '';
+                    switch (campo.tipo_pregunta) {
+                        case 'COMBO':
+                            var opciones = [];
+                            try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) {}
+                            control = '<select class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
+                            opciones.forEach(function(opt){ control += '<option value="' + opt + '">' + opt + '</option>'; });
+                            control += '</select>';
+                            break;
+                        case 'INTEGER':
+                            control = '<input type="number" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            break;
+                    case 'DATE':
+                            control = '<input type="date" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            break;
+                        case 'TIME':
+                            control = '<input type="time" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                            break;
+                        default:
+                            control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + index + '][respuesta]">';
+                    }
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
+                    var col = $('<div class="col-md-4 mb-3"></div>');
+                    col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
+                    col.append(control);
+                    row.append(col);
+                });
+            }
+
+            $('select[name="campania_id"]').on('change', function () {
+                var campaniaId = $(this).val();
+                if (!campaniaId) {
+                    renderCamposDinamicos([]);
+                    return;
+                }
+                $.get('/ajax/campos-dinamicos', { campania_id: campaniaId, tabla_relacionada: 'viaje' }, function (data) {
+                    renderCamposDinamicos(data);
+                });
+            });
+
             const ajaxBase = '{{ url('ajax') }}';
             const viajeId = {{ $viaje['id'] ?? 'null' }};
 
