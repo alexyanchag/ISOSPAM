@@ -76,8 +76,9 @@ class ViajeController extends Controller
         $campoMap = collect($campos)->keyBy('id');
         $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
             ->map(function ($resp) use ($campoMap) {
-                $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
-                $campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $resp['tabla_multifinalitaria_id'] ?? null;
+                $id = $resp['tabla_multifinalitaria_id'] ?? null;
+                $campo = (array) $campoMap->get($id, []);
+                $campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $id;
                 unset($campo['id']);
 
                 return array_merge($campo, [
