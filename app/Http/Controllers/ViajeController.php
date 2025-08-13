@@ -214,7 +214,18 @@ class ViajeController extends Controller
         $response = $this->apiService->put("/viajes/{$id}", $data);
 
         if ($response->successful()) {
+            if ($request->boolean('por_finalizar')) {
+                return redirect()->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                    ->with('success', 'Viaje actualizado correctamente');
+            }
+
             return redirect()->route('viajes.index')->with('success', 'Viaje actualizado correctamente');
+        }
+
+        if ($request->boolean('por_finalizar')) {
+            return redirect()->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                ->withErrors(['error' => 'Error al actualizar'])
+                ->withInput();
         }
 
         return back()->withErrors(['error' => 'Error al actualizar'])->withInput();

@@ -6,6 +6,9 @@
         @if(isset($viaje))
             @method('PUT')
         @endif
+        @if(request()->boolean('por_finalizar'))
+            <input type="hidden" name="por_finalizar" value="1">
+        @endif
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
