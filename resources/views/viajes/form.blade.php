@@ -432,6 +432,7 @@
                             <!-- Scroll interno en el cuerpo -->
                             <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                                 <input type="hidden" id="captura-id">
+                                <div id="captura-error" class="alert alert-danger d-none"></div>
 
                                 <div class="container-fluid">
                                     <div class="row">
@@ -1222,6 +1223,7 @@
 
             function abrirModal(data = {}) {
                 const campaniaId = $('select[name="campania_id"]').val();
+                $('#captura-error').addClass('d-none').text('');
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
                 cargarEspecies(data.especie_id || '');
@@ -1327,6 +1329,7 @@
 
             $('#captura-form').on('submit', function (e) {
                 e.preventDefault();
+                $('#captura-error').addClass('d-none').text('');
                 const id = $('#captura-id').val();
                 const payload = {
                     nombre_comun: $('#nombre_comun').val(),
@@ -1365,6 +1368,16 @@
                     success: () => {
                         $('#captura-modal').modal('hide');
                         cargarCapturas();
+                    },
+                    error: (xhr) => {
+                        if (xhr.status === 422) {
+                            const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
+                            const messages = [];
+                            Object.values(errors).forEach(arr => { messages.push(...arr); });
+                            $('#captura-error').removeClass('d-none').html(messages.join('<br>'));
+                        } else {
+                            $('#captura-error').removeClass('d-none').text('Error al guardar la captura');
+                        }
                     }
                 });
             });
