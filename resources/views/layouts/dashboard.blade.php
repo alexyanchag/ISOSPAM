@@ -296,6 +296,77 @@
                             </li>
                         </ul>
                     </li>
+
+
+
+
+
+                    <li class="nav-item has-treeview menu-open">
+                        <a href="#" class="nav-link active"><i class="nav-icon fas fa-ship"></i><p>Operativos<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('operativos.viajes') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Viajes por periodo</p></a></li>
+                        <li class="nav-item"><a href="{{ route('operativos.esfuerzo') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Mapa de esfuerzo</p></a></li>
+                        <li class="nav-item"><a href="{{ route('operativos.productividad') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Productividad usuarios</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-fish"></i><p>Capturas<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('capturas.top') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Top-N por especie</p></a></li>
+                        <li class="nav-item"><a href="{{ route('capturas.composicion') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Composición por viaje</p></a></li>
+                        <li class="nav-item"><a href="{{ route('capturas.tallas') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Capturas por tamaño</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-dna"></i><p>Biología<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('biologia.tallas') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Estructura de tallas</p></a></li>
+                        <li class="nav-item"><a href="{{ route('biologia.madurez') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Madurez gonadal</p></a></li>
+                        <li class="nav-item"><a href="{{ route('biologia.rel_lw') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Relación L–W</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-map-marked-alt"></i><p>Zonas<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('zonas.sitios') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Sitios más frecuentes</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-dollar-sign"></i><p>Economía<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('economia.viaje') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Resumen por viaje</p></a></li>
+                        <li class="nav-item"><a href="{{ route('economia.precios') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Precio promedio</p></a></li>
+                        <li class="nav-item"><a href="{{ route('economia.margen') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Margen por arte/zona</p></a></li>
+                        <li class="nav-item"><a href="{{ route('economia.destino') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Destino de venta</p></a></li>
+                        <li class="nav-item"><a href="{{ route('economia.insumos') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Insumos por viaje</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-anchor"></i><p>Flota<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('flota.inventario') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Inventario</p></a></li>
+                        <li class="nav-item"><a href="{{ route('flota.productividad') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Productividad</p></a></li>
+                        <li class="nav-item"><a href="{{ route('flota.tripulacion') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Tripulación</p></a></li>
+                        <li class="nav-item"><a href="{{ route('flota.seguridad') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Seguridad</p></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link"><i class="nav-icon fas fa-chart-line"></i><p>Ejecutivos<i class="right fas fa-angle-left"></i></p></a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item"><a href="{{ route('kpi.mensual') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>KPI mensual</p></a></li>
+                        <li class="nav-item"><a href="{{ route('kpi.top_valor') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Top 10 especies por valor</p></a></li>
+                        <li class="nav-item"><a href="{{ route('kpi.sostenibilidad') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Sostenibilidad</p></a></li>
+                        <li class="nav-item"><a href="{{ route('kpi.operativo') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Desempeño operativo</p></a></li>
+                        <li class="nav-item"><a href="{{ route('kpi.interanual') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Comparativo interanual</p></a></li>
+                        <li class="nav-item"><a href="{{ route('kpi.alertas') }}" class="nav-link"><i class="far fa-circle nav-icon"></i><p>Alertas</p></a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>

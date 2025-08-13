@@ -36,6 +36,16 @@ use App\Http\Controllers\CapturaController;
 use App\Http\Controllers\CapturaAjaxController;
 use App\Http\Controllers\ObservadorViajeController;
 use App\Http\Controllers\ObservadorViajeAjaxController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportesOperativosController;
+use App\Http\Controllers\CapturasController;
+use App\Http\Controllers\BiologiaController;
+use App\Http\Controllers\ZonasController;
+use App\Http\Controllers\EconomiaController;
+use App\Http\Controllers\FlotaController;
+use App\Http\Controllers\KpiController;
+use App\Http\Controllers\AlertasController;
+use App\Http\Controllers\ApiController;
 
 Route::get('/', function () {
     return view('home');
@@ -102,3 +112,56 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::delete('rolpersona/{idpersona}/{idrol}', [RolPersonaController::class, 'destroy'])->name('rolpersona.destroy');
     Route::resource('rolpersona', RolPersonaController::class)->only(['index', 'create', 'store']);
 });
+
+
+function runReporte(string $file) {
+    $path = public_path("reportes/{$file}");
+    abort_unless(is_file($path), 404, 'Reporte no encontrado');
+    ob_start();
+    include $path;     // ejecuta rXX.php
+    return response(ob_get_clean());
+}
+
+// Operativos
+Route::get('/operativos/viajes', [ReportesOperativosController::class, 'viajesPeriodo'])->name('operativos.viajes');
+Route::get('/operativos/esfuerzo', [ReportesOperativosController::class, 'mapaEsfuerzo'])->name('operativos.esfuerzo');
+Route::get('/operativos/productividad', [ReportesOperativosController::class, 'productividadUsuarios'])->name('operativos.productividad');
+
+// Capturas
+Route::get('/capturas/top', [CapturasController::class, 'topEspecies'])->name('capturas.top');
+Route::get('/capturas/composicion', [CapturasController::class, 'composicionPorViaje'])->name('capturas.composicion');
+Route::get('/capturas/tallas', [CapturasController::class, 'capturasPorTamanio'])->name('capturas.tallas');
+
+// Biología
+Route::get('/biologia/tallas', [BiologiaController::class, 'estructuraTallas'])->name('biologia.tallas');
+Route::get('/biologia/madurez', [BiologiaController::class, 'madurez'])->name('biologia.madurez');
+Route::get('/biologia/rel-lw', [BiologiaController::class, 'relLW'])->name('biologia.rel_lw');
+
+// Zonas
+Route::get('/zonas/sitios', [ZonasController::class, 'sitiosFrecuentes'])->name('zonas.sitios');
+
+// Economía
+Route::get('/economia/viaje', [EconomiaController::class, 'resumenPorViaje'])->name('economia.viaje');
+Route::get('/economia/precios', [EconomiaController::class, 'precioPromedio'])->name('economia.precios');
+Route::get('/economia/margen', [EconomiaController::class, 'margen'])->name('economia.margen');
+Route::get('/economia/destino', [EconomiaController::class, 'destinoVenta'])->name('economia.destino');
+Route::get('/economia/insumos', [EconomiaController::class, 'costoInsumos'])->name('economia.insumos');
+
+// Flota
+Route::get('/flota/inventario', [FlotaController::class, 'inventario'])->name('flota.inventario');
+Route::get('/flota/productividad', [FlotaController::class, 'productividad'])->name('flota.productividad');
+Route::get('/flota/tripulacion', [FlotaController::class, 'tripulacion'])->name('flota.tripulacion');
+Route::get('/flota/seguridad', [FlotaController::class, 'seguridad'])->name('flota.seguridad');
+
+// Ejecutivos
+Route::get('/kpi/mensual', [KpiController::class, 'kpiMensual'])->name('kpi.mensual');
+Route::get('/kpi/top-valor', [KpiController::class, 'topValor'])->name('kpi.top_valor');
+Route::get('/kpi/sostenibilidad', [KpiController::class, 'sostenibilidad'])->name('kpi.sostenibilidad');
+Route::get('/kpi/operativo', [KpiController::class, 'desempenoOperativo'])->name('kpi.operativo');
+Route::get('/kpi/interanual', [KpiController::class, 'interanual'])->name('kpi.interanual');
+Route::get('/kpi/alertas', [AlertasController::class, 'index'])->name('kpi.alertas');
+
+// API para mapas/gráficas
+Route::get('/api/esfuerzo', [ApiController::class, 'esfuerzo'])->name('api.esfuerzo');
+Route::get('/api/sitios', [ApiController::class, 'sitios'])->name('api.sitios');
+Route::get('/api/serie', [ApiController::class, 'serie'])->name('api.serie');
