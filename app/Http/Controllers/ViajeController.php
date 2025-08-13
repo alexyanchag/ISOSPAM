@@ -47,7 +47,9 @@ class ViajeController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $campos = $this->getCamposDinamicos((int) $request->input('campania_id'));
+
+        $rules = [
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
@@ -60,9 +62,18 @@ class ViajeController extends Controller
             'embarcacion_id' => ['required', 'integer'],
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
-        ]);
+        ];
 
-        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
+        foreach ($campos as $i => $campo) {
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+                ? ['required']
+                : ['nullable'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+        }
+
+        $data = $request->validate($rules);
+
+        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -104,9 +115,18 @@ class ViajeController extends Controller
         $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
         $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
 
-        $camposDinamicos = ! empty($viaje['campania_id'])
-            ? $this->getCamposDinamicos((int) $viaje['campania_id'])
-            : [];
+        $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
+
+        $camposDinamicos = collect($respuestasMulti)
+            ->map(fn($r) => [
+                'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
+                'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
+                'opciones' => is_array($r['opciones'] ?? null)
+                    ? json_encode($r['opciones'])
+                    : ($r['opciones'] ?? '[]'),
+                'requerido' => $r['requerido'] ?? false,
+            ])->all();
 
         return view('viajes.form', [
             'viaje' => $viaje,
@@ -127,7 +147,17 @@ class ViajeController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $data = $request->validate([
+        $respViaje = $this->apiService->get("/viajes/{$id}");
+        $campos = [];
+        if ($respViaje->successful()) {
+            $campos = collect($respViaje->json()['respuestas_multifinalitaria'] ?? [])
+                ->map(fn($r) => [
+                    'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                    'requerido' => $r['requerido'] ?? false,
+                ])->all();
+        }
+
+        $rules = [
             'fecha_zarpe' => ['required', 'date'],
             'hora_zarpe' => ['required'],
             'fecha_arribo' => ['nullable', 'date', 'after_or_equal:fecha_zarpe'],
@@ -140,9 +170,18 @@ class ViajeController extends Controller
             'embarcacion_id' => ['required', 'integer'],
             'digitador_id' => ['required', 'integer'],
             'campania_id' => ['required', 'integer'],
-        ]);
+        ];
 
-        $data['respuestas_multifinalitaria'] = $request->input('respuestas_multifinalitaria', []);
+        foreach ($campos as $i => $campo) {
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+                ? ['required']
+                : ['nullable'];
+            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['required', 'integer'];
+        }
+
+        $data = $request->validate($rules);
+
+        $data['respuestas_multifinalitaria'] = $data['respuestas_multifinalitaria'] ?? [];
 
         if (($data['fecha_arribo'] ?? null) && ($data['hora_arribo'] ?? null)
             && $data['fecha_arribo'] === $data['fecha_zarpe']
@@ -324,11 +363,23 @@ class ViajeController extends Controller
 
     private function getCamposDinamicos(int $campaniaId): array
     {
-        $response = $this->apiService->get('/tabla-multifinalitaria', [
-            'campania_id' => $campaniaId,
-            'tabla_relacionada' => 'viaje',
-        ]);
+        $response = $this->apiService->get("/campanias/{$campaniaId}");
+        if (! $response->successful()) {
+            return [];
+        }
 
-        return $response->successful() ? $response->json() : [];
+        $campania = $response->json();
+        $campos = $campania['campos'] ?? [];
+
+        return collect($campos)
+            ->filter(fn($c) => ($c['tabla_relacionada'] ?? '') === 'viaje')
+            ->map(function ($c) {
+                $c['opciones'] = is_array($c['opciones'] ?? null)
+                    ? json_encode($c['opciones'])
+                    : ($c['opciones'] ?? '[]');
+                return $c;
+            })
+            ->values()
+            ->all();
     }
 }
