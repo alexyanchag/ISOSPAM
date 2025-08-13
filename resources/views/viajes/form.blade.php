@@ -575,7 +575,7 @@
                     url: "{{ route('ajax.personas') }}",
                     dataType: 'json',
                     delay: 250,
-                    data: params => ({ filtro: params.term, rol: 'TRIP' }),
+                    data: params => ({ filtro: params.term, rol: 'TRIPVJ' }),
                     processResults: data => ({
                         results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
                     }),
