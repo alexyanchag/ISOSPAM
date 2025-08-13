@@ -71,6 +71,12 @@ class CapturaAjaxController extends Controller
             $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
         }
 
+        $request->merge([
+            'respuestas_multifinalitaria' => array_values(
+                $request->input('respuestas_multifinalitaria', [])
+            ),
+        ]);
+
         $data = $request->validate($rules);
 
         $campoMap = collect($campos)->keyBy('id');
@@ -127,6 +133,12 @@ class CapturaAjaxController extends Controller
             $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
             $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
         }
+
+        $request->merge([
+            'respuestas_multifinalitaria' => array_values(
+                $request->input('respuestas_multifinalitaria', [])
+            ),
+        ]);
 
         $data = $request->validate($rules);
 
