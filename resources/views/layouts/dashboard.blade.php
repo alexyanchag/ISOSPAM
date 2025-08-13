@@ -460,6 +460,17 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         });
+
+        const sidebar = document.querySelector('.main-sidebar .sidebar');
+        if (sidebar) {
+            const savedScroll = sessionStorage.getItem('sidebar-scroll');
+            if (savedScroll !== null) {
+                sidebar.scrollTop = parseInt(savedScroll, 10);
+            }
+            sidebar.addEventListener('scroll', () => {
+                sessionStorage.setItem('sidebar-scroll', sidebar.scrollTop);
+            });
+        }
     </script>
     @yield('scripts')
 </body>
