@@ -34,6 +34,55 @@
         <input type="checkbox" name="es_descartada" id="es_descartada" class="form-check-input" value="1" {{ old('es_descartada', $captura['es_descartada'] ?? false) ? 'checked' : '' }}>
         <label for="es_descartada" class="form-check-label">Es Descartada</label>
     </div>
+
+    @php
+        $respuestas = collect(old('respuestas_multifinalitaria', $captura['respuestas_multifinalitaria'] ?? []))
+            ->keyBy('tabla_multifinalitaria_id');
+    @endphp
+    @forelse($camposDinamicos ?? [] as $campo)
+        @php
+            $resp = $respuestas->get($campo['id'], []);
+            $required = !empty($campo['requerido']) ? 'required' : '';
+        @endphp
+        <div class="mb-3">
+            <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }} @if($required)<span class="text-danger">*</span>@endif</label>
+            @switch($campo['tipo_pregunta'])
+                @case('SELECT')
+                    @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
+                    <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" {{ $required }}>
+                        <option value="">Seleccione...</option>
+                        @foreach($opciones as $opt)
+                            @php
+                                $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
+                                $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                            @endphp
+                            <option value="{{ $value }}" @selected(($resp['respuesta'] ?? '') == $value)>{{ $text }}</option>
+                        @endforeach
+                    </select>
+                    @break
+                @case('NUMBER')
+                    <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                    @break
+                @case('DATE')
+                    <input type="date" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                    @break
+                @case('TIME')
+                    <input type="time" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                    @break
+                @case('INPUT')
+                @default
+                    <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+            @endswitch
+            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
+            @if(isset($resp['id']))
+                <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][id]" value="{{ $resp['id'] }}">
+            @endif
+            @error('respuestas_multifinalitaria.' . $loop->index . '.respuesta')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+    @empty
+    @endforelse
     @if($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
