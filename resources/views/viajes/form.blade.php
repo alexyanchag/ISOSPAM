@@ -1342,17 +1342,17 @@
                     estado_producto: $('#estado_producto').val()
                 };
                 const respuestas = [];
-                $('#campos-dinamicos-captura [name^="respuestas_multifinalitaria"]').each(function () {
-                    const match = this.name.match(/respuestas_multifinalitaria\[(\d+)\]\[(.+)\]/);
-                    if (match) {
-                        const idx = match[1];
-                        const key = match[2];
-                        respuestas[idx] = respuestas[idx] || {};
-                        respuestas[idx][key] = $(this).val();
-                    }
+                $('#campos-dinamicos-captura').children().each(function () {
+                    const respuesta = $(this).find('[name$="[respuesta]"]').val();
+                    const tablaId = $(this).find('[name$="[tabla_multifinalitaria_id]"]').val();
+                    if (!tablaId) return;
+                    const item = { tabla_multifinalitaria_id: tablaId, respuesta };
+                    const respId = $(this).find('[name$="[id]"]').val();
+                    if (respId) item.id = respId;
+                    respuestas.push(item);
                 });
                 if (respuestas.length) {
-                    payload.respuestas_multifinalitaria = respuestas.filter(r => r);
+                    payload.respuestas_multifinalitaria = respuestas;
                 }
                 console.log(payload)
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
