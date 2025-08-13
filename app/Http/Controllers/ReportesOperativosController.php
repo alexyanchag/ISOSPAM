@@ -12,7 +12,7 @@ class ReportesOperativosController extends Controller {
     $tipo = $req->get('tipo_monitoreo');
     $usuario = $req->get('usuario');
 
-    $q = DB::table('public.viaje as v')
+    $q = DB::connection('reportes')->table('public.viaje as v')
       ->leftJoin('public.puerto as pz','pz.id','=','v.puerto_zarpe_id')
       ->leftJoin('public.puerto as pa','pa.id','=','v.puerto_arribo_id')
       ->leftJoin('public.muelle as m','m.id','=','v.muelle_id')
@@ -41,7 +41,7 @@ class ReportesOperativosController extends Controller {
     $desde = $req->get('desde');
     $hasta = $req->get('hasta');
 
-    $q = DB::table('public.viaje as v')
+    $q = DB::connection('reportes')->table('public.viaje as v')
       ->leftJoin('public.digitador as d','d.id','=','v.digitador_id')
       ->leftJoin('public.captura as c','c.viaje_id','=','v.id')
       ->when($usuario, fn($qq)=>$qq->whereRaw('lower(d.nombres)=lower(?) or lower(d.apellidos)=lower(?)',[ $usuario, $usuario ]))

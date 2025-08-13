@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 
 class KpiController extends Controller {
   public function kpiMensual(Request $req) {
-    $q = DB::table('public.captura as c')
+    $q = DB::connection('reportes')->table('public.captura as c')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
       ->selectRaw("to_char(v.fecha_arribo,'YYYY-MM') as periodo,
@@ -18,7 +18,7 @@ class KpiController extends Controller {
   }
 
   public function topValor(Request $req) {
-    $q = DB::table('public.economia_ventas as ev')
+    $q = DB::connection('reportes')->table('public.economia_ventas as ev')
       ->join('public.captura as c','c.id','=','ev.captura_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
       ->selectRaw('coalesce(e.nombre,'(sin especie)') as especie, sum(ev.precio) as ingreso_total, avg(ev.precio) as ingreso_prom')
@@ -36,7 +36,7 @@ class KpiController extends Controller {
   }
 
   public function desempenoOperativo(Request $req) {
-    $q = DB::table('public.viaje as v')
+    $q = DB::connection('reportes')->table('public.viaje as v')
       ->selectRaw('avg(extract(epoch from (v.fechafinalizado - v.fecha_zarpe))/3600.0) as horas_registro,
                   sum(case when v.fechafinalizado is null then 1 else 0 end) as backlog,
                   0 as errores')
@@ -45,7 +45,7 @@ class KpiController extends Controller {
   }
 
   public function interanual(Request $req) {
-    $q = DB::table('public.captura as c')
+    $q = DB::connection('reportes')->table('public.captura as c')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->selectRaw("extract(year from v.fecha_arribo) as anio,
                   sum(coalesce(c.peso_estimado,0)+coalesce(c.peso_contado,0)) as kg,

@@ -11,7 +11,7 @@ class ApiController extends Controller {
     $arte = $req->get('arte');
     $especie = $req->get('especie');
 
-    $q = DB::table('public.sitio_pesca as sp')
+    $q = DB::connection('reportes')->table('public.sitio_pesca as sp')
       ->selectRaw('sp.latitud::float as lat, sp.longitud::float as lon, count(*) as w')
       ->join('public.viaje as v', 'sp.viaje_id', '=', 'v.id')
       ->leftJoin('public.arte_pesca as ap', 'ap.viaje_id', '=', 'v.id')
@@ -34,7 +34,7 @@ class ApiController extends Controller {
     $hasta = $req->get('hasta');
     $especie = $req->get('especie');
 
-    $q = DB::table('public.sitio_pesca as sp')
+    $q = DB::connection('reportes')->table('public.sitio_pesca as sp')
       ->selectRaw('sp.nombre, sp.latitud::float as lat, sp.longitud::float as lon, count(distinct v.id) as viajes, sum(EXTRACT(EPOCH FROM (v.hora_arribo - v.hora_zarpe))/3600.0) as horas')
       ->join('public.viaje as v','v.id','=','sp.viaje_id')
       ->leftJoin('public.captura as c','c.viaje_id','=','v.id')
@@ -55,7 +55,7 @@ class ApiController extends Controller {
     $puerto = $req->get('puerto');
     $arte = $req->get('arte');
 
-    $q = DB::table('public.captura as c')
+    $q = DB::connection('reportes')->table('public.captura as c')
       ->selectRaw("to_char(v.fecha_arribo, 'YYYY-MM') as periodo, sum(coalesce(c.peso_estimado,0)+coalesce(c.peso_contado,0)) as kg")
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.arte_pesca as ap','ap.viaje_id','=','v.id')

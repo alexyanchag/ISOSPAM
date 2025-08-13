@@ -9,7 +9,7 @@ class BiologiaController extends Controller {
     $sexo = $req->get('sexo');
     $zona = $req->get('zona'); // puerto o sitio
 
-    $q = DB::table('public.datos_biologicos as b')
+    $q = DB::connection('reportes')->table('public.datos_biologicos as b')
       ->join('public.captura as c','c.id','=','b.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.puerto as p','p.id','=','v.puerto_arribo_id')
@@ -27,7 +27,7 @@ class BiologiaController extends Controller {
     $periodo = $req->get('periodo'); // YYYY-MM
     $zona = $req->get('zona');
 
-    $q = DB::table('public.datos_biologicos as b')
+    $q = DB::connection('reportes')->table('public.datos_biologicos as b')
       ->join('public.estado_desarrollo_gonadal as g','g.id','=','b.estado_desarrollo_gonadal_id')
       ->join('public.captura as c','c.id','=','b.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
@@ -46,7 +46,7 @@ class BiologiaController extends Controller {
     $especie = $req->get('especie');
     $periodo = $req->get('periodo');
 
-    $q = DB::table('public.datos_biologicos as b')
+    $q = DB::connection('reportes')->table('public.datos_biologicos as b')
       ->join('public.captura as c','c.id','=','b.captura_id')
       ->join('public.viaje as v','v.id','=','c.viaje_id')
       ->leftJoin('public.especie as e','e.id','=','c.especie_id')
