@@ -152,7 +152,11 @@
                                     <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control">
                                         <option value="">Seleccione...</option>
                                         @foreach($opciones as $opt)
-                                            <option value="{{ $opt }}" @selected(($resp['respuesta'] ?? '') == $opt)>{{ $opt }}</option>
+                                            @php
+                                                $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
+                                                $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                                            @endphp
+                                            <option value="{{ $value }}" @selected(($resp['respuesta'] ?? '') == $value)>{{ $text }}</option>
                                         @endforeach
                                     </select>
                                     @break
