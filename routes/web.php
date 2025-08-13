@@ -63,6 +63,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->middleware('ensure.lo
 Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('embarcaciones', EmbarcacionController::class)->except(['show']);
     Route::resource('campanias', CampaniaController::class)->except(['show']);
+    Route::get('ajax/campos-dinamicos', [CampaniaController::class, 'camposDinamicos']);
     Route::resource('puertos', PuertoController::class)->except(['show']);
     Route::resource('muelles', MuelleController::class)->except(['show']);
     Route::resource('tipoartes', TipoArteController::class)->except(['show']);
