@@ -48,6 +48,7 @@ use App\Http\Controllers\FlotaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\AlertasController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ParametroAmbientalAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -110,6 +111,12 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/observadores-viaje', [ObservadorViajeAjaxController::class, 'store'])->name('ajax.observadores-viaje.store');
     Route::put('ajax/observadores-viaje/{id}', [ObservadorViajeAjaxController::class, 'update'])->name('ajax.observadores-viaje.update');
     Route::delete('ajax/observadores-viaje/{id}', [ObservadorViajeAjaxController::class, 'destroy'])->name('ajax.observadores-viaje.destroy');
+
+    Route::get('ajax/parametros-ambientales', [ParametroAmbientalAjaxController::class, 'index'])->name('ajax.parametros-ambientales');
+    Route::get('ajax/parametros-ambientales/{id}', [ParametroAmbientalAjaxController::class, 'show'])->name('ajax.parametros-ambientales.show');
+    Route::post('ajax/parametros-ambientales', [ParametroAmbientalAjaxController::class, 'store'])->name('ajax.parametros-ambientales.store');
+    Route::put('ajax/parametros-ambientales/{id}', [ParametroAmbientalAjaxController::class, 'update'])->name('ajax.parametros-ambientales.update');
+    Route::delete('ajax/parametros-ambientales/{id}', [ParametroAmbientalAjaxController::class, 'destroy'])->name('ajax.parametros-ambientales.destroy');
 
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);

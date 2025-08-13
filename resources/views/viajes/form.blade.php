@@ -442,6 +442,103 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-3">
+                <div class="card-header border-0 bg-dark">
+                    <h3 class="card-title">
+                        <i class="fas fa-water mr-1"></i>
+                        Parámetros Ambientales
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="parametros-ambientales-collapse">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped mb-0" id="parametros-ambientales-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Sondeo PPT</th>
+                                    <th>TSMP</th>
+                                    <th>Estado Marea</th>
+                                    <th>Condición Mar</th>
+                                    <th>Oxígeno mg/l</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($parametrosAmbientales ?? [] as $p)
+                                <tr>
+                                    <td>{{ $p['hora'] ?? '' }}</td>
+                                    <td>{{ $p['sondeo_ppt'] ?? '' }}</td>
+                                    <td>{{ $p['tsmp'] ?? '' }}</td>
+                                    <td>{{ $p['estado_marea_descripcion'] ?? '' }}</td>
+                                    <td>{{ $p['condicion_mar_descripcion'] ?? '' }}</td>
+                                    <td>{{ $p['oxigeno_mg_l'] ?? '' }}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-sm btn-secondary editar-parametro" data-id="{{ $p['id'] }}">Editar</button>
+                                        <button class="btn btn-sm btn-danger eliminar-parametro" data-id="{{ $p['id'] }}">Eliminar</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                       </table>
+                   </div>
+                    <button id="agregar-parametro" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="parametro-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="parametro-form">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Parámetro Ambiental</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="parametro-id">
+                                <div class="form-group">
+                                    <label>Hora</label>
+                                    <input type="time" class="form-control" id="hora">
+                                </div>
+                                <div class="form-group">
+                                    <label>Sondeo PPT</label>
+                                    <input type="number" step="any" class="form-control" id="sondeo_ppt">
+                                </div>
+                                <div class="form-group">
+                                    <label>TSMP</label>
+                                    <input type="number" step="any" class="form-control" id="tsmp">
+                                </div>
+                                <div class="form-group">
+                                    <label>Estado Marea</label>
+                                    <select class="form-control" id="estado_marea_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Condición Mar</label>
+                                    <select class="form-control" id="condicion_mar_id">
+                                        <option value="">Seleccione...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Oxígeno mg/l</label>
+                                    <input type="number" step="any" class="form-control" id="oxigeno_mg_l">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
         @endif
     @endisset
@@ -698,6 +795,86 @@
                 });
             }
 
+            function cargarEstadosMarea(selected = '') {
+                const select = $('#estado_marea_id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/estados-marea')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(e => {
+                            const opt = new Option(e.descripcion, e.id, false, String(e.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar estados de marea:', err));
+            }
+
+            function cargarCondicionesMar(selected = '') {
+                const select = $('#condicion_mar_id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch('http://186.46.31.211:9090/isospam/condiciones-mar')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(c => {
+                            const opt = new Option(c.descripcion, c.id, false, String(c.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar condiciones de mar:', err));
+            }
+
+            function cargarParametrosAmbientales() {
+                $.ajax({
+                    url: `${ajaxBase}/parametros-ambientales`,
+                    data: { viaje_id: viajeId },
+                    success: data => {
+                        const tbody = $('#parametros-ambientales-table tbody').empty();
+                        data.forEach(p => {
+                            const row = `<tr>
+                                <td>${p.hora ?? ''}</td>
+                                <td>${p.sondeo_ppt ?? ''}</td>
+                                <td>${p.tsmp ?? ''}</td>
+                                <td>${p.estado_marea_descripcion ?? ''}</td>
+                                <td>${p.condicion_mar_descripcion ?? ''}</td>
+                                <td>${p.oxigeno_mg_l ?? ''}</td>
+                                <td class="text-right">
+                                    <button class="btn btn-sm btn-secondary editar-parametro" data-id="${p.id}">Editar</button>
+                                    <button class="btn btn-sm btn-danger eliminar-parametro" data-id="${p.id}">Eliminar</button>
+                                </td>
+                            </tr>`;
+                            tbody.append(row);
+                        });
+                    }
+                });
+            }
+
+            function abrirParametroModal(data = {}) {
+                $('#parametro-id').val(data.id || '');
+                $('#hora').val(data.hora || '');
+                $('#sondeo_ppt').val(data.sondeo_ppt || '');
+                $('#tsmp').val(data.tsmp || '');
+                cargarEstadosMarea(data.estado_marea_id || '');
+                cargarCondicionesMar(data.condicion_mar_id || '');
+                $('#oxigeno_mg_l').val(data.oxigeno_mg_l || '');
+                $('#parametro-modal').modal('show');
+            }
+
+            function editarParametro(id) {
+                $.ajax({
+                    url: `${ajaxBase}/parametros-ambientales/${id}`,
+                    success: data => abrirParametroModal(data)
+                });
+            }
+
+            function eliminarParametro(id) {
+                if (!confirm('¿Eliminar parámetro?')) return;
+                $.ajax({
+                    url: `${ajaxBase}/parametros-ambientales/${id}`,
+                    method: 'DELETE',
+                    success: cargarParametrosAmbientales
+                });
+            }
+
             function abrirModal(data = {}) {
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
@@ -862,10 +1039,37 @@
                 });
             });
 
+            $('#parametro-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#parametro-id').val();
+                const payload = {
+                    viaje_id: viajeId,
+                    hora: $('#hora').val(),
+                    sondeo_ppt: $('#sondeo_ppt').val(),
+                    tsmp: $('#tsmp').val(),
+                    estado_marea_id: $('#estado_marea_id').val(),
+                    condicion_mar_id: $('#condicion_mar_id').val(),
+                    oxigeno_mg_l: $('#oxigeno_mg_l').val()
+                };
+                const url = id ? `${ajaxBase}/parametros-ambientales/${id}` : `${ajaxBase}/parametros-ambientales`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url,
+                    method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: () => {
+                        $('#parametro-modal').modal('hide');
+                        cargarParametrosAmbientales();
+                    }
+                });
+            });
+
             if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
                 cargarCapturas();
                 cargarObservadores();
                 cargarTripulantes();
+                cargarParametrosAmbientales();
                 $('#agregar-captura').on('click', () => abrirModal());
                 $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
                 $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
@@ -875,6 +1079,9 @@
                 $('#agregar-tripulante').on('click', () => abrirTripulanteModal());
                 $('#tripulantes-table').on('click', '.editar-tripulante', function () { editarTripulante($(this).data('id')); });
                 $('#tripulantes-table').on('click', '.eliminar-tripulante', function () { eliminarTripulante($(this).data('id')); });
+                $('#agregar-parametro').on('click', () => abrirParametroModal());
+                $('#parametros-ambientales-table').on('click', '.editar-parametro', function () { editarParametro($(this).data('id')); });
+                $('#parametros-ambientales-table').on('click', '.eliminar-parametro', function () { eliminarParametro($(this).data('id')); });
             }
         });
     </script>

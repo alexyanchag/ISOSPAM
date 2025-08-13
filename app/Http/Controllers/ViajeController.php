@@ -92,11 +92,15 @@ class ViajeController extends Controller
         $respObservadores = $this->apiService->get('/observadores-viaje', ['viaje_id' => $id]);
         $observadores = $respObservadores->successful() ? $respObservadores->json() : [];
 
+        $respParametros = $this->apiService->get('/parametros-ambientales', ['viaje_id' => $id]);
+        $parametrosAmbientales = $respParametros->successful() ? $respParametros->json() : [];
+
         return view('viajes.form', [
             'viaje' => $viaje,
             'tripulantes' => $tripulantes,
             'capturas' => $capturas,
             'observadores' => $observadores,
+            'parametrosAmbientales' => $parametrosAmbientales,
             'muelles' => $this->getMuelles(),
             'puertos' => $this->getPuertos(),
             'embarcaciones' => $this->getEmbarcaciones(),
