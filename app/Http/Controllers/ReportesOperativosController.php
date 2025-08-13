@@ -47,10 +47,10 @@ class ReportesOperativosController extends Controller {
       ->when($usuario, fn($qq)=>$qq->whereRaw('lower(d.nombres)=lower(?) or lower(d.apellidos)=lower(?)',[ $usuario, $usuario ]))
       ->when($desde, fn($qq)=>$qq->whereDate('v.fecha_zarpe','>=',$desde))
       ->when($hasta, fn($qq)=>$qq->whereDate('v.fecha_arribo','<=',$hasta))
-      ->selectRaw('coalesce(d.nombres,'')||' '||coalesce(d.apellidos,'') as usuario,
+      ->selectRaw("coalesce(d.nombres,'')||' '||coalesce(d.apellidos,'') as usuario,
                   count(distinct v.id) as viajes_reg,
                   count(c.id) as capturas_reg,
-                  100.0 * sum(case when v.fechafinalizado is not null then 1 else 0 end)/nullif(count(distinct v.id),0) as pct_completos')
+                  100.0 * sum(case when v.fechafinalizado is not null then 1 else 0 end)/nullif(count(distinct v.id),0) as pct_completos")
       ->groupBy('usuario');
 
     $data = $q->get();

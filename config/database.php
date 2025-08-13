@@ -99,17 +99,14 @@ return [
 
         'reportes' => [
             'driver' => env('REPORT_DB_CONNECTION', 'pgsql'),
-            'url' => env('REPORT_DB_URL'),
             'host' => env('REPORT_DB_HOST', 'localhost'),
             'port' => env('REPORT_DB_PORT', '5432'),
             'database' => env('REPORT_DB_DATABASE', 'isospam'),
             'username' => env('REPORT_DB_USERNAME', 'postgres'),
             'password' => env('REPORT_DB_PASSWORD', '123456'),
-            'charset' => env('DB_CHARSET', 'utf8'),
+            'charset' => 'utf8',
             'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'schema' => 'public',
         ],
 
         'sqlsrv' => [
