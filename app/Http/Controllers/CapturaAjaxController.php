@@ -84,18 +84,17 @@ class CapturaAjaxController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors()->getMessages();
-            $campoNames = collect($request->input('respuestas_multifinalitaria', []))
-                ->mapWithKeys(function ($resp, $idx) use ($campos) {
-                    $campo = collect($campos)->firstWhere('id', $resp['tabla_multifinalitaria_id'] ?? null);
-                    return [$idx => $campo['nombre_pregunta'] ?? $idx];
-                });
-            $errors = collect($errors)->mapWithKeys(function ($msgs, $key) use ($campoNames) {
-                if (preg_match('/respuestas_multifinalitaria\.(\d+)/', $key, $m)) {
-                    $name = $campoNames->get((int) $m[1], $key);
-                    return [$name => $msgs];
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            foreach ($validator->errors()->get('respuestas_multifinalitaria.*.respuesta') as $key => $msgs) {
+                if (preg_match('/respuestas_multifinalitaria\.(\d+)\.respuesta/', $key, $m)) {
+                    $idx = (int) $m[1];
+                    $tablaId = $respuestas->get($idx)['tabla_multifinalitaria_id'] ?? null;
+                    $campo = collect($campos)->firstWhere('id', $tablaId);
+                    $name = $campo['nombre_pregunta'] ?? $key;
+                    unset($errors[$key]);
+                    $errors[$name] = $msgs;
                 }
-                return [$key => $msgs];
-            })->all();
+            }
 
             return response()->json([
                 'message' => 'The given data was invalid.',
@@ -173,19 +172,18 @@ class CapturaAjaxController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors()->getMessages();
-            $campoNames = collect($request->input('respuestas_multifinalitaria', []))
-                ->mapWithKeys(function ($resp, $idx) use ($campos) {
-                    $campo = collect($campos)->firstWhere('tabla_multifinalitaria_id', $resp['tabla_multifinalitaria_id'] ?? null) ??
-                        collect($campos)->firstWhere('id', $resp['tabla_multifinalitaria_id'] ?? null);
-                    return [$idx => $campo['nombre_pregunta'] ?? $idx];
-                });
-            $errors = collect($errors)->mapWithKeys(function ($msgs, $key) use ($campoNames) {
-                if (preg_match('/respuestas_multifinalitaria\.(\d+)/', $key, $m)) {
-                    $name = $campoNames->get((int) $m[1], $key);
-                    return [$name => $msgs];
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            foreach ($validator->errors()->get('respuestas_multifinalitaria.*.respuesta') as $key => $msgs) {
+                if (preg_match('/respuestas_multifinalitaria\.(\d+)\.respuesta/', $key, $m)) {
+                    $idx = (int) $m[1];
+                    $tablaId = $respuestas->get($idx)['tabla_multifinalitaria_id'] ?? null;
+                    $campo = collect($campos)->firstWhere('tabla_multifinalitaria_id', $tablaId)
+                        ?? collect($campos)->firstWhere('id', $tablaId);
+                    $name = $campo['nombre_pregunta'] ?? $key;
+                    unset($errors[$key]);
+                    $errors[$name] = $msgs;
                 }
-                return [$key => $msgs];
-            })->all();
+            }
 
             return response()->json([
                 'message' => 'The given data was invalid.',

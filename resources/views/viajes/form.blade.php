@@ -1376,7 +1376,9 @@
                         if (xhr.status === 422) {
                             const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
                             const messages = [];
-                            Object.values(errors).forEach(arr => { messages.push(...arr); });
+                            Object.entries(errors).forEach(([field, arr]) => {
+                                arr.forEach(msg => messages.push(`${field}: ${msg}`));
+                            });
                             $('#captura-error').removeClass('d-none').html(messages.join('<br>'));
                         } else {
                             $('#captura-error').removeClass('d-none').text('Error al guardar la captura');
