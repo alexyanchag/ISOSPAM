@@ -61,6 +61,7 @@ class CapturaAjaxController extends Controller
             'tipo_numero_individuos' => ['nullable', 'string'],
             'tipo_peso' => ['nullable', 'string'],
             'estado_producto' => ['nullable', 'string'],
+            'respuestas_multifinalitaria' => ['array'],
         ];
 
         foreach ($campos as $i => $campo) {
@@ -78,9 +79,10 @@ class CapturaAjaxController extends Controller
         ]);
 
         $data = $request->validate($rules);
+        $respuestas = $request->input('respuestas_multifinalitaria', []);
 
         $campoMap = collect($campos)->keyBy('id');
-        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
+        $data['respuestas_multifinalitaria'] = collect($respuestas)
             ->map(function ($resp) use ($campoMap) {
                 $id = $resp['tabla_multifinalitaria_id'] ?? null;
                 $campo = (array) $campoMap->get($id, []);
@@ -124,6 +126,7 @@ class CapturaAjaxController extends Controller
             'tipo_numero_individuos' => ['nullable', 'string'],
             'tipo_peso' => ['nullable', 'string'],
             'estado_producto' => ['nullable', 'string'],
+            'respuestas_multifinalitaria' => ['array'],
         ];
 
         foreach ($campos as $i => $campo) {
@@ -141,9 +144,10 @@ class CapturaAjaxController extends Controller
         ]);
 
         $data = $request->validate($rules);
+        $respuestas = $request->input('respuestas_multifinalitaria', []);
 
         $campoMap = collect($campos)->keyBy('tabla_multifinalitaria_id');
-        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
+        $data['respuestas_multifinalitaria'] = collect($respuestas)
             ->map(function ($resp) use ($campoMap, $id) {
                 $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
                 $campo['tabla_multifinalitaria_id'] = $campo['tabla_multifinalitaria_id']
