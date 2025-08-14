@@ -1347,7 +1347,7 @@
                 };
                 const respuestas = {};
                 $('#campos-dinamicos-captura')
-                    .find('[name$="[tabla_multifinalitaria_id]"]')
+                    .find('input[name*="[tabla_multifinalitaria_id]"]')
                     .each(function () {
                         const wrap = $(this).closest('.col-md-4');
                         const key = $(this).val();
@@ -1360,7 +1360,7 @@
                         respuestas[key] = item;
                     });
                 payload.respuestas_multifinalitaria = Object.values(respuestas);
-                console.log(payload)
+                console.log('Payload a enviar:', payload);
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
                 $.ajax({
