@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CapturaAjaxController extends Controller
 {
@@ -62,27 +63,51 @@ class CapturaAjaxController extends Controller
             'tipo_peso' => ['nullable', 'string'],
             'estado_producto' => ['nullable', 'string'],
             'respuestas_multifinalitaria' => ['array'],
+            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
+            'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
+            'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
-        foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
-                ? ['required']
-                : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
-            $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
+        $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request, $campos) {
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
+            foreach ($campos as $campo) {
+                if (!empty($campo['requerido'])) {
+                    $resp = $map->get($campo['id']);
+                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                    }
+                }
+            }
+        });
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->getMessages();
+            $campoNames = collect($request->input('respuestas_multifinalitaria', []))
+                ->mapWithKeys(function ($resp, $idx) use ($campos) {
+                    $campo = collect($campos)->firstWhere('id', $resp['tabla_multifinalitaria_id'] ?? null);
+                    return [$idx => $campo['nombre_pregunta'] ?? $idx];
+                });
+            $errors = collect($errors)->mapWithKeys(function ($msgs, $key) use ($campoNames) {
+                if (preg_match('/respuestas_multifinalitaria\.(\d+)/', $key, $m)) {
+                    $name = $campoNames->get((int) $m[1], $key);
+                    return [$name => $msgs];
+                }
+                return [$key => $msgs];
+            })->all();
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $errors,
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $request->merge([
-            'respuestas_multifinalitaria' => array_values(
-                $request->input('respuestas_multifinalitaria', [])
-            ),
-        ]);
-
-        $data = $request->validate($rules);
-        $respuestas = $request->input('respuestas_multifinalitaria', []);
+        $data = $validator->validated();
+        $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
 
         $campoMap = collect($campos)->keyBy('id');
-        $data['respuestas_multifinalitaria'] = collect($respuestas)
+        $data['respuestas_multifinalitaria'] = $respuestas
             ->map(function ($resp) use ($campoMap) {
                 $id = $resp['tabla_multifinalitaria_id'] ?? null;
                 $campo = (array) $campoMap->get($id, []);
@@ -127,27 +152,52 @@ class CapturaAjaxController extends Controller
             'tipo_peso' => ['nullable', 'string'],
             'estado_producto' => ['nullable', 'string'],
             'respuestas_multifinalitaria' => ['array'],
+            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
+            'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
+            'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
-        foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
-                ? ['required']
-                : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
-            $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
+        $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request, $campos) {
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
+            foreach ($campos as $campo) {
+                if (!empty($campo['requerido'])) {
+                    $resp = $map->get($campo['tabla_multifinalitaria_id'] ?? $campo['id']);
+                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                    }
+                }
+            }
+        });
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->getMessages();
+            $campoNames = collect($request->input('respuestas_multifinalitaria', []))
+                ->mapWithKeys(function ($resp, $idx) use ($campos) {
+                    $campo = collect($campos)->firstWhere('tabla_multifinalitaria_id', $resp['tabla_multifinalitaria_id'] ?? null) ??
+                        collect($campos)->firstWhere('id', $resp['tabla_multifinalitaria_id'] ?? null);
+                    return [$idx => $campo['nombre_pregunta'] ?? $idx];
+                });
+            $errors = collect($errors)->mapWithKeys(function ($msgs, $key) use ($campoNames) {
+                if (preg_match('/respuestas_multifinalitaria\.(\d+)/', $key, $m)) {
+                    $name = $campoNames->get((int) $m[1], $key);
+                    return [$name => $msgs];
+                }
+                return [$key => $msgs];
+            })->all();
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $errors,
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $request->merge([
-            'respuestas_multifinalitaria' => array_values(
-                $request->input('respuestas_multifinalitaria', [])
-            ),
-        ]);
-
-        $data = $request->validate($rules);
-        $respuestas = $request->input('respuestas_multifinalitaria', []);
+        $data = $validator->validated();
+        $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
 
         $campoMap = collect($campos)->keyBy('tabla_multifinalitaria_id');
-        $data['respuestas_multifinalitaria'] = collect($respuestas)
+        $data['respuestas_multifinalitaria'] = $respuestas
             ->map(function ($resp) use ($campoMap, $id) {
                 $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
                 $campo['tabla_multifinalitaria_id'] = $campo['tabla_multifinalitaria_id']
