@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CapturaController extends Controller
 {
@@ -69,24 +70,37 @@ class CapturaController extends Controller
             'viaje_id' => ['required', 'integer'],
             'es_incidental' => ['nullable', 'boolean'],
             'es_descartada' => ['nullable', 'boolean'],
+            'respuestas_multifinalitaria' => ['array'],
+            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
+            'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
+            'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
-        foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
-                ? ['required']
-                : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
-            $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
-        }
+        $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request, $campos) {
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
+            foreach ($campos as $campo) {
+                if (!empty($campo['requerido'])) {
+                    $resp = $map->get($campo['id']);
+                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                    }
+                }
+            }
+        });
 
-        $data = $request->validate($rules);
+        $validator->validate();
+        $data = $validator->validated();
 
-        $campoMap = collect($campos)->keyBy('id');
-        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
-            ->map(function ($resp) use ($campoMap) {
-                $id = $resp['tabla_multifinalitaria_id'] ?? null;
-                $campo = (array) $campoMap->get($id, []);
-                $campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $id;
+        $respuestas = collect($request->input('respuestas_multifinalitaria', []))
+            ->values()
+            ->keyBy('tabla_multifinalitaria_id');
+
+        $data['respuestas_multifinalitaria'] = collect($campos)
+            ->map(function ($campo) use ($respuestas) {
+                $resp = (array) $respuestas->get($campo['id']);
+                $campo['tabla_multifinalitaria_id'] = $campo['id'];
                 unset($campo['id']);
 
                 return array_merge($campo, [
@@ -149,27 +163,44 @@ class CapturaController extends Controller
             'viaje_id' => ['required', 'integer'],
             'es_incidental' => ['nullable', 'boolean'],
             'es_descartada' => ['nullable', 'boolean'],
+            'respuestas_multifinalitaria' => ['array'],
+            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
+            'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
+            'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
-        foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
-                ? ['required']
-                : ['nullable'];
-            $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
-            $rules["respuestas_multifinalitaria.$i.id"] = ['nullable', 'integer'];
-        }
+        $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request, $campos) {
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
+            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
+            foreach ($campos as $campo) {
+                if (!empty($campo['requerido'])) {
+                    $tablaId = $campo['tabla_multifinalitaria_id'] ?? $campo['id'];
+                    $resp = $map->get($tablaId);
+                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                    }
+                }
+            }
+        });
 
-        $data = $request->validate($rules);
+        $validator->validate();
+        $data = $validator->validated();
 
-        $campoMap = collect($campos)->keyBy('tabla_multifinalitaria_id');
-        $data['respuestas_multifinalitaria'] = collect($data['respuestas_multifinalitaria'] ?? [])
-            ->map(function ($resp) use ($campoMap, $id) {
-                $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
-                $campo['tabla_multifinalitaria_id'] = $campo['tabla_multifinalitaria_id']
-                    ?? $resp['tabla_multifinalitaria_id'];
+        $respuestas = collect($request->input('respuestas_multifinalitaria', []))
+            ->values()
+            ->keyBy('tabla_multifinalitaria_id');
+
+        $data['respuestas_multifinalitaria'] = collect($campos)
+            ->map(function ($campo) use ($respuestas, $id) {
+                $tablaId = $campo['tabla_multifinalitaria_id'] ?? $campo['id'];
+                $resp = (array) $respuestas->get($tablaId);
+                $campo['tabla_multifinalitaria_id'] = $tablaId;
+                $existingId = $resp['id'] ?? ($campo['id'] ?? null);
+                unset($campo['id']);
 
                 return array_merge($campo, [
-                    'id' => $resp['id'] ?? ($campo['id'] ?? null),
+                    'id' => $existingId,
                     'respuesta' => $resp['respuesta'] ?? null,
                     'tabla_relacionada_id' => (int) $id,
                 ]);
