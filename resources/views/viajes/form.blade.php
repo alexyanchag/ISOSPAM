@@ -1368,6 +1368,7 @@
                         cargarCapturas();
                     },
                     error: (xhr) => {
+                        console.log(xhr)
                         if (xhr.status === 422) {
                             const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
                             const messages = [];

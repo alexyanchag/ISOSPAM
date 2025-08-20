@@ -49,6 +49,15 @@ class CapturaAjaxController extends Controller
                 }
             }
         }
+        $campos = collect($campos)
+        ->values() // reindexa 0..n-1
+        ->map(function ($campo, $i) {
+            $campo = (array) $campo;
+            //$campo['tabla_multifinalitaria_id'] = $i;   // o $i + 1
+            $campo['id'] = $i;                          // o $i + 1
+            return $campo;
+        })
+        ->all();
 
         $rules = [
             'nombre_comun' => ['nullable', 'string'],
@@ -63,20 +72,30 @@ class CapturaAjaxController extends Controller
             'tipo_peso' => ['nullable', 'string'],
             'estado_producto' => ['nullable', 'string'],
             'respuestas_multifinalitaria' => ['array'],
-            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
+            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['nullable', 'integer'],
             'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
             'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
         $validator->after(function ($validator) use ($request, $campos) {
-            $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
-            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
-            foreach ($campos as $campo) {
+            $respuestas = collect($request->input('respuestas_multifinalitaria', []))
+                ->values()
+                ->map(function ($item, $index) {
+                    //$item['tabla_multifinalitaria_id'] = $index;
+                    $item['id'] = $index;
+                    return $item;
+                });
+
+            $map = $respuestas->keyBy('id');
+            foreach ($campos as $i => $campo) {
                 if (!empty($campo['requerido'])) {
-                    $resp = $map->get($campo['id']);
+                    $resp = $map->get($i);
                     if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
-                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                        $validator->errors()->add(
+                            $campo['nombre_pregunta'],
+                            "Este campo es obligatorio. (índice: {$i}) "
+                        );
                     }
                 }
             }
@@ -95,7 +114,7 @@ class CapturaAjaxController extends Controller
                     $errors[$name] = $msgs;
                 }
             }
-
+            
             return response()->json([
                 'message' => 'The given data was invalid.',
                 'errors' => $errors,
@@ -110,7 +129,7 @@ class CapturaAjaxController extends Controller
             ->map(function ($resp) use ($campoMap) {
                 $id = $resp['tabla_multifinalitaria_id'] ?? null;
                 $campo = (array) $campoMap->get($id, []);
-                $campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $id;
+                //$campo['tabla_multifinalitaria_id'] = $campo['id'] ?? $id;
                 unset($campo['id']);
 
                 return array_merge($campo, [
