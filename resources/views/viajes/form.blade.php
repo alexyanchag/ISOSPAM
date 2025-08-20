@@ -859,9 +859,9 @@
                         default:
                             control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]">';
                     }
-                    if (campo.id != null) {
-                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
-                    }
+                    var tablaId = campo.id != null ? campo.id : 0;
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + tablaId + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][id]" value="0">';
                     var col = $('<div class="col-md-4 mb-3"></div>');
                     col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
                     col.append(control);
@@ -910,12 +910,10 @@
                         default:
                             control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '">';
                     }
-                    if (campo.id != null) {
-                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tabla_multifinalitaria_id]" value="' + campo.id + '">';
-                    }
-                    if (resp.id != null) {
-                        control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][id]" value="' + resp.id + '">';
-                    }
+                    var tablaId = campo.id != null ? campo.id : 0;
+                    var respId = resp.id != null ? resp.id : 0;
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tabla_multifinalitaria_id]" value="' + tablaId + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][id]" value="' + respId + '">';
                     var col = $('<div class="col-md-4 mb-3"></div>');
                     col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
                     col.append(control);
@@ -1345,21 +1343,18 @@
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
                 };
-                const respuestas = {};
+                const respuestas = [];
                 $('#campos-dinamicos-captura')
                     .find('input[name*="[tabla_multifinalitaria_id]"]')
                     .each(function () {
                         const wrap = $(this).closest('.col-md-4');
-                        const key = $(this).val();
-                        const item = {
-                            tabla_multifinalitaria_id: key,
-                            respuesta: wrap.find('[name$="[respuesta]"]').val()
-                        };
-                        const respId = wrap.find('[name$="[id]"]').val();
-                        if (respId) item.id = respId;
-                        respuestas[key] = item;
+                        respuestas.push({
+                            tabla_multifinalitaria_id: $(this).val() || 0,
+                            respuesta: wrap.find('[name$="[respuesta]"]').val(),
+                            id: wrap.find('[name$="[id]"]').val() || 0
+                        });
                     });
-                payload.respuestas_multifinalitaria = Object.values(respuestas);
+                payload.respuestas_multifinalitaria = respuestas;
                 console.log('Payload a enviar:', payload);
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
