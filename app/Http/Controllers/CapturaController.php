@@ -79,12 +79,16 @@ class CapturaController extends Controller
         $validator = Validator::make($request->all(), $rules);
         $validator->after(function ($validator) use ($request, $campos) {
             $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
-            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
             foreach ($campos as $campo) {
                 if (!empty($campo['requerido'])) {
-                    $resp = $map->get($campo['id']);
-                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                    $index = $respuestas->search(fn($r) => ($r['tabla_multifinalitaria_id'] ?? null) == $campo['id']);
+                    if ($index === false) {
                         $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                        continue;
+                    }
+                    $respuesta = $respuestas[$index]['respuesta'] ?? null;
+                    if ($respuesta === null || $respuesta === '') {
+                        $validator->errors()->add("respuestas_multifinalitaria.$index.respuesta", 'Este campo es obligatorio.');
                     }
                 }
             }
@@ -172,13 +176,17 @@ class CapturaController extends Controller
         $validator = Validator::make($request->all(), $rules);
         $validator->after(function ($validator) use ($request, $campos) {
             $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
-            $map = $respuestas->keyBy('tabla_multifinalitaria_id');
             foreach ($campos as $campo) {
                 if (!empty($campo['requerido'])) {
                     $tablaId = $campo['tabla_multifinalitaria_id'] ?? $campo['id'];
-                    $resp = $map->get($tablaId);
-                    if (empty($resp) || ($resp['respuesta'] === null || $resp['respuesta'] === '')) {
+                    $index = $respuestas->search(fn($r) => ($r['tabla_multifinalitaria_id'] ?? null) == $tablaId);
+                    if ($index === false) {
                         $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
+                        continue;
+                    }
+                    $respuesta = $respuestas[$index]['respuesta'] ?? null;
+                    if ($respuesta === null || $respuesta === '') {
+                        $validator->errors()->add("respuestas_multifinalitaria.$index.respuesta", 'Este campo es obligatorio.');
                     }
                 }
             }
