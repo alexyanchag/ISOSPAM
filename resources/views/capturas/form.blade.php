@@ -73,10 +73,8 @@
                 @default
                     <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
             @endswitch
-            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] }}">
-            @if(isset($resp['id']))
-                <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][id]" value="{{ $resp['id'] }}">
-            @endif
+            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][tabla_multifinalitaria_id]" value="{{ $campo['id'] ?? 0 }}">
+            <input type="hidden" name="respuestas_multifinalitaria[{{ $loop->index }}][id]" value="{{ $resp['id'] ?? 0 }}">
             @error('respuestas_multifinalitaria.' . $loop->index . '.respuesta')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

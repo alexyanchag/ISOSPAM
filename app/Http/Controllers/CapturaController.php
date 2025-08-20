@@ -71,21 +71,14 @@ class CapturaController extends Controller
             'es_incidental' => ['nullable', 'boolean'],
             'es_descartada' => ['nullable', 'boolean'],
             'respuestas_multifinalitaria' => ['array'],
-            'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
             'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
-            'respuestas_multifinalitaria.*.id' => ['nullable', 'integer'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
         $validator->after(function ($validator) use ($request, $campos) {
             $respuestas = collect($request->input('respuestas_multifinalitaria', []))->values();
-            foreach ($campos as $campo) {
+            foreach ($campos as $index => $campo) {
                 if (!empty($campo['requerido'])) {
-                    $index = $respuestas->search(fn($r) => ($r['tabla_multifinalitaria_id'] ?? null) == $campo['id']);
-                    if ($index === false) {
-                        $validator->errors()->add($campo['nombre_pregunta'], 'Este campo es obligatorio.');
-                        continue;
-                    }
                     $respuesta = $respuestas[$index]['respuesta'] ?? null;
                     if ($respuesta === null || $respuesta === '') {
                         $validator->errors()->add("respuestas_multifinalitaria.$index.respuesta", 'Este campo es obligatorio.');
@@ -98,17 +91,17 @@ class CapturaController extends Controller
         $data = $validator->validated();
 
         $respuestas = collect($request->input('respuestas_multifinalitaria', []))
-            ->values()
-            ->keyBy('tabla_multifinalitaria_id');
+            ->values();
 
         $data['respuestas_multifinalitaria'] = collect($campos)
-            ->map(function ($campo) use ($respuestas) {
-                $resp = (array) $respuestas->get($campo['id']);
+            ->values()
+            ->map(function ($campo, $index) use ($respuestas) {
+                $resp = (array) ($respuestas[$index] ?? []);
                 $campo['tabla_multifinalitaria_id'] = $campo['id'];
                 unset($campo['id']);
 
                 return array_merge($campo, [
-                    'id' => $resp['id'] ?? null,
+                    'id' => !empty($resp['id']) ? $resp['id'] : null,
                     'respuesta' => $resp['respuesta'] ?? null,
                     'tabla_relacionada_id' => null,
                 ]);
