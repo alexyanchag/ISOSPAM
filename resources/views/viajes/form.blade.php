@@ -938,7 +938,7 @@
             function cargarEspecies(selected = '') {
                 const select = $('#especie_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/especies')
+                fetch('{{ route('api.especies') }}')
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(e => {
@@ -952,7 +952,7 @@
             function cargarTiposObservador(selected = '') {
                 const select = $('#tipo_observador_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/tipo-observador')
+                fetch('{{ route('api.tipo-observador') }}')
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(t => {
@@ -966,7 +966,7 @@
             function cargarTiposTripulante(selected = '') {
                 const select = $('#tipo_tripulante_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/tipos-tripulante')
+                fetch('{{ route('api.tipos-tripulante') }}')
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(t => {
@@ -1051,7 +1051,7 @@
             function cargarEstadosMarea(selected = '') {
                 const select = $('#estado_marea_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/estados-marea')
+                fetch('{{ route('api.estados-marea') }}')
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(e => {
@@ -1065,7 +1065,7 @@
             function cargarCondicionesMar(selected = '') {
                 const select = $('#condicion_mar_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/condiciones-mar')
+                fetch('{{ route('api.condiciones-mar') }}')
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(c => {
@@ -1152,7 +1152,7 @@
 
             function cargarTiposInsumo(selected = '') {
                 const select = $('#tipo_insumo_id').empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/tipos-insumo')
+                fetch('{{ route('api.tipos-insumo') }}')
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(t => {
@@ -1164,7 +1164,7 @@
 
             function cargarUnidadesInsumo(selected = '') {
                 const select = $('#unidad_insumo_id').empty().append('<option value="">Seleccione...</option>');
-                fetch('http://186.46.31.211:9090/isospam/unidades-insumo')
+                fetch('{{ route('api.unidades-insumo') }}')
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(u => {

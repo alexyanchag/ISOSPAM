@@ -49,6 +49,7 @@ use App\Http\Controllers\FlotaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\AlertasController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ApiProxyController;
 use App\Http\Controllers\ParametroAmbientalAjaxController;
 use App\Http\Controllers\EconomiaInsumoAjaxController;
 
@@ -193,3 +194,12 @@ Route::get('/kpi/alertas', [AlertasController::class, 'index'])->name('kpi.alert
 Route::get('/api/esfuerzo', [ApiController::class, 'esfuerzo'])->name('api.esfuerzo');
 Route::get('/api/sitios', [ApiController::class, 'sitios'])->name('api.sitios');
 Route::get('/api/serie', [ApiController::class, 'serie'])->name('api.serie');
+
+// API proxy to external service
+Route::get('/api/especies', [ApiProxyController::class, 'getEspecies'])->name('api.especies');
+Route::get('/api/tipo-observador', [ApiProxyController::class, 'getTipoObservador'])->name('api.tipo-observador');
+Route::get('/api/tipos-tripulante', [ApiProxyController::class, 'getTiposTripulante'])->name('api.tipos-tripulante');
+Route::get('/api/estados-marea', [ApiProxyController::class, 'getEstadosMarea'])->name('api.estados-marea');
+Route::get('/api/condiciones-mar', [ApiProxyController::class, 'getCondicionesMar'])->name('api.condiciones-mar');
+Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->name('api.tipos-insumo');
+Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
