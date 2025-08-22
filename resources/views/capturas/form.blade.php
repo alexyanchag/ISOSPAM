@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const select = document.getElementById('especie_id');
     const selected = @json(old('especie_id', $captura['especie_id'] ?? ''));
 
-    fetch('http://186.46.31.211:9090/isospam/especies')
+    fetch('{{ route('api.especies') }}')
         .then(response => response.json())
         .then(data => {
             data.forEach(e => {
