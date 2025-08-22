@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tipoSelect = document.getElementById('tipo_tripulante_id');
     const personaSelect = $('#persona_idpersona');
     const selectedTipo = @json(old('tipo_tripulante_id', $tripulante['tipo_tripulante_id'] ?? ''));
-    fetch('http://186.46.31.211:9090/isospam/tipos-tripulante')
+    fetch('{{ route('api.tipos-tripulante') }}')
         .then(r => r.json())
         .then(data => {
             data.forEach(t => {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     const selectedPersona = @json(old('persona_idpersona', $tripulante['persona_idpersona'] ?? ''));
     if (selectedPersona) {
-        fetch(`http://186.46.31.211:9090/isospam/personas/${selectedPersona}`)
+        fetch(`{{ route('api.personas') }}/${selectedPersona}`)
             .then(r => r.json())
             .then(p => {
                 const opt = new Option(`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim(), p.idpersona, true, true);

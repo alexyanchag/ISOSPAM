@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedTipo = @json(old('tipo_insumo_id', $economia['tipo_insumo_id'] ?? ''));
     const selectedUnidad = @json(old('unidad_insumo_id', $economia['unidad_insumo_id'] ?? ''));
 
-    fetch('http://186.46.31.211:9090/isospam/tipos-insumo')
+    fetch('{{ route('api.tipos-insumo') }}')
         .then(r => r.json())
         .then(data => {
             data.forEach(t => {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-    fetch('http://186.46.31.211:9090/isospam/unidades-insumo')
+    fetch('{{ route('api.unidades-insumo') }}')
         .then(r => r.json())
         .then(data => {
             data.forEach(u => {

@@ -203,3 +203,5 @@ Route::get('/api/estados-marea', [ApiProxyController::class, 'getEstadosMarea'])
 Route::get('/api/condiciones-mar', [ApiProxyController::class, 'getCondicionesMar'])->name('api.condiciones-mar');
 Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->name('api.tipos-insumo');
 Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
+Route::get('/api/personas', [ApiProxyController::class, 'getPersonas'])->name('api.personas');
+Route::get('/api/personas/{id}', [ApiProxyController::class, 'getPersona'])->name('api.personas.show');
