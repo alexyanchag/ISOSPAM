@@ -916,6 +916,9 @@
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tabla_multifinalitaria_id]" value="' + tablaId + '">';
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][id]" value="' + respId + '">';
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][campania_id]" value="' + campo.campania_id + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tabla_relacionada]" value="' + campo.tabla_relacionada + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][nombre_pregunta]" value="' + campo.nombre_pregunta + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tipo_pregunta]" value="' + campo.tipo_pregunta + '">';
                     var col = $('<div class="col-md-4 mb-3"></div>');
                     col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
                     col.append(control);
@@ -1355,7 +1358,10 @@
                             respuesta: wrap.find('[name$="[respuesta]"]').val(),
                             id: wrap.find('[name$="[id]"]').val() || 0,
                             
-                            campania_id: parseInt(wrap.find('[name$="[campania_id]"]').val())
+                            campania_id: parseInt(wrap.find('[name$="[campania_id]"]').val()),
+                            tabla_relacionada: wrap.find('[name$="[tabla_relacionada]"]').val(),
+                            nombre_pregunta: wrap.find('[name$="[nombre_pregunta]"]').val(),
+                            tipo_pregunta: wrap.find('[name$="[tipo_pregunta]"]').val(),
                         });
                     });
                 payload.respuestas_multifinalitaria = respuestas;
@@ -1368,8 +1374,6 @@
                     contentType: 'application/json',
                     data: JSON.stringify(payload),
                     success: (data) => {
-                        console.log(data);
-                        return;
                         $('#captura-modal').modal('hide');
                         cargarCapturas();
                     },
