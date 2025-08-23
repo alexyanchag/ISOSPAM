@@ -937,18 +937,18 @@
                     renderCamposDinamicos([]);
                     return;
                 }
-                $.get('{{ url('ajax/campos-dinamicos') }}', { campania_id: campaniaId, tabla_relacionada: 'viaje' }, function (data) {
+                $.get("{{ url('ajax/campos-dinamicos') }}", { campania_id: campaniaId, tabla_relacionada: 'viaje' }, function (data) {
                     renderCamposDinamicos(data);
                 });
             });
 
-            const ajaxBase = '{{ url('ajax') }}';
-            const viajeId = {{ $viaje['id'] ?? 'null' }};
+            const ajaxBase = "{{ url('ajax') }}";
+            const viajeId = "{{ $viaje['id'] ?? 'null' }}";
 
             function cargarEspecies(selected = '') {
                 const select = $('#especie_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.especies') }}')
+                fetch("{{ route('api.especies') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(e => {
@@ -962,7 +962,7 @@
             function cargarTiposObservador(selected = '') {
                 const select = $('#tipo_observador_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.tipo-observador') }}')
+                fetch("{{ route('api.tipo-observador') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(t => {
@@ -976,7 +976,7 @@
             function cargarTiposTripulante(selected = '') {
                 const select = $('#tipo_tripulante_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.tipos-tripulante') }}')
+                fetch("{{ route('api.tipos-tripulante') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(t => {
@@ -1061,7 +1061,7 @@
             function cargarEstadosMarea(selected = '') {
                 const select = $('#estado_marea_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.estados-marea') }}')
+                fetch("{{ route('api.estados-marea') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(e => {
@@ -1075,7 +1075,7 @@
             function cargarCondicionesMar(selected = '') {
                 const select = $('#condicion_mar_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.condiciones-mar') }}')
+                fetch("{{ route('api.condiciones-mar') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(c => {
@@ -1162,7 +1162,7 @@
 
             function cargarTiposInsumo(selected = '') {
                 const select = $('#tipo_insumo_id').empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.tipos-insumo') }}')
+                fetch("{{ route('api.tipos-insumo') }}")
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(t => {
@@ -1174,7 +1174,7 @@
 
             function cargarUnidadesInsumo(selected = '') {
                 const select = $('#unidad_insumo_id').empty().append('<option value="">Seleccione...</option>');
-                fetch('{{ route('api.unidades-insumo') }}')
+                fetch("{{ route('api.unidades-insumo') }}")
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(u => {
@@ -1255,7 +1255,7 @@
                     }));
                     renderCamposDinamicosCaptura(campos, data.respuestas_multifinalitaria || []);
                 } else if (campaniaId) {
-                    $.get('{{ url('ajax/campos-dinamicos') }}', { campania_id: campaniaId, tabla_relacionada: 'captura' }, function (campos) {
+                    $.get("{{ url('ajax/campos-dinamicos') }}", { campania_id: campaniaId, tabla_relacionada: 'captura' }, function (campos) {
                         renderCamposDinamicosCaptura(campos || []);
                     });
                 }
