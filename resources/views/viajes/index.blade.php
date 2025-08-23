@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
