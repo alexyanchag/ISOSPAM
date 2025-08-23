@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
 @section('content')
 <div class="d-flex justify-content-between mb-3">
     <h3>Tripulantes</h3>
