@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($condicion) ? 'Editar' : 'Nueva' }} Condición del Mar</h3>
 <form method="POST" action="{{ isset($condicion) ? route('condicionesmar.update', $condicion['id']) : route('condicionesmar.store') }}">

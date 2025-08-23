@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($rol) ? 'Editar' : 'Nuevo' }} Rol</h3>
 <form method="POST" action="{{ isset($rol) ? route('roles.update', $rol['id']) : route('roles.store') }}">

@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($tipotripulante) ? 'Editar' : 'Nuevo' }} Tipo de Tripulante</h3>
 <form method="POST" action="{{ isset($tipotripulante) ? route('tipotripulantes.update', $tipotripulante['id']) : route('tipotripulantes.store') }}">

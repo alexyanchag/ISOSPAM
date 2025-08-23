@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($unidad) ? 'Editar' : 'Nueva' }} Unidad de Longitud</h3>
 <form method="POST" action="{{ isset($unidad) ? route('unidadlongitud.update', $unidad['id']) : route('unidadlongitud.store') }}">
