@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
 @section('body-class', 'hold-transition login-page dark-mode')
 @section('container-class', 'login-box')
 

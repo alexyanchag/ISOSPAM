@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 </head>
 <body class="@yield('body-class', 'hold-transition login-page dark-mode')">
+    @yield('spinner')
     <div class="@yield('container-class', 'container')">
         @yield('content')
     </div>
@@ -21,6 +22,18 @@
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
+        });
+
+        $(document).on('submit', 'form', function () {
+            $('.spinner-overlay').removeClass('d-none');
+        });
+
+        $(document).ajaxComplete(function () {
+            $('.spinner-overlay').addClass('d-none');
+        });
+
+        $(window).on('pageshow', function () {
+            $('.spinner-overlay').addClass('d-none');
         });
     </script>
 </body>
