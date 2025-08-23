@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($captura) ? 'Editar' : 'Nueva' }} Captura</h3>
 <form method="POST" action="{{ isset($captura) ? route('capturas.update', $captura['id']) : route('capturas.store') }}">

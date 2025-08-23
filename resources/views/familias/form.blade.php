@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($familia) ? 'Editar' : 'Nueva' }} Familia</h3>
 <form method="POST" action="{{ isset($familia) ? route('familias.update', $familia['id']) : route('familias.store') }}">

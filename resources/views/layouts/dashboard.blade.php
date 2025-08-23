@@ -14,6 +14,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed dark-mode">
+    @yield('spinner')
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-dark">
@@ -494,6 +495,18 @@
                 }
             });
         }
+
+        $(document).on('submit', 'form', function () {
+            $('.spinner-overlay').removeClass('d-none');
+        });
+
+        $(document).ajaxComplete(function () {
+            $('.spinner-overlay').addClass('d-none');
+        });
+
+        $(window).on('pageshow', function () {
+            $('.spinner-overlay').addClass('d-none');
+        });
     </script>
     @yield('scripts')
 </body>

@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($item) ? 'Editar' : 'Nueva' }} Asignación Menú a Rol</h3>
 <form method="POST" action="{{ isset($item) ? route('rolmenu.update', ['idrol' => $item['idrol'], 'idmenu' => $item['idmenu']]) : route('rolmenu.store') }}">

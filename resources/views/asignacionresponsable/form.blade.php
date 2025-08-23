@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('spinner')
+    <x-spinner />
+@endsection
+
+
 @section('content')
 <h3>{{ isset($asignacion) ? 'Editar' : 'Nueva' }} Asignación Responsable</h3>
 <form method="POST" action="{{ isset($asignacion) ? route('asignacionresponsable.update', $asignacion['id']) : route('asignacionresponsable.store') }}">
