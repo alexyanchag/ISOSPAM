@@ -25,7 +25,7 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 @if(session('user'))
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/logout') }}">Logout</a></li>
+                    <li class="nav-item"><a class="btn btn-sm btn-primary" href="{{ url('/logout') }}">Cerrar sesión</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
                 @endif
