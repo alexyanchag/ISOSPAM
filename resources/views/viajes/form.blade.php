@@ -870,6 +870,7 @@
             }
 
             function renderCamposDinamicosCaptura(campos = [], respuestas = []) {
+                console.log(campos)
                 const row = $('#campos-dinamicos-captura');
                 row.empty();
                 if (!campos.length) {
@@ -910,10 +911,11 @@
                         default:
                             control = '<input type="text" class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '">';
                     }
-                    var tablaId = campo.id != null ? campo.id : 0;
+                    var tablaId = campo.id != null ? parseInt(campo.id) : parseInt(campo.tabla_multifinalitaria_id);
                     var respId = resp.id != null ? resp.id : 0;
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tabla_multifinalitaria_id]" value="' + tablaId + '">';
                     control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][id]" value="' + respId + '">';
+                    control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][campania_id]" value="' + campo.campania_id + '">';
                     var col = $('<div class="col-md-4 mb-3"></div>');
                     col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
                     col.append(control);
@@ -1349,9 +1351,11 @@
                     .each(function () {
                         const wrap = $(this).closest('.col-md-4');
                         respuestas.push({
-                            tabla_multifinalitaria_id: $(this).val() || 0,
+                            tabla_multifinalitaria_id: parseInt($(this).val()),
                             respuesta: wrap.find('[name$="[respuesta]"]').val(),
-                            id: wrap.find('[name$="[id]"]').val() || 0
+                            id: wrap.find('[name$="[id]"]').val() || 0,
+                            
+                            campania_id: parseInt(wrap.find('[name$="[campania_id]"]').val())
                         });
                     });
                 payload.respuestas_multifinalitaria = respuestas;
@@ -1363,7 +1367,9 @@
                     method,
                     contentType: 'application/json',
                     data: JSON.stringify(payload),
-                    success: () => {
+                    success: (data) => {
+                        console.log(data);
+                        return;
                         $('#captura-modal').modal('hide');
                         cargarCapturas();
                     },

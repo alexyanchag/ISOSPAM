@@ -39,25 +39,6 @@ class CapturaAjaxController extends Controller
     public function store(Request $request)
     {
         $viajeId = (int) $request->input('viaje_id');
-        $campos = [];
-        if ($viajeId) {
-            $respViaje = $this->apiService->get("/viajes/{$viajeId}");
-            if ($respViaje->successful()) {
-                $campaniaId = $respViaje->json()['campania_id'] ?? null;
-                if ($campaniaId) {
-                    $campos = $this->getCamposDinamicosCaptura((int) $campaniaId);
-                }
-            }
-        }
-        $campos = collect($campos)
-        ->values() // reindexa 0..n-1
-        ->map(function ($campo, $i) {
-            $campo = (array) $campo;
-            //$campo['tabla_multifinalitaria_id'] = $i;   // o $i + 1
-            $campo['id'] = $i;                          // o $i + 1
-            return $campo;
-        })
-        ->all();
 
         $rules = [
             'nombre_comun' => ['nullable', 'string'],
@@ -78,16 +59,16 @@ class CapturaAjaxController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
-        $validator->after(function ($validator) use ($request, $campos) {
+        $validator->after(function ($validator) use ($request) {
             $respuestas = collect($request->input('respuestas_multifinalitaria', []))
                 ->values()
                 ->map(function ($item, $index) {
-                    //$item['tabla_multifinalitaria_id'] = $index;
                     $item['id'] = $index;
                     return $item;
                 });
 
             $map = $respuestas->keyBy('id');
+            
             foreach ($campos as $i => $campo) {
                 if (!empty($campo['requerido'])) {
                     $resp = $map->get($i);
@@ -139,7 +120,8 @@ class CapturaAjaxController extends Controller
                 ]);
             })
             ->all();
-
+        
+        return json_encode($data);
         $resp = $this->apiService->post('/capturas', $data);
 
         return response()->json($resp->json(), $resp->status());
