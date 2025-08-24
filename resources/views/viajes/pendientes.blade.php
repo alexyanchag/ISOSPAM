@@ -6,20 +6,6 @@
         <h3 class="card-title mb-0">Viajes pendientes</h3>
     </div>
     <div class="card-body">
-        @if(session('success'))
-            <script>
-                Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-            </script>
-        @endif
-        @if(session('error'))
-            <script>
-                Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
-            </script>
-        @elseif($errors->any())
-            <script>
-                Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-            </script>
-        @endif
         <div class="table-responsive">
             <table class="table table-dark table-striped mb-0">
                 <thead>
@@ -60,4 +46,21 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    @if(session('success'))
+        <script>
+            Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
+        </script>
+    @elseif($errors->any())
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+        </script>
+    @endif
 @endsection
