@@ -60,20 +60,8 @@
 @endsection
 
 @section('scripts')
-    @if(session('success'))
-        <script>
-            Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-        </script>
-    @endif
-    @if(session('error'))
-        <script>
-            Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
-        </script>
-    @elseif($errors->any())
-        <script>
-            Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-        </script>
-    @endif
+    
+    
     <script>
         $(function () {
             $('#digitador-select').select2({
@@ -93,4 +81,21 @@
             });
         });
     </script>
+@endsection
+
+@section('scripts')
+@if(session('success'))
+        <script>
+            Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+        </script>
+    @endif
+@if(session('error'))
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
+        </script>
+    @elseif($errors->any())
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+        </script>
+    @endif
 @endsection

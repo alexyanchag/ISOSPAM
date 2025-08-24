@@ -9,16 +9,8 @@
     <h3>Materiales de Malla</h3>
     <a href="{{ route('materialesmalla.create') }}" class="btn btn-primary">Nuevo</a>
 </div>
-@if(session('success'))
-    <script>
-        Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-    </script>
-@endif
-@if($errors->any())
-    <script>
-        Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-    </script>
-@endif
+
+
 <table class="table table-dark table-striped">
     <thead>
         <tr>
@@ -42,4 +34,17 @@
     @endforeach
     </tbody>
 </table>
+@endsection
+
+@section('scripts')
+@if(session('success'))
+    <script>
+        Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+    </script>
+@endif
+@if($errors->any())
+    <script>
+        Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+    </script>
+@endif
 @endsection
