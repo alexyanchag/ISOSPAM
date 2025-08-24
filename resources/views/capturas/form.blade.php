@@ -7,7 +7,7 @@
 
 @section('content')
 <h3>{{ isset($captura) ? 'Editar' : 'Nueva' }} Captura</h3>
-<form method="POST" action="{{ isset($captura) ? route('capturas.update', $captura['id']) : route('capturas.store') }}">
+<form id="captura-form" method="POST" action="{{ isset($captura) ? route('capturas.update', $captura['id']) : route('capturas.store') }}">
     @csrf
     @isset($captura)
         @method('PUT')
@@ -38,6 +38,26 @@
     <div class="form-check mb-3">
         <input type="checkbox" name="es_descartada" id="es_descartada" class="form-check-input" value="1" {{ old('es_descartada', $captura['es_descartada'] ?? false) ? 'checked' : '' }}>
         <label for="es_descartada" class="form-check-label">Es Descartada</label>
+    </div>
+
+    <div id="sitio-pesca-card" class="card mb-3 d-none">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Sitio de pesca</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" id="sitio-nombre" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Latitud</label>
+                <input type="text" id="sitio-latitud" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Longitud</label>
+                <input type="text" id="sitio-longitud" class="form-control">
+            </div>
+        </div>
     </div>
 
     @php
@@ -114,6 +134,55 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .catch(err => console.error('Error al cargar especies:', err));
+
+    const capturaId = @json($captura['id'] ?? null);
+    if (capturaId) {
+        const card = document.getElementById('sitio-pesca-card');
+        const nombre = document.getElementById('sitio-nombre');
+        const lat = document.getElementById('sitio-latitud');
+        const lon = document.getElementById('sitio-longitud');
+        let sitioId = null;
+
+        fetch(`/isospam/sitios-pesca?captura_id=${capturaId}`)
+            .then(r => r.ok ? r.json() : [])
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    const d = data[0];
+                    sitioId = d.id;
+                    nombre.value = d.nombre ?? '';
+                    lat.value = d.latitud ?? '';
+                    lon.value = d.longitud ?? '';
+                }
+                card.classList.remove('d-none');
+            })
+            .catch(() => card.classList.remove('d-none'));
+
+        const form = document.getElementById('captura-form');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const payload = {
+                captura_id: capturaId,
+                nombre: nombre.value || null,
+                latitud: lat.value || null,
+                longitud: lon.value || null,
+            };
+            const url = sitioId ? `/isospam/sitios-pesca/${sitioId}` : '/isospam/sitios-pesca';
+            const method = sitioId ? 'PUT' : 'POST';
+            try {
+                await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify(payload),
+                });
+            } catch (err) {
+                console.error('Error al guardar sitio de pesca:', err);
+            }
+            form.submit();
+        });
+    }
 });
 </script>
 @endsection

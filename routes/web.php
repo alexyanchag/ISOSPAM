@@ -38,6 +38,7 @@ use App\Http\Controllers\ObservadorViajeController;
 use App\Http\Controllers\ObservadorViajeAjaxController;
 use App\Http\Controllers\TripulanteViajeController;
 use App\Http\Controllers\TripulanteViajeAjaxController;
+use App\Http\Controllers\SitioPescaAjaxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportesOperativosController;
 use App\Http\Controllers\CapturasController;
@@ -101,6 +102,10 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/capturas', [CapturaAjaxController::class, 'store'])->name('ajax.capturas.store');
     Route::put('ajax/capturas/{id}', [CapturaAjaxController::class, 'update'])->name('ajax.capturas.update');
     Route::delete('ajax/capturas/{id}', [CapturaAjaxController::class, 'destroy'])->name('ajax.capturas.destroy');
+
+    Route::get('isospam/sitios-pesca', [SitioPescaAjaxController::class, 'index']);
+    Route::post('isospam/sitios-pesca', [SitioPescaAjaxController::class, 'store']);
+    Route::put('isospam/sitios-pesca/{id}', [SitioPescaAjaxController::class, 'update']);
 
     Route::resource('tripulantes-viaje', TripulanteViajeController::class)->except(['show']);
     Route::get('ajax/tripulantes-viaje', [TripulanteViajeAjaxController::class, 'index'])->name('ajax.tripulantes-viaje');
