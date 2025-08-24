@@ -135,10 +135,18 @@
                     </div>
                 </div>
                 @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <script>
+                        Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+                    </script>
                 @endif
-                @if($errors->any())
-                    <div class="alert alert-danger">{{ $errors->first() }}</div>
+                @if(session('error'))
+                    <script>
+                        Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
+                    </script>
+                @elseif($errors->any())
+                    <script>
+                        Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+                    </script>
                 @endif
             </div>
         </div>
