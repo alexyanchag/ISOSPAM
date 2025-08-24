@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title mb-0">Personas</h3>
-        <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm">Nueva</a>
+        <a href="{{ route('personas.create') }}" class="btn btn-primary btn-xs">Nueva</a>
     </div>
     <div class="card-body">
         <form method="GET" action="{{ route('personas.index') }}" class="mb-3">
@@ -22,7 +22,7 @@
         
         
         <div class="table-responsive">
-            <table class="table table-dark table-striped mb-0">
+            <table class="table table-dark table-striped table-compact mb-0">
     <thead>
         <tr>
             <th>Identificación</th>
@@ -42,11 +42,11 @@
             <td>{{ $persona['celular'] ?? '' }}</td>
             <td>{{ $persona['email'] ?? '' }}</td>
             <td class="text-right">
-                <a href="{{ route('personas.edit', $persona['idpersona']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('personas.edit', $persona['idpersona']) }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('personas.destroy', $persona['idpersona']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

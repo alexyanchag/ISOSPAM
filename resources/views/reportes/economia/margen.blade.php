@@ -5,7 +5,7 @@
   <div class="card-header"><h3 class="card-title">Margen por arte o zona</h3></div>
   <div class="card-body">
     
-<table class="table table-sm">
+<table class="table table-dark table-striped table-compact">
   <thead><tr><th>Grupo</th><th>Margen</th></tr></thead>
   <tbody>
   @foreach($rows as $r)

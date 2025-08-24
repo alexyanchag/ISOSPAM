@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Opción</th>
@@ -29,11 +29,11 @@
             <td>{{ $menu['idmenupadre'] ?? '' }}</td>
             <td>{{ isset($menu['activo']) && $menu['activo'] ? 'Sí' : 'No' }}</td>
             <td class="text-right">
-                <a href="{{ route('menus.edit', $menu['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('menus.edit', $menu['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('menus.destroy', $menu['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

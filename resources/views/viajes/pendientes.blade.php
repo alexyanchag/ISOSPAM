@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-dark table-striped mb-0">
+            <table class="table table-dark table-striped table-compact mb-0">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -33,10 +33,10 @@
                         <td>{{ $v['campania_descripcion'] ?? '' }}</td>
                         <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
                         <td class="text-right">
-                            <a href="{{ route('viajes.mostrar', $v['id']) }}" class="btn btn-sm btn-info">Mostrar</a>
+                            <a href="{{ route('viajes.mostrar', $v['id']) }}" class="btn btn-xs btn-info">Mostrar</a>
                             <form method="POST" action="{{ route('viajes.seleccionar', $v['id']) }}" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">Seleccionar</button>
+                                <button type="submit" class="btn btn-xs btn-primary">Seleccionar</button>
                             </form>
                         </td>
                     </tr>

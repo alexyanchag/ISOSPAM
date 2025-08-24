@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -23,12 +23,12 @@
         <tr>
             <td>{{ $familia['nombre'] ?? '' }}</td>
             <td class="text-right">
-                <a href="{{ route('familias.edit', $familia['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
-                <a href="{{ route('especies.index', ['familia_id' => $familia['id']]) }}" class="btn btn-sm btn-info">Especies</a>
+                <a href="{{ route('familias.edit', $familia['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
+                <a href="{{ route('especies.index', ['familia_id' => $familia['id']]) }}" class="btn btn-xs btn-info">Especies</a>
                 <form action="{{ route('familias.destroy', $familia['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

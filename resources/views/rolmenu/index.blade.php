@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Rol</th>
@@ -27,11 +27,11 @@
             <td>{{ $item['opcion_menu'] ?? $item['idmenu'] }}</td>
             <td>{{ $item['acceso'] }}</td>
             <td class="text-right">
-                <a href="{{ route('rolmenu.edit', ['idrol' => $item['idrol'], 'idmenu' => $item['idmenu']]) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('rolmenu.edit', ['idrol' => $item['idrol'], 'idmenu' => $item['idmenu']]) }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('rolmenu.destroy', ['idrol' => $item['idrol'], 'idmenu' => $item['idmenu']]) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

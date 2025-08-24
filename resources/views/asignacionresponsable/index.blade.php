@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Organización</th>
@@ -31,11 +31,11 @@
             <td>{{ $asignacion['fecha_fin'] ?? '' }}</td>
             <td>{{ $asignacion['estado'] ?? '' }}</td>
             <td class="text-right">
-                <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}{{ $organizacionId ? '?organizacion_pesquera_id='.$organizacionId : '' }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}{{ $organizacionId ? '?organizacion_pesquera_id='.$organizacionId : '' }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('asignacionresponsable.destroy', $asignacion['id']) }}{{ $organizacionId ? '?organizacion_pesquera_id='.$organizacionId : '' }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

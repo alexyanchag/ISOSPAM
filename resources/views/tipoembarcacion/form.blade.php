@@ -27,9 +27,9 @@
     <hr>
     <div class="d-flex justify-content-between mb-2">
         <h4>Embarcaciones</h4>
-        <a href="{{ route('embarcaciones.create') }}" class="btn btn-sm btn-primary">Nueva</a>
+        <a href="{{ route('embarcaciones.create') }}" class="btn btn-xs btn-primary">Nueva</a>
     </div>
-    <table class="table table-dark table-striped">
+    <table class="table table-dark table-striped table-compact">
         <thead>
             <tr>
                 <th>Código</th>
@@ -47,11 +47,11 @@
                 <td>{{ $emb['matricula'] ?? '' }}</td>
                 <td>{{ $emb['eslora'] ?? '' }}</td>
                 <td class="text-right">
-                    <a href="{{ route('embarcaciones.edit', $emb['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                    <a href="{{ route('embarcaciones.edit', $emb['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
                     <form action="{{ route('embarcaciones.destroy', $emb['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                     </form>
                 </td>
             </tr>
