@@ -7,6 +7,15 @@
 
 @section('content')
     <form id="viaje-form" method="POST" action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         @csrf
         @if(isset($viaje))
             @method('PUT')
@@ -37,6 +46,9 @@
                                 <option value="{{ $c['id'] }}" @selected(old('campania_id', $viaje['campania_id'] ?? '') == $c['id'])>{{ $c['descripcion'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('campania_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -50,6 +62,9 @@
                                     {{ $per['apellidos'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('persona_idpersona')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Digitador <span class="text-danger">*</span></label>
@@ -59,6 +74,9 @@
                                 <option value="{{ $d['idpersona'] }}" @selected(old('digitador_id', $viaje['digitador_id'] ?? '') == $d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('digitador_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Embarcación <span class="text-danger">*</span></label>
@@ -68,6 +86,9 @@
                                 <option value="{{ $e['id'] }}" @selected(old('embarcacion_id', $viaje['embarcacion_id'] ?? '') == $e['id'])>{{ $e['nombre'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('embarcacion_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -76,11 +97,17 @@
                         <label class="form-label">Fecha Zarpe <span class="text-danger">*</span></label>
                         <input type="date" name="fecha_zarpe" id="fecha_zarpe" class="form-control"
                             value="{{ old('fecha_zarpe', $viaje['fecha_zarpe'] ?? '') }}">
+                        @error('fecha_zarpe')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Hora Zarpe <span class="text-danger">*</span></label>
                         <input type="time" name="hora_zarpe" id="hora_zarpe" class="form-control"
                             value="{{ old('hora_zarpe', $viaje['hora_zarpe'] ?? '') }}">
+                        @error('hora_zarpe')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Puerto Zarpe <span class="text-danger">*</span></label>
@@ -90,6 +117,9 @@
                                 <option value="{{ $p['id'] }}" @selected(old('puerto_zarpe_id', $viaje['puerto_zarpe_id'] ?? '') == $p['id'])>{{ $p['nombre'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('puerto_zarpe_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -98,11 +128,17 @@
                         <label class="form-label">Fecha Arribo <span class="text-danger">*</span></label>
                         <input type="date" name="fecha_arribo" id="fecha_arribo" class="form-control"
                             value="{{ old('fecha_arribo', $viaje['fecha_arribo'] ?? '') }}">
+                        @error('fecha_arribo')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-3 col-lg-2 mb-3">
                         <label class="form-label">Hora Arribo <span class="text-danger">*</span></label>
                         <input type="time" name="hora_arribo" id="hora_arribo" class="form-control"
                             value="{{ old('hora_arribo', $viaje['hora_arribo'] ?? '') }}">
+                        @error('hora_arribo')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Puerto Arribo <span class="text-danger">*</span></label>
@@ -112,6 +148,9 @@
                                 <option value="{{ $p['id'] }}" @selected(old('puerto_arribo_id', $viaje['puerto_arribo_id'] ?? '') == $p['id'])>{{ $p['nombre'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('puerto_arribo_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
@@ -124,6 +163,9 @@
                                     {{ $m['nombre'] ?? '' }}</option>
                             @endforeach
                         </select>
+                        @error('muelle_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 
@@ -132,6 +174,9 @@
                         <label class="form-label">Observaciones <span class="text-danger">*</span></label>
                         <textarea name="observaciones"
                             class="form-control">{{ old('observaciones', $viaje['observaciones'] ?? '') }}</textarea>
+                        @error('observaciones')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
