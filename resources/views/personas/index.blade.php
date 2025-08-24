@@ -19,16 +19,8 @@
                 </div>
             </div>
         </form>
-        @if(session('success'))
-            <script>
-                Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-            </script>
-        @endif
-        @if($errors->any())
-            <script>
-                Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-            </script>
-        @endif
+        
+        
         <div class="table-responsive">
             <table class="table table-dark table-striped mb-0">
     <thead>
@@ -69,3 +61,15 @@
 </div>
 @endsection
 
+@section('scripts')
+@if(session('success'))
+            <script>
+                Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+            </script>
+        @endif
+@if($errors->any())
+            <script>
+                Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+            </script>
+        @endif
+@endsection

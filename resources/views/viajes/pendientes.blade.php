@@ -49,12 +49,17 @@
 @endsection
 
 @section('scripts')
-    @if(session('success'))
+    
+    
+@endsection
+
+@section('scripts')
+@if(session('success'))
         <script>
             Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
         </script>
     @endif
-    @if(session('error'))
+@if(session('error'))
         <script>
             Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
         </script>

@@ -11,16 +11,8 @@
         <a href="{{ route('capturas.create', ['viaje_id' => $viajeId]) }}" class="btn btn-primary">Nueva</a>
     @endif
 </div>
-@if(session('success'))
-    <script>
-        Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-    </script>
-@endif
-@if($errors->any())
-    <script>
-        Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-    </script>
-@endif
+
+
 <table class="table table-dark table-striped">
     <thead>
         <tr>
@@ -63,4 +55,17 @@
     @endforeach
     </tbody>
 </table>
+@endsection
+
+@section('scripts')
+@if(session('success'))
+    <script>
+        Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+    </script>
+@endif
+@if($errors->any())
+    <script>
+        Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+    </script>
+@endif
 @endsection
