@@ -431,7 +431,6 @@
                             <!-- Scroll interno en el cuerpo -->
                             <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
                                 <input type="hidden" id="captura-id">
-                                <div id="captura-error" class="alert alert-danger d-none"></div>
 
                                 <div class="container-fluid">
                                     <div class="row">
@@ -705,6 +704,10 @@
         </script>
     @endif
     <script>
+        function mostrarErrorCaptura(mensaje) {
+            Swal.fire({ icon: 'error', title: 'Error', text: mensaje });
+        }
+
         $(function () {
             // Validación de fechas y horas de zarpe y arribo
             const fechaZarpe = document.getElementById('fecha_zarpe');
@@ -1240,7 +1243,6 @@
 
             function abrirModal(data = {}) {
                 const campaniaId = $('select[name="campania_id"]').val();
-                $('#captura-error').addClass('d-none').text('');
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
                 cargarEspecies(data.especie_id || '');
@@ -1346,7 +1348,6 @@
 
             $('#captura-form').on('submit', function (e) {
                 e.preventDefault();
-                $('#captura-error').addClass('d-none').text('');
                 const id = $('#captura-id').val();
                 const payload = {
                     nombre_comun: $('#nombre_comun').val(),
@@ -1398,9 +1399,9 @@
                             Object.entries(errors).forEach(([field, arr]) => {
                                 arr.forEach(msg => messages.push(`${field}: ${msg}`));
                             });
-                            $('#captura-error').removeClass('d-none').html(messages.join('<br>'));
+                            mostrarErrorCaptura(messages.join('\n'));
                         } else {
-                            $('#captura-error').removeClass('d-none').text('Error al guardar la captura');
+                            mostrarErrorCaptura('Error al guardar la captura');
                         }
                     }
                 });
