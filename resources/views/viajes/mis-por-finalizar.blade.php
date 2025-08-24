@@ -21,20 +21,6 @@
                 </div>
             </div>
         </form>
-        @if(session('success'))
-            <script>
-                Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-            </script>
-        @endif
-        @if(session('error'))
-            <script>
-                Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
-            </script>
-        @elseif($errors->any())
-            <script>
-                Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-            </script>
-        @endif
         <div class="table-responsive">
             <table class="table table-dark table-striped mb-0">
                 <thead>
@@ -74,23 +60,37 @@
 @endsection
 
 @section('scripts')
-<script>
-$(function () {
-    $('#digitador-select').select2({
-        width: '100%',
-        placeholder: 'Seleccione digitador...',
-        allowClear: true,
-        ajax: {
-            url: "{{ route('ajax.personas') }}",
-            dataType: 'json',
-            delay: 250,
-            data: params => ({ filtro: params.term, rol: 'CTF' }),
-            processResults: data => ({
-                results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
-            }),
-            cache: true
-        }
-    });
-});
-</script>
+    @if(session('success'))
+        <script>
+            Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
+        </script>
+    @endif
+    @if(session('error'))
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
+        </script>
+    @elseif($errors->any())
+        <script>
+            Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
+        </script>
+    @endif
+    <script>
+        $(function () {
+            $('#digitador-select').select2({
+                width: '100%',
+                placeholder: 'Seleccione digitador...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('ajax.personas') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: params => ({ filtro: params.term, rol: 'CTF' }),
+                    processResults: data => ({
+                        results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                    }),
+                    cache: true
+                }
+            });
+        });
+    </script>
 @endsection
