@@ -22,7 +22,7 @@
             </div>
         </form>
         <div class="table-responsive">
-            <table class="table table-dark table-striped mb-0">
+            <table class="table table-dark table-striped table-compact mb-0">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -48,7 +48,7 @@
                         <td>{{ $v['campania_descripcion'] ?? '' }}</td>
                         <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
                         <td class="text-right">
-                            <a href="{{ route('viajes.edit', ['viaje' => $v['id'], 'por_finalizar' => 1]) }}" class="btn btn-sm btn-secondary">Editar</a>
+                            <a href="{{ route('viajes.edit', ['viaje' => $v['id'], 'por_finalizar' => 1]) }}" class="btn btn-xs btn-secondary">Editar</a>
                         </td>
                     </tr>
                 @endforeach

@@ -251,7 +251,7 @@
                     </h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                        <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
@@ -259,7 +259,7 @@
 
                 <div class="card-body collapse show" id="tripulantes-collapse">
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped mb-0" id="tripulantes-table">
+                        <table class="table table-dark table-striped table-compact mb-0" id="tripulantes-table">
                             <thead>
                                 <tr>
                                     <th>Tipo</th>
@@ -273,15 +273,15 @@
                                     <td>{{ $t['tipo_tripulante_nombre'] ?? '' }}</td>
                                     <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm btn-secondary editar-tripulante" data-id="{{ $t['id'] }}">Editar</button>
-                                        <button class="btn btn-sm btn-danger eliminar-tripulante" data-id="{{ $t['id'] }}">Eliminar</button>
+                                        <button class="btn btn-xs btn-secondary editar-tripulante" data-id="{{ $t['id'] }}">Editar</button>
+                                        <button class="btn btn-xs btn-danger eliminar-tripulante" data-id="{{ $t['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                        </table>
                    </div>
-                    <button id="agregar-tripulante" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                    <button id="agregar-tripulante" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                 </div>
             </div>
 
@@ -331,7 +331,7 @@
                     </h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                        <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
@@ -339,7 +339,7 @@
 
                 <div class="card-body collapse show" id="observadores-collapse">
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped mb-0" id="observadores-table">
+                        <table class="table table-dark table-striped table-compact mb-0" id="observadores-table">
                             <thead>
                                 <tr>
                                     <th>Tipo</th>
@@ -353,15 +353,15 @@
                                     <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
                                     <td>{{ $o['persona_nombres'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm btn-secondary editar-observador" data-id="{{ $o['id'] }}">Editar</button>
-                                        <button class="btn btn-sm btn-danger eliminar-observador" data-id="{{ $o['id'] }}">Eliminar</button>
+                                        <button class="btn btn-xs btn-secondary editar-observador" data-id="{{ $o['id'] }}">Editar</button>
+                                        <button class="btn btn-xs btn-danger eliminar-observador" data-id="{{ $o['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                        </table>
                    </div>
-                    <button id="agregar-observador" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                    <button id="agregar-observador" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                 </div>
             </div>
 
@@ -412,7 +412,7 @@
                     </h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                        <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
@@ -420,7 +420,7 @@
 
                 <div class="card-body collapse show" id="capturas-collapse">
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped mb-0" id="capturas-table">
+                        <table class="table table-dark table-striped table-compact mb-0" id="capturas-table">
                             <thead>
                                 <tr>
                                     <th>Nombre común</th>
@@ -450,15 +450,15 @@
                                     <td>{{ $c['tipo_peso'] ?? '' }}</td>
                                     <td>{{ $c['estado_producto'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm btn-secondary editar-captura" data-id="{{ $c['id'] }}">Editar</button>
-                                        <button class="btn btn-sm btn-danger eliminar-captura" data-id="{{ $c['id'] }}">Eliminar</button>
+                                        <button class="btn btn-xs btn-secondary editar-captura" data-id="{{ $c['id'] }}">Editar</button>
+                                        <button class="btn btn-xs btn-danger eliminar-captura" data-id="{{ $c['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                        </table>
                    </div>
-                    <button id="agregar-captura" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                    <button id="agregar-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                 </div>
             </div>
 
@@ -558,14 +558,14 @@
                         Parámetros Ambientales
                     </h3>
                     <div class="card-tools">
-                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                        <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
                 </div>
                 <div class="card-body collapse show" id="parametros-ambientales-collapse">
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped mb-0" id="parametros-ambientales-table">
+                        <table class="table table-dark table-striped table-compact mb-0" id="parametros-ambientales-table">
                             <thead>
                                 <tr>
                                     <th>Hora</th>
@@ -587,15 +587,15 @@
                                     <td>{{ $p['condicion_mar_descripcion'] ?? '' }}</td>
                                     <td>{{ $p['oxigeno_mg_l'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm btn-secondary editar-parametro" data-id="{{ $p['id'] }}">Editar</button>
-                                        <button class="btn btn-sm btn-danger eliminar-parametro" data-id="{{ $p['id'] }}">Eliminar</button>
+                                        <button class="btn btn-xs btn-secondary editar-parametro" data-id="{{ $p['id'] }}">Editar</button>
+                                        <button class="btn btn-xs btn-danger eliminar-parametro" data-id="{{ $p['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                        </table>
                    </div>
-                    <button id="agregar-parametro" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                    <button id="agregar-parametro" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                 </div>
             </div>
 
@@ -656,14 +656,14 @@
                         Economía de Insumos
                     </h3>
                     <div class="card-tools">
-                        <button type="button" class="btn bg-gray btn-sm" data-card-widget="collapse">
+                        <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
                 </div>
                 <div class="card-body collapse show" id="economia-insumo-collapse">
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped mb-0" id="economia-insumo-table">
+                        <table class="table table-dark table-striped table-compact mb-0" id="economia-insumo-table">
                             <thead>
                                 <tr>
                                     <th>Tipo</th>
@@ -679,15 +679,15 @@
                                     <td>{{ $e['nombre_unidad'] ?? '' }}</td>
                                     <td>{{ $e['cantidad'] ?? '' }}</td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm btn-secondary editar-economia-insumo" data-id="{{ $e['id'] }}">Editar</button>
-                                        <button class="btn btn-sm btn-danger eliminar-economia-insumo" data-id="{{ $e['id'] }}">Eliminar</button>
+                                        <button class="btn btn-xs btn-secondary editar-economia-insumo" data-id="{{ $e['id'] }}">Editar</button>
+                                        <button class="btn btn-xs btn-danger eliminar-economia-insumo" data-id="{{ $e['id'] }}">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
                     </div>
-                    <button id="agregar-economia-insumo" type="button" class="btn btn-primary btn-sm mt-2">Agregar</button>
+                    <button id="agregar-economia-insumo" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                 </div>
             </div>
 
@@ -1042,8 +1042,8 @@
                                 <td>${t.tipo_tripulante_nombre ?? ''}</td>
                                 <td>${t.tripulante_nombres ?? ''}</td>
                                 <td class=\"text-right\">
-                                    <button class=\"btn btn-sm btn-secondary editar-tripulante\" data-id=\"${t.id}\">Editar</button>
-                                    <button class=\"btn btn-sm btn-danger eliminar-tripulante\" data-id=\"${t.id}\">Eliminar</button>
+                                    <button class=\"btn btn-xs btn-secondary editar-tripulante\" data-id=\"${t.id}\">Editar</button>
+                                    <button class=\"btn btn-xs btn-danger eliminar-tripulante\" data-id=\"${t.id}\">Eliminar</button>
                                 </td>
                             </tr>`;
                             tbody.append(row);
@@ -1071,8 +1071,8 @@
                                 <td>${c.tipo_peso ?? ''}</td>
                                 <td>${c.estado_producto ?? ''}</td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-secondary editar-captura" data-id="${c.id}">Editar</button>
-                                    <button class="btn btn-sm btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>
+                                    <button class="btn btn-xs btn-secondary editar-captura" data-id="${c.id}">Editar</button>
+                                    <button class="btn btn-xs btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>
                                 </td>
                             </tr>`;
                             tbody.append(row);
@@ -1092,8 +1092,8 @@
                                 <td>${o.tipo_observador_descripcion ?? ''}</td>
                                 <td>${o.persona_nombres ?? ''}</td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-secondary editar-observador" data-id="${o.id}">Editar</button>
-                                    <button class="btn btn-sm btn-danger eliminar-observador" data-id="${o.id}">Eliminar</button>
+                                    <button class="btn btn-xs btn-secondary editar-observador" data-id="${o.id}">Editar</button>
+                                    <button class="btn btn-xs btn-danger eliminar-observador" data-id="${o.id}">Eliminar</button>
                                 </td>
                             </tr>`;
                             tbody.append(row);
@@ -1145,8 +1145,8 @@
                                 <td>${p.condicion_mar_descripcion ?? ''}</td>
                                 <td>${p.oxigeno_mg_l ?? ''}</td>
                                 <td class="text-right">
-                                    <button class="btn btn-sm btn-secondary editar-parametro" data-id="${p.id}">Editar</button>
-                                    <button class="btn btn-sm btn-danger eliminar-parametro" data-id="${p.id}">Eliminar</button>
+                                    <button class="btn btn-xs btn-secondary editar-parametro" data-id="${p.id}">Editar</button>
+                                    <button class="btn btn-xs btn-danger eliminar-parametro" data-id="${p.id}">Eliminar</button>
                                 </td>
                             </tr>`;
                             tbody.append(row);
@@ -1194,8 +1194,8 @@
                                 <td>${e.nombre_unidad ?? ''}</td>
                                 <td>${e.cantidad ?? ''}</td>
                                 <td class="text-right">
-                                    <button class=\"btn btn-sm btn-secondary editar-economia-insumo\" data-id=\"${e.id}\">Editar</button>
-                                    <button class=\"btn btn-sm btn-danger eliminar-economia-insumo\" data-id=\"${e.id}\">Eliminar</button>
+                                    <button class=\"btn btn-xs btn-secondary editar-economia-insumo\" data-id=\"${e.id}\">Editar</button>
+                                    <button class=\"btn btn-xs btn-danger eliminar-economia-insumo\" data-id=\"${e.id}\">Eliminar</button>
                                 </td>
                             </tr>`;
                             tbody.append(row);

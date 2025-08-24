@@ -9,3 +9,6 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+.table-compact { font-size: 0.8rem; }
+.table-compact td, .table-compact th { padding: 0.25rem 0.5rem; }
+.btn-xs { padding: 0.15rem 0.35rem; font-size: 0.75rem; }

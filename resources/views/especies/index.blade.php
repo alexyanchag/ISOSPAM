@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -25,11 +25,11 @@
             <td>{{ $esp['nombre'] ?? '' }}</td>
             <td>{{ $esp['familia_nombre'] ?? '' }}</td>
             <td class="text-right">
-                <a href="{{ route('especies.edit', $esp['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('especies.edit', $esp['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('especies.destroy', $esp['id']) }}{{ $familiaId ? '?familia_id='.$familiaId : '' }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

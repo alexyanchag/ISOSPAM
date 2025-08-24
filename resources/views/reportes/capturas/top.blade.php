@@ -6,7 +6,7 @@
   <div class="card-body">
     
 <canvas id="chartTop"></canvas>
-<table class="table table-sm mt-3">
+<table class="table table-dark table-striped table-compact mt-3">
   <thead><tr><th>Especie</th><th>Kg</th><th>%</th></tr></thead>
   <tbody>
   @foreach($rows as $r)

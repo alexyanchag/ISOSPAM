@@ -6,7 +6,7 @@
   <div class="card-body">
     
 <div id="map"></div>
-<table class="table table-sm mt-3" id="tabla"></table>
+<table class="table table-dark table-striped table-compact mt-3" id="tabla"></table>
 @push('scripts')
 <script>
 const map = L.map('map').setView([-0.7,-80.1], 7);

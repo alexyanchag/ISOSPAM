@@ -13,7 +13,7 @@
 </div>
 
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-compact">
     <thead>
         <tr>
             <th>Tipo</th>
@@ -27,12 +27,12 @@
             <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
             <td>{{ $o['persona_nombres'] ?? '' }}</td>
             <td class="text-right">
-                <a href="{{ route('observadores-viaje.edit', $o['id']) }}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{{ route('observadores-viaje.edit', $o['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
                 <form action="{{ route('observadores-viaje.destroy', $o['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
                     <input type="hidden" name="viaje_id" value="{{ $viajeId }}">
-                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

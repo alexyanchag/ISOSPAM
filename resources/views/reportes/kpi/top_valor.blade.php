@@ -5,7 +5,7 @@
   <div class="card-header"><h3 class="card-title">Top 10 especies por valor económico</h3></div>
   <div class="card-body">
     
-<table class="table table-sm">
+<table class="table table-dark table-striped table-compact">
   <thead><tr><th>Especie</th><th>Ingreso total</th><th>Ingreso promedio</th></tr></thead>
   <tbody>
   @foreach($rows as $r)

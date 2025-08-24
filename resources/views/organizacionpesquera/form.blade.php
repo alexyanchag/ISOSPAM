@@ -37,9 +37,9 @@
     <div class="mt-4">
         <div class="d-flex justify-content-between mb-3">
             <h4>Responsables</h4>
-            <a href="{{ route('asignacionresponsable.create') }}?organizacion_pesquera_id={{ $organizacion['id'] }}" class="btn btn-primary btn-sm">Nueva</a>
+            <a href="{{ route('asignacionresponsable.create') }}?organizacion_pesquera_id={{ $organizacion['id'] }}" class="btn btn-primary btn-xs">Nueva</a>
         </div>
-        <table class="table table-dark table-striped">
+        <table class="table table-dark table-striped table-compact">
             <thead>
                 <tr>
                     <th>Presidente</th>
@@ -57,11 +57,11 @@
                     <td>{{ $asignacion['fecha_fin'] ?? '' }}</td>
                     <td>{{ $asignacion['estado'] ?? '' }}</td>
                     <td class="text-right">
-                        <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}?organizacion_pesquera_id={{ $organizacion['id'] }}" class="btn btn-sm btn-secondary">Editar</a>
+                        <a href="{{ route('asignacionresponsable.edit', $asignacion['id']) }}?organizacion_pesquera_id={{ $organizacion['id'] }}" class="btn btn-xs btn-secondary">Editar</a>
                         <form action="{{ route('asignacionresponsable.destroy', $asignacion['id']) }}?organizacion_pesquera_id={{ $organizacion['id'] }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
                         </form>
                     </td>
                 </tr>

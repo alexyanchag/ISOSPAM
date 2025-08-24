@@ -5,7 +5,7 @@
   <div class="card-header"><h3 class="card-title">Productividad por embarcación</h3></div>
   <div class="card-body">
     
-<table class="table table-sm">
+<table class="table table-dark table-striped table-compact">
   <thead><tr><th>Embarcación</th><th>Viajes</th><th>Kg</th><th>CPUE</th></tr></thead>
   <tbody>
   @foreach($rows as $r)
