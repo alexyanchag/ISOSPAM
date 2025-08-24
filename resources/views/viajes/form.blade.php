@@ -538,8 +538,27 @@
                                                 <label class="form-check-label" for="es_descartada">Es Descartada</label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div id="campos-dinamicos-captura" class="row"></div>
+                                      </div>
+                                      <div id="sitio-pesca-card" class="card mb-3">
+                                          <div class="card-header">
+                                              <h5 class="card-title mb-0">Sitio de pesca</h5>
+                                          </div>
+                                          <div class="card-body">
+                                              <div class="mb-3">
+                                                  <label class="form-label">Nombre</label>
+                                                  <input type="text" id="sitio-nombre" class="form-control">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <label class="form-label">Latitud</label>
+                                                  <input type="text" id="sitio-latitud" class="form-control">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <label class="form-label">Longitud</label>
+                                                  <input type="text" id="sitio-longitud" class="form-control">
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div id="campos-dinamicos-captura" class="row"></div>
                                 </div>
                             </div>
 
