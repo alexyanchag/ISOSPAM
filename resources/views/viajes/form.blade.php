@@ -551,7 +551,13 @@
                                                 </div>
                                             </div>
                                               <div class="card-body collapse" >
-                                                <input type="hidden" id="sitio-id">
+                                                <input type="hidden" id="sitio-pesca-id">
+                                                <div class="mb-3">
+                                                  <label class="form-label">Sitio existente</label>
+                                                  <select id="sitio-id" class="form-control">
+                                                    <option value="">Seleccione...</option>
+                                                  </select>
+                                                </div>
                                                 <div class="mb-3">
                                                   <label class="form-label">Nombre</label>
                                                   <input type="text" id="sitio-nombre" class="form-control">
@@ -563,6 +569,16 @@
                                               <div class="mb-3">
                                                   <label class="form-label">Longitud</label>
                                                   <input type="text" id="sitio-longitud" class="form-control">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <label class="form-label">Profundidad <span class="text-danger">*</span></label>
+                                                  <input type="number" id="sitio-profundidad" class="form-control" required>
+                                              </div>
+                                              <div class="mb-3">
+                                                  <label class="form-label">Unidad de profundidad <span class="text-danger">*</span></label>
+                                                  <select id="sitio-unidad-profundidad" class="form-control" required>
+                                                    <option value="">Seleccione...</option>
+                                                  </select>
                                               </div>
                                           </div>
                                       </div>
@@ -1057,6 +1073,54 @@
                     .catch(err => console.error('Error al cargar tipos de tripulante:', err));
             }
 
+            function cargarUnidadesProfundidad(selected = '') {
+                const select = $('#sitio-unidad-profundidad');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch(`${ajaxBase}/unidades-profundidad`)
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(u => {
+                            const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar unidades de profundidad:', err));
+            }
+
+            let sitiosCache = [];
+            function cargarSitios(selected = '') {
+                const select = $('#sitio-id');
+                select.empty().append('<option value="">Seleccione...</option>');
+                fetch(`${ajaxBase}/sitios`)
+                    .then(r => r.json())
+                    .then(data => {
+                        sitiosCache = Array.isArray(data) ? data : [];
+                        sitiosCache.forEach(s => {
+                            const opt = new Option(s.nombre || '', s.id, false, String(s.id) === String(selected));
+                            select.append(opt);
+                        });
+                    })
+                    .catch(err => console.error('Error al cargar sitios:', err));
+            }
+
+            $('#sitio-id').on('change', function () {
+                const id = $(this).val();
+                const s = sitiosCache.find(x => String(x.id) === String(id));
+                if (s) {
+                    $('#sitio-nombre').val(s.nombre || '');
+                    $('#sitio-latitud').val(s.latitud || '');
+                    $('#sitio-longitud').val(s.longitud || '');
+                    $('#sitio-profundidad').val(s.profundidad || '');
+                    $('#sitio-unidad-profundidad').val(s.unidad_profundidad_id || '');
+                } else {
+                    $('#sitio-nombre').val('');
+                    $('#sitio-latitud').val('');
+                    $('#sitio-longitud').val('');
+                    $('#sitio-profundidad').val('');
+                    $('#sitio-unidad-profundidad').val('');
+                }
+            });
+
             function cargarTripulantes() {
                 $.ajax({
                     url: `${ajaxBase}/tripulantes-viaje`,
@@ -1316,16 +1380,24 @@
                 renderCamposDinamicosCaptura([]);
 
                 const sitioCard = $('#sitio-pesca-card');
+                const sitioRegistroId = $('#sitio-pesca-id');
                 const sitioId = $('#sitio-id');
                 const sitioNombre = $('#sitio-nombre');
                 const sitioLatitud = $('#sitio-latitud');
                 const sitioLongitud = $('#sitio-longitud');
+                const sitioProfundidad = $('#sitio-profundidad');
+                const sitioUnidad = $('#sitio-unidad-profundidad');
 
+                sitioRegistroId.val('');
                 sitioId.val('');
                 sitioNombre.val('');
                 sitioLatitud.val('');
                 sitioLongitud.val('');
+                sitioProfundidad.val('');
+                sitioUnidad.val('');
                 sitioCard.removeClass('d-none').show();
+                cargarUnidadesProfundidad();
+                cargarSitios();
 
                 if (data.id) {
                     fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
@@ -1333,10 +1405,14 @@
                         .then(sitios => {
                             if (Array.isArray(sitios) && sitios.length > 0) {
                                 const s = sitios[0];
-                                sitioId.val(s.id || '');
+                                sitioRegistroId.val(s.id || '');
+                                sitioId.val(s.sitio_id || '');
                                 sitioNombre.val(s.nombre || '');
                                 sitioLatitud.val(s.latitud || '');
                                 sitioLongitud.val(s.longitud || '');
+                                sitioProfundidad.val(s.profundidad || '');
+                                cargarUnidadesProfundidad(s.unidad_profundidad_id || '');
+                                cargarSitios(s.sitio_id || '');
                             }
                         })
                         .catch(err => {
@@ -1498,20 +1574,32 @@
                     });
                 };
 
+                const sitioRegistroId = $('#sitio-pesca-id').val();
                 const sitioId = $('#sitio-id').val();
+                const sitioProf = $('#sitio-profundidad').val();
+                const sitioUnidad = $('#sitio-unidad-profundidad').val();
+
+                if (!sitioId || !sitioProf || !sitioUnidad) {
+                    mostrarErrorCaptura('Complete los datos del sitio de pesca');
+                    return;
+                }
+
                 const sitioPayload = {
-                    captura_id: id || null,
+                    captura_id: id ? parseInt(id) : null,
+                    sitio_id: parseInt(sitioId),
                     nombre: $('#sitio-nombre').val(),
                     latitud: $('#sitio-latitud').val(),
-                    longitud: $('#sitio-longitud').val()
+                    longitud: $('#sitio-longitud').val(),
+                    profundidad: parseFloat(sitioProf),
+                    unidad_profundidad_id: parseInt(sitioUnidad)
                 };
-                const sitioMethod = sitioId ? 'PUT' : 'POST';
+                const sitioMethod = sitioRegistroId ? 'PUT' : 'POST';
 
                 $.ajax({
                     url: `${ajaxBase}/sitios-pesca`,
                     method: sitioMethod,
                     contentType: 'application/json',
-                    data: JSON.stringify({ ...sitioPayload, id: sitioId || undefined }),
+                    data: JSON.stringify({ ...sitioPayload, id: sitioRegistroId || undefined }),
                     success: guardarCaptura,
                     error: (xhr) => {
                         if (xhr.status === 422) {
