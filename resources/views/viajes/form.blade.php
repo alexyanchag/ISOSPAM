@@ -1511,7 +1511,7 @@
                 });
             }
 
-            $('#captura-form').on('submit', function (e) {
+            $('#captura-form').on('submit', async function (e) {
                 e.preventDefault();
                 const id = $('#captura-id').val();
                 const payload = {
@@ -1545,34 +1545,6 @@
                     });
                 payload.respuestas_multifinalitaria = respuestas;
                 console.log('Payload a enviar:', payload);
-                const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
-                const method = id ? 'PUT' : 'POST';
-
-                const guardarCaptura = () => {
-                    $.ajax({
-                        url,
-                        method,
-                        contentType: 'application/json',
-                        data: JSON.stringify(payload),
-                        success: () => {
-                            $('#captura-modal').modal('hide');
-                            cargarCapturas();
-                        },
-                        error: (xhr) => {
-                            console.log(xhr)
-                            if (xhr.status === 422) {
-                                const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
-                                const messages = [];
-                                Object.entries(errors).forEach(([field, arr]) => {
-                                    arr.forEach(msg => messages.push(`${field}: ${msg}`));
-                                });
-                                mostrarErrorCaptura(messages.join('\n'));
-                            } else {
-                                mostrarErrorCaptura('Error al guardar la captura');
-                            }
-                        }
-                    });
-                };
 
                 const sitioRegistroId = $('#sitio-pesca-id').val();
                 const sitioId = $('#sitio-id').val();
@@ -1584,37 +1556,73 @@
                     return;
                 }
 
-                const sitioPayload = {
-                    captura_id: id ? parseInt(id) : null,
-                    sitio_id: parseInt(sitioId),
-                    nombre: $('#sitio-nombre').val(),
-                    latitud: $('#sitio-latitud').val(),
-                    longitud: $('#sitio-longitud').val(),
-                    profundidad: parseFloat(sitioProf),
-                    unidad_profundidad_id: parseInt(sitioUnidad)
-                };
-                const sitioMethod = sitioRegistroId ? 'PUT' : 'POST';
+                const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
+                const method = id ? 'PUT' : 'POST';
 
-                $.ajax({
-                    url: `${ajaxBase}/sitios-pesca`,
-                    method: sitioMethod,
-                    contentType: 'application/json',
-                    data: JSON.stringify({ ...sitioPayload, id: sitioRegistroId || undefined }),
-                    success: guardarCaptura,
-                    error: (xhr) => {
-                        if (xhr.status === 422) {
-                            const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
+                try {
+                    const capturaResp = await fetch(url, {
+                        method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!capturaResp.ok) {
+                        if (capturaResp.status === 422) {
+                            const data = await capturaResp.json();
                             const messages = [];
-                            Object.entries(errors).forEach(([field, arr]) => {
+                            Object.entries(data.errors || {}).forEach(([field, arr]) => {
                                 arr.forEach(msg => messages.push(`${field}: ${msg}`));
                             });
                             mostrarErrorCaptura(messages.join('\n'));
                         } else {
-                            const msg = (xhr.responseJSON && xhr.responseJSON.message) || 'Error al guardar el sitio de pesca';
+                            mostrarErrorCaptura('Error al guardar la captura');
+                        }
+                        return;
+                    }
+
+                    const capturaData = await capturaResp.json();
+                    const capturaId = capturaData.id || capturaData.data?.id || id;
+
+                    const sitioPayload = {
+                        captura_id: capturaId,
+                        sitio_id: parseInt(sitioId),
+                        nombre: $('#sitio-nombre').val(),
+                        latitud: $('#sitio-latitud').val(),
+                        longitud: $('#sitio-longitud').val(),
+                        profundidad: parseFloat(sitioProf),
+                        unidad_profundidad_id: parseInt(sitioUnidad)
+                    };
+                    const sitioUrl = sitioRegistroId ? `${ajaxBase}/sitios-pesca/${sitioRegistroId}` : `${ajaxBase}/sitios-pesca`;
+                    const sitioMethod = sitioRegistroId ? 'PUT' : 'POST';
+
+                    const sitioResp = await fetch(sitioUrl, {
+                        method: sitioMethod,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(sitioPayload)
+                    });
+
+                    if (!sitioResp.ok) {
+                        if (sitioResp.status === 422) {
+                            const data = await sitioResp.json();
+                            const messages = [];
+                            Object.entries(data.errors || {}).forEach(([field, arr]) => {
+                                arr.forEach(msg => messages.push(`${field}: ${msg}`));
+                            });
+                            mostrarErrorCaptura(messages.join('\n'));
+                        } else {
+                            const data = await sitioResp.json().catch(() => ({}));
+                            const msg = data.message || 'Error al guardar el sitio de pesca';
                             mostrarErrorCaptura(msg);
                         }
+                        return;
                     }
-                });
+
+                    $('#captura-modal').modal('hide');
+                    cargarCapturas();
+                } catch (err) {
+                    console.error(err);
+                    mostrarErrorCaptura('Error al guardar la captura');
+                }
             });
 
             $('#observador-form').on('submit', function (e) {
