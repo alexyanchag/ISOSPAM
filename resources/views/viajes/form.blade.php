@@ -608,62 +608,70 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <label>Anzuelos</label>
-                                                        <input type="number" id="anzuelos" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Tipo anzuelo</label>
-                                                        <select id="tipo-anzuelo-id" class="form-control">
-                                                            <option value="">Seleccione...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label>Tamaño anzuelo (pulg)</label>
-                                                        <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-4">
                                                         <label>Líneas madre</label>
                                                         <input type="number" id="lineas-madre" class="form-control">
                                                     </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Largo red (m)</label>
-                                                        <input type="number" step="any" id="largo-red-m" class="form-control">
+                                                </div>
+
+                                                <div class="arte-linea d-none">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Anzuelos</label>
+                                                            <input type="number" id="anzuelos" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Tipo anzuelo</label>
+                                                            <select id="tipo-anzuelo-id" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Tamaño anzuelo (pulg)</label>
+                                                            <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Carnada viva</label>
+                                                            <select id="carnadaviva" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                                <option value="1">Sí</option>
+                                                                <option value="0">No</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Especie carnada</label>
+                                                            <input type="text" id="especie-carnada" class="form-control">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label>Alto red (m)</label>
-                                                        <input type="number" step="any" id="alto-red-m" class="form-control">
+
+                                                <div class="arte-enmalle d-none">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Largo red (m)</label>
+                                                            <input type="number" step="any" id="largo-red-m" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Alto red (m)</label>
+                                                            <input type="number" step="any" id="alto-red-m" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Material malla</label>
+                                                            <select id="material-malla-id" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Material malla</label>
-                                                        <select id="material-malla-id" class="form-control">
-                                                            <option value="">Seleccione...</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Ojo malla (cm)</label>
-                                                        <input type="number" step="any" id="ojo-malla-cm" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label>Diámetro</label>
-                                                        <input type="number" step="any" id="diametro" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Carnada viva</label>
-                                                        <select id="carnadaviva" class="form-control">
-                                                            <option value="">Seleccione...</option>
-                                                            <option value="1">Sí</option>
-                                                            <option value="0">No</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label>Especie carnada</label>
-                                                        <input type="text" id="especie-carnada" class="form-control">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Ojo malla (cm)</label>
+                                                            <input type="number" step="any" id="ojo-malla-cm" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Diámetro</label>
+                                                            <input type="number" step="any" id="diametro" class="form-control">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1551,6 +1559,7 @@
                 $('#diametro').val('');
                 $('#carnadaviva').val('');
                 $('#especie-carnada').val('');
+                $('#tipo-arte-id').trigger('change');
 
                 if (data.id) {
                     promises.push(
@@ -1659,9 +1668,13 @@
                     );
                 }
 
-                Promise.all(promises).finally(() => {
-                    $('.spinner-overlay').addClass('d-none');
-                });
+                Promise.all(promises)
+                    .then(() => {
+                        $('#tipo-arte-id').trigger('change');
+                    })
+                    .finally(() => {
+                        $('.spinner-overlay').addClass('d-none');
+                    });
 
                 $('#captura-modal').modal('show');
             }
@@ -1986,6 +1999,26 @@
                     }
                 });
             });
+
+            function toggleArteFields($container, show) {
+                if (show) {
+                    $container.removeClass('d-none');
+                    $container.find(':input').prop('required', true);
+                } else {
+                    $container.addClass('d-none');
+                    $container.find(':input').each(function () {
+                        $(this).val('').prop('required', false);
+                    });
+                }
+            }
+
+            $('#tipo-arte-id').on('change', function () {
+                const texto = $(this).find('option:selected').text().toLowerCase();
+                const esLinea = texto.includes('línea') || texto.includes('linea') || texto.includes('palangre');
+                const esEnmalle = texto.includes('enmalle') || texto.includes('trasmallo');
+                toggleArteFields($('.arte-linea'), esLinea);
+                toggleArteFields($('.arte-enmalle'), esEnmalle);
+            }).trigger('change');
 
             if (viajeId && {{ request()->boolean('por_finalizar') ? 'true' : 'false' }}) {
                 cargarCapturas();
