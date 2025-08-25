@@ -480,18 +480,18 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>Nombre común</label>
+                                            <label>Nombre común <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_comun" required>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>Especie</label>
+                                            <label>Especie <span class="text-danger">*</span></label>
                                             <select class="form-control" id="especie_id" required>
                                                 <option value="">Seleccione...</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label>Tipo Nº Individuos</label>
+                                            <label>Tipo Nº Individuos <span class="text-danger">*</span></label>
                                             <select class="form-control" id="tipo_numero_individuos" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="ESTIMADO">Estimado</option>
@@ -499,12 +499,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>Nº Individuos</label>
+                                            <label>Nº Individuos <span class="text-danger">*</span></label>
                                             <input type="number" min="0" step="1" class="form-control no-negative" id="numero_individuos" required>
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label>Tipo Peso</label>
+                                            <label>Tipo Peso <span class="text-danger">*</span></label>
                                             <select class="form-control" id="tipo_peso" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="ESTIMADO">Estimado</option>
@@ -512,12 +512,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>Peso de captura</label>
+                                            <label>Peso de captura <span class="text-danger">*</span></label>
                                             <input type="number" step="any" min="0" class="form-control no-negative" id="peso_estimado" required>
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label>Estado Producto</label>
+                                            <label>Estado Producto <span class="text-danger">*</span></label>
                                             <select class="form-control" id="estado_producto" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="EVISCERADO">Eviscerado</option>
@@ -529,7 +529,7 @@
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label>Es Incidental</label>
+                                            <label>Es Incidental <span class="text-danger">*</span></label>
                                             <select class="form-control" id="es_incidental" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="1">Sí</option>
@@ -537,7 +537,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>Es Descartada</label>
+                                            <label>Es Descartada <span class="text-danger">*</span></label>
                                             <select class="form-control" id="es_descartada" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="1">Sí</option>
@@ -559,21 +559,21 @@
                                               <div class="card-body collapse" >
                                                 <input type="hidden" id="sitio-pesca-id">
                                                 <div class="mb-3">
-                                                  <label class="form-label">Sitio existente</label>
+                                                  <label class="form-label">Sitio existente <span class="text-danger">*</span></label>
                                                   <select id="sitio-id" class="form-control">
                                                     <option value="">Seleccione...</option>
                                                   </select>
                                                 </div>
                                                 <div class="mb-3">
-                                                  <label class="form-label">Nombre</label>
+                                                  <label class="form-label">Nombre <span class="text-danger">*</span></label>
                                                   <input type="text" id="sitio-nombre" class="form-control">
                                               </div>
                                               <div class="mb-3">
-                                                  <label class="form-label">Latitud</label>
+                                                  <label class="form-label">Latitud <span class="text-danger">*</span></label>
                                                   <input type="text" id="sitio-latitud" class="form-control">
                                               </div>
                                               <div class="mb-3">
-                                                  <label class="form-label">Longitud</label>
+                                                  <label class="form-label">Longitud <span class="text-danger">*</span></label>
                                                   <input type="text" id="sitio-longitud" class="form-control">
                                               </div>
                                               <div class="mb-3">
