@@ -1602,6 +1602,7 @@
                     });
 
                     if (!sitioResp.ok) {
+                        console.log(sitioResp)
                         if (sitioResp.status === 422) {
                             const data = await sitioResp.json();
                             const messages = [];
