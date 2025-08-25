@@ -550,8 +550,9 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="card-body collapse" >
-                                              <div class="mb-3">
+                                              <div class="card-body collapse" >
+                                                <input type="hidden" id="sitio-id">
+                                                <div class="mb-3">
                                                   <label class="form-label">Nombre</label>
                                                   <input type="text" id="sitio-nombre" class="form-control">
                                               </div>
@@ -1315,10 +1316,12 @@
                 renderCamposDinamicosCaptura([]);
 
                 const sitioCard = $('#sitio-pesca-card');
+                const sitioId = $('#sitio-id');
                 const sitioNombre = $('#sitio-nombre');
                 const sitioLatitud = $('#sitio-latitud');
                 const sitioLongitud = $('#sitio-longitud');
 
+                sitioId.val('');
                 sitioNombre.val('');
                 sitioLatitud.val('');
                 sitioLongitud.val('');
@@ -1330,6 +1333,7 @@
                         .then(sitios => {
                             if (Array.isArray(sitios) && sitios.length > 0) {
                                 const s = sitios[0];
+                                sitioId.val(s.id || '');
                                 sitioNombre.val(s.nombre || '');
                                 sitioLatitud.val(s.latitud || '');
                                 sitioLongitud.val(s.longitud || '');
@@ -1456,7 +1460,7 @@
                             tabla_multifinalitaria_id: parseInt($(this).val()),
                             respuesta: wrap.find('[name$="[respuesta]"]').val(),
                             id: wrap.find('[name$="[id]"]').val() || 0,
-                            
+
                             campania_id: parseInt(wrap.find('[name$="[campania_id]"]').val()),
                             tabla_relacionada: wrap.find('[name$="[tabla_relacionada]"]').val(),
                             nombre_pregunta: wrap.find('[name$="[nombre_pregunta]"]').val(),
@@ -1467,17 +1471,49 @@
                 console.log('Payload a enviar:', payload);
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
+
+                const guardarCaptura = () => {
+                    $.ajax({
+                        url,
+                        method,
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: () => {
+                            $('#captura-modal').modal('hide');
+                            cargarCapturas();
+                        },
+                        error: (xhr) => {
+                            console.log(xhr)
+                            if (xhr.status === 422) {
+                                const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
+                                const messages = [];
+                                Object.entries(errors).forEach(([field, arr]) => {
+                                    arr.forEach(msg => messages.push(`${field}: ${msg}`));
+                                });
+                                mostrarErrorCaptura(messages.join('\n'));
+                            } else {
+                                mostrarErrorCaptura('Error al guardar la captura');
+                            }
+                        }
+                    });
+                };
+
+                const sitioId = $('#sitio-id').val();
+                const sitioPayload = {
+                    captura_id: id || null,
+                    nombre: $('#sitio-nombre').val(),
+                    latitud: $('#sitio-latitud').val(),
+                    longitud: $('#sitio-longitud').val()
+                };
+                const sitioMethod = sitioId ? 'PUT' : 'POST';
+
                 $.ajax({
-                    url,
-                    method,
+                    url: `${ajaxBase}/sitios-pesca`,
+                    method: sitioMethod,
                     contentType: 'application/json',
-                    data: JSON.stringify(payload),
-                    success: (data) => {
-                        $('#captura-modal').modal('hide');
-                        cargarCapturas();
-                    },
+                    data: JSON.stringify({ ...sitioPayload, id: sitioId || undefined }),
+                    success: guardarCaptura,
                     error: (xhr) => {
-                        console.log(xhr)
                         if (xhr.status === 422) {
                             const errors = (xhr.responseJSON && xhr.responseJSON.errors) || {};
                             const messages = [];
@@ -1486,7 +1522,8 @@
                             });
                             mostrarErrorCaptura(messages.join('\n'));
                         } else {
-                            mostrarErrorCaptura('Error al guardar la captura');
+                            const msg = (xhr.responseJSON && xhr.responseJSON.message) || 'Error al guardar el sitio de pesca';
+                            mostrarErrorCaptura(msg);
                         }
                     }
                 });
