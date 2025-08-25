@@ -1030,6 +1030,7 @@
 
             const ajaxBase = "{{ url('ajax') }}";
             const viajeId = "{{ $viaje['id'] ?? 'null' }}";
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             function cargarEspecies(selected = '') {
                 const select = $('#especie_id');
@@ -1569,7 +1570,11 @@
                 try {
                     const capturaResp = await fetch(url, {
                         method,
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        credentials: 'same-origin',
                         body: JSON.stringify(payload)
                     });
 
@@ -1604,7 +1609,11 @@
 
                     const sitioResp = await fetch(sitioUrl, {
                         method: sitioMethod,
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        credentials: 'same-origin',
                         body: JSON.stringify(sitioPayload)
                     });
 
