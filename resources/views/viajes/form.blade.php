@@ -642,7 +642,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="arte-linea d-none">
+                                                <div class="arte-linea">
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4">
                                                             <label>Anzuelos</label>
@@ -675,14 +675,14 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="arte-enmalle d-none">
+                                                <div class="arte-enmalle">
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4">
                                                             <label>Largo red (m)</label>
                                                             <input type="number" step="any" id="largo-red-m" class="form-control">
                                                         </div>
                                                         <div class="form-group col-md-4">
-                                                            <label>Alto red (m)</label>
+                                                            <label>Ancho red (m)</label>
                                                             <input type="number" step="any" id="alto-red-m" class="form-control">
                                                         </div>
                                                         <div class="form-group col-md-4">
@@ -2052,12 +2052,12 @@
                     hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
                     reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
                 },
-                PALANGRE: {
+                'LÍNEA MANO, PALANGRE': {
                     show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
                     hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
                     reset: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
                 },
-                ENMALLE: {
+                'ENMALLE/TRASMALLO': {
                     show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
                     hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
                     reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada']
@@ -2078,6 +2078,7 @@
             function changeArtePesca(id) {
                 const opt = $('#tipo-arte-id option').filter(function(){return String(this.value)===String(id);}).first();
                 const tipo = String(opt.data('tipo') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
+                
                 const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
 
                 // Ocultar y resetear todos los campos
