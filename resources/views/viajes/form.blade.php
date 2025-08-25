@@ -1486,9 +1486,11 @@
             }
 
             function editarCaptura(id) {
+                $('.spinner-overlay').removeClass('d-none');
                 $.ajax({
                     url: `${ajaxBase}/capturas/${id}`,
-                    success: data => abrirModal(data)
+                    success: data => abrirModal(data),
+                    complete: () => $('.spinner-overlay').addClass('d-none')
                 });
             }
 
@@ -1581,6 +1583,7 @@
                 const url = id ? `${ajaxBase}/capturas/${id}` : `${ajaxBase}/capturas`;
                 const method = id ? 'PUT' : 'POST';
 
+                $('.spinner-overlay').removeClass('d-none');
                 try {
                     const capturaResp = await fetch(url, {
                         method,
@@ -1653,6 +1656,8 @@
                 } catch (err) {
                     console.error(err);
                     mostrarErrorCaptura('Error al guardar la captura');
+                } finally {
+                    $('.spinner-overlay').addClass('d-none');
                 }
             });
 
