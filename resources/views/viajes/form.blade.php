@@ -910,6 +910,8 @@
         Swal.fire({ icon: 'error', title: 'Error', text: mensaje });
     }
 
+    let tipoArtePesca = '';
+
     $(function () {
         // Validación de fechas y horas de zarpe y arribo
         const fechaZarpe = document.getElementById('fecha_zarpe');
@@ -1654,7 +1656,10 @@
                                 cargarTiposArte(tipoArteSel),
                                 cargarTiposAnzuelo(tipoAnzueloSel),
                                 cargarMaterialesMalla(materialMallaSel)
-                            ]);
+                            ]).then(() => {
+                                $('#tipo-arte-id').val(tipoArteSel);
+                                changeArtePesca(tipoArteSel);
+                            });
                         })
                         .catch(err => {
                             console.error('Error al cargar arte de pesca:', err);
@@ -1703,7 +1708,7 @@
 
                 Promise.all(promises)
                     .then(() => {
-                        $('#tipo-arte-id').trigger('change');
+                        changeArtePesca($('#tipo-arte-id').val());
                     })
                     .finally(() => {
                         $('.spinner-overlay').addClass('d-none');
@@ -2045,13 +2050,16 @@
                 }
             }
 
-            $('#tipo-arte-id').on('change', function () {
-                const texto = $(this).find('option:selected').text().toLowerCase();
-                const esLinea = texto.includes('línea') || texto.includes('linea') || texto.includes('palangre');
-                const esEnmalle = texto.includes('enmalle') || texto.includes('trasmallo');
-                toggleArteFields($('.arte-linea'), esLinea);
-                toggleArteFields($('.arte-enmalle'), esEnmalle);
-            }).trigger('change');
+            function changeArtePesca(idSeleccionado) {
+                const option = $('#tipo-arte-id option').filter(function () {
+                    return String(this.value) === String(idSeleccionado);
+                }).first();
+                tipoArtePesca = option.length ? option.text() : '';
+                toggleArteFields($('.arte-linea'), tipoArtePesca === 'Línea mano, palangre');
+                toggleArteFields($('.arte-enmalle'), tipoArtePesca === 'Enmalle/Trasmallo');
+            }
+
+            $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
 
         if (viajeId && "{{ request()->boolean('por_finalizar') ? 'true' : 'false' }}" === 'true') {
             cargarCapturas();
