@@ -598,13 +598,78 @@
                                                   </button>
                                               </div>
                                           </div>
-                                          <div class="card-body collapse">
-                                              <div id="artes-pesca-container"></div>
-                                              <button type="button" id="agregar-arte-pesca" class="btn btn-primary btn-xs mt-2">Agregar</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
+                                            <div class="card-body collapse">
+                                                <input type="hidden" id="arte-pesca-id">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label>Tipo de arte <span class="text-danger">*</span></label>
+                                                        <select id="tipo-arte-id" class="form-control" required>
+                                                            <option value="">Seleccione...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Anzuelos</label>
+                                                        <input type="number" id="anzuelos" class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Tipo anzuelo</label>
+                                                        <select id="tipo-anzuelo-id" class="form-control">
+                                                            <option value="">Seleccione...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label>Tamaño anzuelo (pulg)</label>
+                                                        <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Líneas madre</label>
+                                                        <input type="number" id="lineas-madre" class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Largo red (m)</label>
+                                                        <input type="number" step="any" id="largo-red-m" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label>Alto red (m)</label>
+                                                        <input type="number" step="any" id="alto-red-m" class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Material malla</label>
+                                                        <select id="material-malla-id" class="form-control">
+                                                            <option value="">Seleccione...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Ojo malla (cm)</label>
+                                                        <input type="number" step="any" id="ojo-malla-cm" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label>Diámetro</label>
+                                                        <input type="number" step="any" id="diametro" class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Carnada viva</label>
+                                                        <select id="carnadaviva" class="form-control">
+                                                            <option value="">Seleccione...</option>
+                                                            <option value="1">Sí</option>
+                                                            <option value="0">No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Especie carnada</label>
+                                                        <input type="text" id="especie-carnada" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                               <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -1143,7 +1208,8 @@
                 }
             });
 
-            function cargarTiposArte(select, selected = '') {
+            function cargarTiposArte(selected = '') {
+                const select = $('#tipo-arte-id');
                 select.empty().append('<option value="">Seleccione...</option>');
                 return fetch("{{ route('api.tipos-arte') }}")
                     .then(r => r.json())
@@ -1156,7 +1222,8 @@
                     .catch(err => console.error('Error al cargar tipos de arte:', err));
             }
 
-            function cargarTiposAnzuelo(select, selected = '') {
+            function cargarTiposAnzuelo(selected = '') {
+                const select = $('#tipo-anzuelo-id');
                 select.empty().append('<option value="">Seleccione...</option>');
                 return fetch("{{ route('api.tipos-anzuelo') }}")
                     .then(r => r.json())
@@ -1169,7 +1236,8 @@
                     .catch(err => console.error('Error al cargar tipos de anzuelo:', err));
             }
 
-            function cargarMaterialesMalla(select, selected = '') {
+            function cargarMaterialesMalla(selected = '') {
+                const select = $('#material-malla-id');
                 select.empty().append('<option value="">Seleccione...</option>');
                 return fetch("{{ route('api.materiales-malla') }}")
                     .then(r => r.json())
@@ -1181,45 +1249,6 @@
                     })
                     .catch(err => console.error('Error al cargar materiales de malla:', err));
             }
-
-            function agregarArtePesca(data = {}) {
-                const container = $('#artes-pesca-container');
-                const item = $('<div class="arte-pesca-item border rounded p-2 mb-2"></div>');
-                item.append('<input type="hidden" class="arte-id" value="' + (data.id || '') + '">');
-                let row1 = $('<div class="form-row"></div>');
-                row1.append('<div class="form-group col-md-4"><label>Tipo de arte</label><select class="form-control tipo_arte_id" required><option value="">Seleccione...</option></select></div>');
-                row1.append('<div class="form-group col-md-4"><label>Anzuelos</label><input type="number" class="form-control anzuelos" value="' + (data.anzuelos || '') + '"></div>');
-                row1.append('<div class="form-group col-md-4"><label>Tipo anzuelo</label><select class="form-control tipo_anzuelo_id"><option value="">Seleccione...</option></select></div>');
-                let row2 = $('<div class="form-row"></div>');
-                row2.append('<div class="form-group col-md-4"><label>Tamaño anzuelo (pulg)</label><input type="number" step="any" class="form-control tamanio_anzuelo_pulg" value="' + (data.tamanio_anzuelo_pulg || '') + '"></div>');
-                row2.append('<div class="form-group col-md-4"><label>Líneas madre</label><input type="number" class="form-control lineas_madre" value="' + (data.lineas_madre || '') + '"></div>');
-                row2.append('<div class="form-group col-md-4"><label>Largo red (m)</label><input type="number" step="any" class="form-control largo_red_m" value="' + (data.largo_red_m || '') + '"></div>');
-                let row3 = $('<div class="form-row"></div>');
-                row3.append('<div class="form-group col-md-4"><label>Alto red (m)</label><input type="number" step="any" class="form-control alto_red_m" value="' + (data.alto_red_m || '') + '"></div>');
-                row3.append('<div class="form-group col-md-4"><label>Material malla</label><select class="form-control material_malla_id"><option value="">Seleccione...</option></select></div>');
-                row3.append('<div class="form-group col-md-4"><label>Ojo malla (cm)</label><input type="number" step="any" class="form-control ojo_malla_cm" value="' + (data.ojo_malla_cm || '') + '"></div>');
-                let row4 = $('<div class="form-row"></div>');
-                row4.append('<div class="form-group col-md-4"><label>Diámetro</label><input type="number" step="any" class="form-control diametro" value="' + (data.diametro || '') + '"></div>');
-                row4.append('<div class="form-group col-md-4"><label>Carnada viva</label><select class="form-control carnadaviva"><option value="">Seleccione...</option><option value="1">Sí</option><option value="0">No</option></select></div>');
-                row4.append('<div class="form-group col-md-4"><label>Especie carnada</label><input type="text" class="form-control especiecarnada" value="' + (data.especiecarnada || '') + '"></div>');
-                item.append(row1, row2, row3, row4);
-                item.append('<button type="button" class="btn btn-danger btn-xs eliminar-arte-pesca">Eliminar</button>');
-                container.append(item);
-                cargarTiposArte(item.find('.tipo_arte_id'), data.tipo_arte_id || '');
-                cargarTiposAnzuelo(item.find('.tipo_anzuelo_id'), data.tipo_anzuelo_id || '');
-                cargarMaterialesMalla(item.find('.material_malla_id'), data.material_malla_id || '');
-                item.find('.carnadaviva').val(data.carnadaviva === undefined || data.carnadaviva === null ? '' : (data.carnadaviva ? '1' : '0'));
-                item.on('click', '.eliminar-arte-pesca', function () { item.remove(); });
-            }
-
-            function renderArtesPesca(list = []) {
-                const container = $('#artes-pesca-container').empty();
-                if (Array.isArray(list) && list.length) {
-                    list.forEach(a => agregarArtePesca(a));
-                }
-            }
-
-            $('#agregar-arte-pesca').on('click', () => agregarArtePesca());
 
             function cargarTripulantes() {
                 $.ajax({
@@ -1508,9 +1537,20 @@
                 sitioCard.removeClass('d-none').show();
 
                 const arteCard = $('#arte-pesca-card');
-                const artesContainer = $('#artes-pesca-container');
                 arteCard.removeClass('d-none').show();
-                artesContainer.empty();
+                $('#arte-pesca-id').val('');
+                $('#tipo-arte-id').val('');
+                $('#lineas-madre').val('');
+                $('#anzuelos').val('');
+                $('#tamanio-anzuelo-pulg').val('');
+                $('#tipo-anzuelo-id').val('');
+                $('#largo-red-m').val('');
+                $('#alto-red-m').val('');
+                $('#material-malla-id').val('');
+                $('#ojo-malla-cm').val('');
+                $('#diametro').val('');
+                $('#carnadaviva').val('');
+                $('#especie-carnada').val('');
 
                 if (data.id) {
                     promises.push(
@@ -1548,12 +1588,59 @@
                     promises.push(
                         fetch(`${ajaxBase}/artes-pesca?captura_id=${data.id}`)
                             .then(r => r.ok ? r.json() : [])
-                            .then(artes => { renderArtesPesca(artes || []); })
-                            .catch(err => { console.error('Error al cargar artes de pesca:', err); renderArtesPesca([]); })
+                            .then(artes => {
+                                let tipoArteSel = '';
+                                let tipoAnzueloSel = '';
+                                let materialMallaSel = '';
+                                if (Array.isArray(artes) && artes.length) {
+                                    const a = artes[0];
+                                    $('#arte-pesca-id').val(a.id || '');
+                                    $('#lineas-madre').val(a.lineas_madre || '');
+                                    $('#anzuelos').val(a.anzuelos || '');
+                                    $('#tamanio-anzuelo-pulg').val(a.tamanio_anzuelo_pulg || '');
+                                    $('#largo-red-m').val(a.largo_red_m || '');
+                                    $('#alto-red-m').val(a.alto_red_m || '');
+                                    $('#ojo-malla-cm').val(a.ojo_malla_cm || '');
+                                    $('#diametro').val(a.diametro || '');
+                                    $('#especie-carnada').val(a.especiecarnada || '');
+                                    $('#carnadaviva').val(a.carnadaviva === undefined || a.carnadaviva === null ? '' : (a.carnadaviva ? '1' : '0'));
+                                    tipoArteSel = a.tipo_arte_id || '';
+                                    tipoAnzueloSel = a.tipo_anzuelo_id || '';
+                                    materialMallaSel = a.material_malla_id || '';
+                                }
+                                return Promise.all([
+                                    cargarTiposArte(tipoArteSel),
+                                    cargarTiposAnzuelo(tipoAnzueloSel),
+                                    cargarMaterialesMalla(materialMallaSel)
+                                ]);
+                            })
+                            .catch(err => {
+                                console.error('Error al cargar arte de pesca:', err);
+                                $('#arte-pesca-id').val('');
+                                $('#lineas-madre').val('');
+                                $('#anzuelos').val('');
+                                $('#tamanio-anzuelo-pulg').val('');
+                                $('#largo-red-m').val('');
+                                $('#alto-red-m').val('');
+                                $('#ojo-malla-cm').val('');
+                                $('#diametro').val('');
+                                $('#especie-carnada').val('');
+                                $('#carnadaviva').val('');
+                                return Promise.all([
+                                    cargarTiposArte(''),
+                                    cargarTiposAnzuelo(''),
+                                    cargarMaterialesMalla('')
+                                ]);
+                            })
                     );
                 } else {
-                    promises.push(cargarUnidadesProfundidad(''), cargarSitios(''));
-                    renderArtesPesca([]);
+                    promises.push(
+                        cargarUnidadesProfundidad(''),
+                        cargarSitios(''),
+                        cargarTiposArte(''),
+                        cargarTiposAnzuelo(''),
+                        cargarMaterialesMalla('')
+                    );
                 }
                 if (data.id) {
                     const campos = (data.respuestas_multifinalitaria || []).map(r => ({
@@ -1775,38 +1862,49 @@
                         }
                         return;
                     }
-                    const artesPromises = [];
-                    $('#artes-pesca-container .arte-pesca-item').each(function () {
-                        const item = $(this);
-                        const idArte = item.find('.arte-id').val();
-                        const payloadArte = {
-                            captura_id: capturaId,
-                            tipo_arte_id: item.find('.tipo_arte_id').val(),
-                            lineas_madre: item.find('.lineas_madre').val() || null,
-                            anzuelos: item.find('.anzuelos').val() || null,
-                            tamanio_anzuelo_pulg: item.find('.tamanio_anzuelo_pulg').val() || null,
-                            tipo_anzuelo_id: item.find('.tipo_anzuelo_id').val() || null,
-                            largo_red_m: item.find('.largo_red_m').val() || null,
-                            alto_red_m: item.find('.alto_red_m').val() || null,
-                            material_malla_id: item.find('.material_malla_id').val() || null,
-                            ojo_malla_cm: item.find('.ojo_malla_cm').val() || null,
-                            diametro: item.find('.diametro').val() || null,
-                            carnadaviva: item.find('.carnadaviva').val() === '' ? null : item.find('.carnadaviva').val() === '1',
-                            especiecarnada: item.find('.especiecarnada').val() || null,
-                        };
-                        const urlArte = idArte ? `${ajaxBase}/artes-pesca/${idArte}` : `${ajaxBase}/artes-pesca`;
-                        const methodArte = idArte ? 'PUT' : 'POST';
-                        artesPromises.push(fetch(urlArte, {
-                            method: methodArte,
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            credentials: 'same-origin',
-                            body: JSON.stringify(payloadArte)
-                        }));
+                    const arteId = $('#arte-pesca-id').val();
+                    const artePayload = {
+                        captura_id: capturaId,
+                        tipo_arte_id: $('#tipo-arte-id').val(),
+                        lineas_madre: $('#lineas-madre').val() || null,
+                        anzuelos: $('#anzuelos').val() || null,
+                        tamanio_anzuelo_pulg: $('#tamanio-anzuelo-pulg').val() || null,
+                        tipo_anzuelo_id: $('#tipo-anzuelo-id').val() || null,
+                        largo_red_m: $('#largo-red-m').val() || null,
+                        alto_red_m: $('#alto-red-m').val() || null,
+                        material_malla_id: $('#material-malla-id').val() || null,
+                        ojo_malla_cm: $('#ojo-malla-cm').val() || null,
+                        diametro: $('#diametro').val() || null,
+                        carnadaviva: $('#carnadaviva').val() === '' ? null : $('#carnadaviva').val() === '1',
+                        especiecarnada: $('#especie-carnada').val() || null,
+                    };
+                    const urlArte = arteId ? `${ajaxBase}/artes-pesca/${arteId}` : `${ajaxBase}/artes-pesca`;
+                    const methodArte = arteId ? 'PUT' : 'POST';
+                    const arteResp = await fetch(urlArte, {
+                        method: methodArte,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(artePayload)
                     });
-                    await Promise.all(artesPromises);
+
+                    if (!arteResp.ok) {
+                        if (arteResp.status === 422) {
+                            const data = await arteResp.json();
+                            const messages = [];
+                            Object.entries(data.errors || {}).forEach(([field, arr]) => {
+                                arr.forEach(msg => messages.push(`${field}: ${msg}`));
+                            });
+                            mostrarErrorCaptura(messages.join('\n'));
+                        } else {
+                            const data = await arteResp.json().catch(() => ({}));
+                            const msg = data.message || 'Error al guardar el arte de pesca';
+                            mostrarErrorCaptura(msg);
+                        }
+                        return;
+                    }
 
                     $('#captura-modal').modal('hide');
                     cargarCapturas();
