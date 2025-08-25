@@ -614,6 +614,11 @@
                                             <option value="">Seleccione...</option>
                                         </select>
                                     </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label d-block">&nbsp;</label>
+                                        <button type="button" id="btn-geolocalizar" class="btn btn-secondary btn-sm mr-2">Obtener ubicación</button>
+                                        <button type="button" id="btn-mapa" class="btn btn-info btn-sm">Seleccionar en mapa</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -898,12 +903,32 @@
     </div>
 </div>
 
+<div class="modal fade" id="mapa-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Seleccionar ubicación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="mapa-sitio" style="height: 400px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="guardar-mapa">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endif
 @endisset
 @endsection
 
 @section('scripts')
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWFpxWyWOOOfzceN1ycIhCv9hzpeK7nHg"></script>
 
 <script>
     function mostrarErrorCaptura(mensaje) {
@@ -911,6 +936,21 @@
     }
 
     let tipoArtePesca = '';
+
+    let mapa, marcador;
+
+    function initMap(lat = -12.046374, lng = -77.042793) {
+        const centro = { lat, lng };
+        mapa = new google.maps.Map(document.getElementById('mapa-sitio'), {
+            zoom: 8,
+            center: centro
+        });
+        marcador = new google.maps.Marker({
+            position: centro,
+            map: mapa,
+            draggable: true
+        });
+    }
 
     $(function () {
         // Validación de fechas y horas de zarpe y arribo
@@ -2096,6 +2136,53 @@
             }
 
             $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
+
+            $('#btn-geolocalizar').on('click', function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        $('#sitio-latitud').val(position.coords.latitude.toFixed(6));
+                        $('#sitio-longitud').val(position.coords.longitude.toFixed(6));
+                    }, function () {
+                        alert('No se pudo obtener la ubicación');
+                    });
+                } else {
+                    alert('Geolocalización no soportada');
+                }
+            });
+
+            $('#btn-mapa').on('click', function () {
+                $('#mapa-modal').modal('show');
+            });
+
+            $('#mapa-modal').on('shown.bs.modal', function () {
+                let lat = parseFloat($('#sitio-latitud').val());
+                let lng = parseFloat($('#sitio-longitud').val());
+                if (isNaN(lat) || isNaN(lng)) {
+                    lat = -12.046374;
+                    lng = -77.042793;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (pos) {
+                            lat = pos.coords.latitude;
+                            lng = pos.coords.longitude;
+                            mapa.setCenter({ lat, lng });
+                            marcador.setPosition({ lat, lng });
+                        });
+                    }
+                }
+                if (!mapa) {
+                    initMap(lat, lng);
+                } else {
+                    mapa.setCenter({ lat, lng });
+                    marcador.setPosition({ lat, lng });
+                }
+            });
+
+            $('#guardar-mapa').on('click', function () {
+                const pos = marcador.getPosition();
+                $('#sitio-latitud').val(pos.lat().toFixed(6));
+                $('#sitio-longitud').val(pos.lng().toFixed(6));
+                $('#mapa-modal').modal('hide');
+            });
 
         if (viajeId && "{{ request()->boolean('por_finalizar') ? 'true' : 'false' }}" === 'true') {
             cargarCapturas();
