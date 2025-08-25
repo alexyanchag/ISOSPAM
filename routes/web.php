@@ -39,6 +39,7 @@ use App\Http\Controllers\ObservadorViajeAjaxController;
 use App\Http\Controllers\TripulanteViajeController;
 use App\Http\Controllers\TripulanteViajeAjaxController;
 use App\Http\Controllers\SitioPescaAjaxController;
+use App\Http\Controllers\ArtePescaAjaxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportesOperativosController;
 use App\Http\Controllers\CapturasController;
@@ -106,6 +107,10 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::get('ajax/sitios-pesca', [SitioPescaAjaxController::class, 'index']);
     Route::post('ajax/sitios-pesca', [SitioPescaAjaxController::class, 'store']);
     Route::put('ajax/sitios-pesca/{id}', [SitioPescaAjaxController::class, 'update']);
+
+    Route::get('ajax/artes-pesca', [ArtePescaAjaxController::class, 'index']);
+    Route::post('ajax/artes-pesca', [ArtePescaAjaxController::class, 'store']);
+    Route::put('ajax/artes-pesca/{id}', [ArtePescaAjaxController::class, 'update']);
 
     Route::resource('tripulantes-viaje', TripulanteViajeController::class)->except(['show']);
     Route::get('ajax/tripulantes-viaje', [TripulanteViajeAjaxController::class, 'index'])->name('ajax.tripulantes-viaje');
