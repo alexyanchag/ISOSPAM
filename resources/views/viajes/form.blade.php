@@ -636,7 +636,7 @@
                                                             <option value="">Seleccione...</option>
                                                         </select>
                                                     </div>
-                                                    <div class="form-group col-md-4">
+                                                    <div class="form-group col-md-4 arte-linea-madre d-none">
                                                         <label>Líneas madre</label>
                                                         <input type="number" id="lineas-madre" class="form-control">
                                                     </div>
@@ -1920,7 +1920,6 @@
                 const artePayload = {
                     captura_id: capturaId,
                     tipo_arte_id: $('#tipo-arte-id').val(),
-                    lineas_madre: $('#lineas-madre').val() || null,
                     anzuelos: $('#anzuelos').val() || null,
                     tamanio_anzuelo_pulg: $('#tamanio-anzuelo-pulg').val() || null,
                     tipo_anzuelo_id: $('#tipo-anzuelo-id').val() || null,
@@ -1932,6 +1931,9 @@
                     carnadaviva: $('#carnadaviva').val() === '' ? null : $('#carnadaviva').val() === '1',
                     especiecarnada: $('#especie-carnada').val() || null,
                 };
+                if (!$('.arte-linea-madre').hasClass('d-none')) {
+                    artePayload.lineas_madre = $('#lineas-madre').val() || null;
+                }
                 const urlArte = arteId ? `${ajaxBase}/artes-pesca/${arteId}` : `${ajaxBase}/artes-pesca`;
                 const methodArte = arteId ? 'PUT' : 'POST';
                 const arteResp = await fetch(urlArte, {
@@ -2064,14 +2066,17 @@
                 switch (true) {
                     case esLinea:
                         toggleArteFields($('.arte-linea'), true);
+                        toggleArteFields($('.arte-linea-madre'), true);
                         toggleArteFields($('.arte-enmalle'), false);
                         break;
                     case esEnmalle:
                         toggleArteFields($('.arte-linea'), false);
+                        toggleArteFields($('.arte-linea-madre'), false);
                         toggleArteFields($('.arte-enmalle'), true);
                         break;
                     default:
                         toggleArteFields($('.arte-linea'), false);
+                        toggleArteFields($('.arte-linea-madre'), false);
                         toggleArteFields($('.arte-enmalle'), false);
                 }
             }
