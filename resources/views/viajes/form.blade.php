@@ -1396,13 +1396,13 @@
                 sitioProfundidad.val('');
                 sitioUnidad.val('');
                 sitioCard.removeClass('d-none').show();
-                cargarUnidadesProfundidad();
-                cargarSitios();
 
                 if (data.id) {
                     fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
                         .then(r => r.ok ? r.json() : Promise.reject(r))
                         .then(sitios => {
+                            let unidadId = '';
+                            let sitioSeleccionado = '';
                             if (Array.isArray(sitios) && sitios.length > 0) {
                                 const s = sitios[0];
                                 sitioRegistroId.val(s.id || '');
@@ -1411,14 +1411,21 @@
                                 sitioLatitud.val(s.latitud || '');
                                 sitioLongitud.val(s.longitud || '');
                                 sitioProfundidad.val(s.profundidad || '');
-                                cargarUnidadesProfundidad(s.unidad_profundidad_id || '');
-                                cargarSitios(s.sitio_id || '');
+                                unidadId = s.unidad_profundidad_id || '';
+                                sitioSeleccionado = s.sitio_id || '';
                             }
+                            cargarUnidadesProfundidad(unidadId);
+                            cargarSitios(sitioSeleccionado);
                         })
                         .catch(err => {
                             console.error('Error al cargar sitio de pesca:', err);
                             alert('Error al cargar sitio de pesca');
+                            cargarUnidadesProfundidad('');
+                            cargarSitios('');
                         });
+                } else {
+                    cargarUnidadesProfundidad('');
+                    cargarSitios('');
                 }
                 if (data.id) {
                     const campos = (data.respuestas_multifinalitaria || []).map(r => ({
