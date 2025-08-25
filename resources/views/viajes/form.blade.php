@@ -1307,6 +1307,33 @@
                 $('#tipo_peso').val(data.tipo_peso || '');
                 $('#estado_producto').val(data.estado_producto || '');
                 renderCamposDinamicosCaptura([]);
+
+                const sitioCard = $('#sitio-pesca-card');
+                const sitioNombre = $('#sitio-nombre');
+                const sitioLatitud = $('#sitio-latitud');
+                const sitioLongitud = $('#sitio-longitud');
+
+                sitioNombre.val('');
+                sitioLatitud.val('');
+                sitioLongitud.val('');
+                sitioCard.removeClass('d-none').show();
+
+                if (data.id) {
+                    fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
+                        .then(r => r.ok ? r.json() : Promise.reject(r))
+                        .then(sitios => {
+                            if (Array.isArray(sitios) && sitios.length > 0) {
+                                const s = sitios[0];
+                                sitioNombre.val(s.nombre || '');
+                                sitioLatitud.val(s.latitud || '');
+                                sitioLongitud.val(s.longitud || '');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error al cargar sitio de pesca:', err);
+                            alert('Error al cargar sitio de pesca');
+                        });
+                }
                 if (data.id) {
                     const campos = (data.respuestas_multifinalitaria || []).map(r => ({
                         id: r.tabla_multifinalitaria_id,
