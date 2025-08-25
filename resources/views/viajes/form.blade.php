@@ -1260,7 +1260,7 @@
                     .then(data => {
                         data.forEach(t => {
                             const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
-                            if (t.clase) {
+                            if (t.clase !== undefined && t.clase !== null) {
                                 opt.dataset.clase = t.clase;
                             }
                             select.append(opt);
@@ -2064,8 +2064,11 @@
                 }).first();
                 tipoArtePesca = option.length ? option.text() : '';
                 const clase = option.data('clase');
-                const esLinea = clase ? String(clase).toLowerCase() === 'linea' : tipoArtePesca === 'Línea mano, palangre';
-                const esEnmalle = clase ? String(clase).toLowerCase() === 'enmalle' : tipoArtePesca === 'Enmalle/Trasmallo';
+                const nombre = (tipoArtePesca || '').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+                const esLinea = clase ? String(clase).toLowerCase() === 'linea'
+                    : nombre.includes('linea') || nombre.includes('palangre');
+                const esEnmalle = clase ? String(clase).toLowerCase() === 'enmalle'
+                    : nombre.includes('enmalle') || nombre.includes('trasmallo');
                 switch (true) {
                     case esLinea:
                         toggleArteFields($('.arte-linea'), true);
