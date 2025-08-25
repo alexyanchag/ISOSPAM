@@ -1254,18 +1254,25 @@
         function cargarTiposArte(selected = '') {
             const select = $('#tipo-arte-id');
             select.empty().append('<option value="">Seleccione...</option>');
-            return fetch("{{ route('api.tipos-arte') }}")
-                .then(r => r.json())
-                .then(data => {
-                    data.forEach(t => {
-                        const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
-                        if (t.clase) {
-                            opt.dataset.clase = t.clase;
-                        }
-                        select.append(opt);
+            return new Promise((resolve, reject) => {
+                fetch("{{ route('api.tipos-arte') }}")
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(t => {
+                            const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                            if (t.clase) {
+                                opt.dataset.clase = t.clase;
+                            }
+                            select.append(opt);
+                        });
+                        select.val(selected);
+                        resolve(selected);
+                    })
+                    .catch(err => {
+                        console.error('Error al cargar tipos de arte:', err);
+                        reject(err);
                     });
-                })
-                .catch(err => console.error('Error al cargar tipos de arte:', err));
+            });
         }
 
         function cargarTiposAnzuelo(selected = '') {
@@ -1597,7 +1604,6 @@
                 $('#diametro').val('');
                 $('#carnadaviva').val('');
                 $('#especie-carnada').val('');
-                $('#tipo-arte-id').trigger('change');
 
             if (data.id) {
                 promises.push(
@@ -1656,13 +1662,10 @@
                                 materialMallaSel = a.material_malla_id || '';
                             }
                             return Promise.all([
-                                cargarTiposArte(tipoArteSel),
+                                cargarTiposArte(tipoArteSel).then(() => changeArtePesca(tipoArteSel)),
                                 cargarTiposAnzuelo(tipoAnzueloSel),
                                 cargarMaterialesMalla(materialMallaSel)
-                            ]).then(() => {
-                                $('#tipo-arte-id').val(tipoArteSel);
-                                changeArtePesca(tipoArteSel);
-                            });
+                            ]);
                         })
                         .catch(err => {
                             console.error('Error al cargar arte de pesca:', err);
