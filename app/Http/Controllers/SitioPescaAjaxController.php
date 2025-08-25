@@ -23,22 +23,33 @@ class SitioPescaAjaxController extends Controller
         $data = $request->validate([
             'captura_id' => ['required', 'integer'],
             'nombre' => ['nullable', 'string'],
-            'latitud' => ['nullable'],
-            'longitud' => ['nullable'],
+            'latitud' => ['required', 'numeric'],
+            'longitud' => ['required', 'numeric'],
+            'profundidad' => ['required', 'numeric'],
+            'unidad_profundidad_id' => ['required', 'integer'],
+            'sitio_id' => ['required', 'integer'],
         ]);
 
         // Validate uniqueness of captura_id
         $existing = $this->apiService->get('/sitios-pesca', ['captura_id' => $data['captura_id']]);
         if ($existing->successful() && !empty($existing->json())) {
             return response()->json([
-                'message' => 'The given data was invalid.',
+                'message' => 'Los datos proporcionados no son válidos.',
                 'errors' => [
-                    'captura_id' => ['Ya existe un sitio para esta captura.'],
+                    'captura_id' => ['Ya existe un sitio de pesca para esta captura.'],
                 ],
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $resp = $this->apiService->post('/sitios-pesca', $data);
+        $resp = $this->apiService->post('/sitios-pesca', [
+            'captura_id' => $data['captura_id'],
+            'nombre' => $data['nombre'] ?? null,
+            'latitud' => $data['latitud'],
+            'longitud' => $data['longitud'],
+            'profundidad' => $data['profundidad'],
+            'unidad_profundidad_id' => $data['unidad_profundidad_id'],
+            'sitio_id' => $data['sitio_id'],
+        ]);
         return response()->json($resp->json(), $resp->status());
     }
 
@@ -47,11 +58,22 @@ class SitioPescaAjaxController extends Controller
         $data = $request->validate([
             'captura_id' => ['required', 'integer'],
             'nombre' => ['nullable', 'string'],
-            'latitud' => ['nullable'],
-            'longitud' => ['nullable'],
+            'latitud' => ['required', 'numeric'],
+            'longitud' => ['required', 'numeric'],
+            'profundidad' => ['required', 'numeric'],
+            'unidad_profundidad_id' => ['required', 'integer'],
+            'sitio_id' => ['required', 'integer'],
         ]);
 
-        $resp = $this->apiService->put("/sitios-pesca/{$id}", $data);
+        $resp = $this->apiService->put("/sitios-pesca/{$id}", [
+            'captura_id' => $data['captura_id'],
+            'nombre' => $data['nombre'] ?? null,
+            'latitud' => $data['latitud'],
+            'longitud' => $data['longitud'],
+            'profundidad' => $data['profundidad'],
+            'unidad_profundidad_id' => $data['unidad_profundidad_id'],
+            'sitio_id' => $data['sitio_id'],
+        ]);
         return response()->json($resp->json(), $resp->status());
     }
 }
