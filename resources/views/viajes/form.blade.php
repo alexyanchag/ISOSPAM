@@ -1891,6 +1891,7 @@
                     });
 
                     if (!arteResp.ok) {
+                        console.log(arteResp)
                         if (arteResp.status === 422) {
                             const data = await arteResp.json();
                             const messages = [];
