@@ -41,17 +41,17 @@ class CapturaAjaxController extends Controller
         $viajeId = (int) $request->input('viaje_id');
 
         $rules = [
-            'nombre_comun' => ['nullable', 'string'],
-            'numero_individuos' => ['nullable', 'integer'],
-            'peso_estimado' => ['nullable', 'numeric'],
+            'nombre_comun' => ['required', 'string'],
+            'numero_individuos' => ['required', 'integer'],
+            'peso_estimado' => ['required', 'numeric'],
             'peso_contado' => ['nullable', 'numeric'],
-            'especie_id' => ['nullable', 'integer'],
+            'especie_id' => ['required', 'integer'],
             'viaje_id' => ['required', 'integer'],
-            'es_incidental' => ['nullable', 'boolean'],
-            'es_descartada' => ['nullable', 'boolean'],
-            'tipo_numero_individuos' => ['nullable', 'string'],
-            'tipo_peso' => ['nullable', 'string'],
-            'estado_producto' => ['nullable', 'string'],
+            'es_incidental' => ['required', 'boolean'],
+            'es_descartada' => ['required', 'boolean'],
+            'tipo_numero_individuos' => ['required', 'string'],
+            'tipo_peso' => ['required', 'string'],
+            'estado_producto' => ['required', 'string'],
             'respuestas_multifinalitaria' => ['array'],
             'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['nullable', 'integer'],
             'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
@@ -63,9 +63,14 @@ class CapturaAjaxController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
         $data = $validator->validated();
-        
-        //return json_encode($data);
+
         $resp = $this->apiService->post('/capturas', $data);
 
         return response()->json($resp->json(), $resp->status());
@@ -84,17 +89,17 @@ class CapturaAjaxController extends Controller
             : [];
 
         $rules = [
-            'nombre_comun' => ['nullable', 'string'],
-            'numero_individuos' => ['nullable', 'integer'],
-            'peso_estimado' => ['nullable', 'numeric'],
+            'nombre_comun' => ['required', 'string'],
+            'numero_individuos' => ['required', 'integer'],
+            'peso_estimado' => ['required', 'numeric'],
             'peso_contado' => ['nullable', 'numeric'],
-            'especie_id' => ['nullable', 'integer'],
+            'especie_id' => ['required', 'integer'],
             'viaje_id' => ['required', 'integer'],
-            'es_incidental' => ['nullable', 'boolean'],
-            'es_descartada' => ['nullable', 'boolean'],
-            'tipo_numero_individuos' => ['nullable', 'string'],
-            'tipo_peso' => ['nullable', 'string'],
-            'estado_producto' => ['nullable', 'string'],
+            'es_incidental' => ['required', 'boolean'],
+            'es_descartada' => ['required', 'boolean'],
+            'tipo_numero_individuos' => ['required', 'string'],
+            'tipo_peso' => ['required', 'string'],
+            'estado_producto' => ['required', 'string'],
             'respuestas_multifinalitaria' => ['array'],
             'respuestas_multifinalitaria.*.tabla_multifinalitaria_id' => ['integer'],
             'respuestas_multifinalitaria.*.respuesta' => ['nullable'],
