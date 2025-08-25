@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ArtePescaAjaxController extends Controller
 {
@@ -34,6 +35,13 @@ class ArtePescaAjaxController extends Controller
             'carnadaviva' => ['nullable', 'boolean'],
             'especiecarnada' => ['nullable', 'string'],
         ]);
+
+        $existing = $this->apiService->get('/artes-pesca', ['captura_id' => $data['captura_id']]);
+        if ($existing->successful() && !empty($existing->json())) {
+            return response()->json([
+                'message' => 'Ya existe un arte de pesca para esta captura.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $resp = $this->apiService->post('/artes-pesca', [
             'captura_id' => $data['captura_id'],
