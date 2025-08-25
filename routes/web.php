@@ -197,7 +197,7 @@ Route::get('/kpi/alertas', [AlertasController::class, 'index'])->name('kpi.alert
 
 // API para mapas/gráficas
 Route::get('/api/esfuerzo', [ApiController::class, 'esfuerzo'])->name('api.esfuerzo');
-Route::get('/api/sitios', [ApiController::class, 'sitios'])->name('api.sitios');
+Route::get('/api/sitios-reporte', [ApiController::class, 'sitios'])->name('api.sitios.reporte');
 Route::get('/api/serie', [ApiController::class, 'serie'])->name('api.serie');
 
 // API proxy to external service
@@ -208,5 +208,7 @@ Route::get('/api/estados-marea', [ApiProxyController::class, 'getEstadosMarea'])
 Route::get('/api/condiciones-mar', [ApiProxyController::class, 'getCondicionesMar'])->name('api.condiciones-mar');
 Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->name('api.tipos-insumo');
 Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
+Route::get('/api/unidades-profundidad', [ApiProxyController::class, 'getUnidadesProfundidad'])->name('api.unidades-profundidad');
+Route::get('/api/sitios', [ApiProxyController::class, 'getSitios'])->name('api.sitios');
 Route::get('/api/personas', [ApiProxyController::class, 'getPersonas'])->name('api.personas');
 Route::get('/api/personas/{id}', [ApiProxyController::class, 'getPersona'])->name('api.personas.show');
