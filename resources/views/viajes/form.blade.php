@@ -539,11 +539,18 @@
                                             </div>
                                         </div>
                                       </div>
-                                      <div id="sitio-pesca-card" class="card mb-3">
-                                          <div class="card-header">
+                                      <div id="campos-dinamicos-captura" class="row"></div>
+
+                                      <div id="sitio-pesca-card" class="card mb-3 collapsed-card">                                          
+                                            <div class="card-header border-0 bg-dark">
                                               <h5 class="card-title mb-0">Sitio de pesca</h5>
-                                          </div>
-                                          <div class="card-body">
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body collapse" >
                                               <div class="mb-3">
                                                   <label class="form-label">Nombre</label>
                                                   <input type="text" id="sitio-nombre" class="form-control">
@@ -558,7 +565,6 @@
                                               </div>
                                           </div>
                                       </div>
-                                      <div id="campos-dinamicos-captura" class="row"></div>
                                 </div>
                             </div>
 
