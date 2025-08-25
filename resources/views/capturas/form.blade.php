@@ -45,6 +45,13 @@
             <h5 class="card-title mb-0">Sitio de pesca</h5>
         </div>
         <div class="card-body">
+            <input type="hidden" id="sitio-pesca-id">
+            <div class="mb-3">
+                <label class="form-label">Sitio existente</label>
+                <select id="sitio-id" class="form-control">
+                    <option value="">Seleccione...</option>
+                </select>
+            </div>
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
                 <input type="text" id="sitio-nombre" class="form-control">
@@ -56,6 +63,16 @@
             <div class="mb-3">
                 <label class="form-label">Longitud</label>
                 <input type="text" id="sitio-longitud" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Profundidad <span class="text-danger">*</span></label>
+                <input type="number" id="sitio-profundidad" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Unidad de profundidad <span class="text-danger">*</span></label>
+                <select id="sitio-unidad-profundidad" class="form-control" required>
+                    <option value="">Seleccione...</option>
+                </select>
             </div>
         </div>
     </div>
@@ -135,41 +152,116 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => console.error('Error al cargar especies:', err));
 
+    const ajaxBase = '{{ url('ajax') }}';
     const capturaId = @json($captura['id'] ?? null);
-    if (capturaId) {
-        const card = document.getElementById('sitio-pesca-card');
-        const nombre = document.getElementById('sitio-nombre');
-        const lat = document.getElementById('sitio-latitud');
-        const lon = document.getElementById('sitio-longitud');
-        let sitioId = null;
+    const card = document.getElementById('sitio-pesca-card');
+    const sitioRegistroId = document.getElementById('sitio-pesca-id');
+    const sitioSelect = document.getElementById('sitio-id');
+    const nombre = document.getElementById('sitio-nombre');
+    const lat = document.getElementById('sitio-latitud');
+    const lon = document.getElementById('sitio-longitud');
+    const prof = document.getElementById('sitio-profundidad');
+    const unidad = document.getElementById('sitio-unidad-profundidad');
 
+    let sitiosCache = [];
+
+    function loadUnidades(selected = '') {
+        unidad.innerHTML = '<option value="">Seleccione...</option>';
+        fetch(`${ajaxBase}/unidades-profundidad`)
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.id;
+                    opt.textContent = u.nombre || u.descripcion || '';
+                    if (String(u.id) === String(selected)) opt.selected = true;
+                    unidad.appendChild(opt);
+                });
+            })
+            .catch(err => console.error('Error al cargar unidades de profundidad:', err));
+    }
+
+    function loadSitios(selected = '') {
+        sitioSelect.innerHTML = '<option value="">Seleccione...</option>';
+        fetch(`${ajaxBase}/sitios`)
+            .then(r => r.json())
+            .then(data => {
+                sitiosCache = Array.isArray(data) ? data : [];
+                sitiosCache.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.nombre || '';
+                    if (String(s.id) === String(selected)) opt.selected = true;
+                    sitioSelect.appendChild(opt);
+                });
+            })
+            .catch(err => console.error('Error al cargar sitios:', err));
+    }
+
+    sitioSelect.addEventListener('change', function() {
+        const s = sitiosCache.find(x => String(x.id) === this.value);
+        if (s) {
+            nombre.value = s.nombre || '';
+            lat.value = s.latitud || '';
+            lon.value = s.longitud || '';
+            prof.value = s.profundidad || '';
+            unidad.value = s.unidad_profundidad_id || '';
+        } else {
+            nombre.value = '';
+            lat.value = '';
+            lon.value = '';
+            prof.value = '';
+            unidad.value = '';
+        }
+    });
+
+    if (capturaId) {
         fetch(`/isospam/sitios-pesca?captura_id=${capturaId}`)
             .then(r => r.ok ? r.json() : [])
             .then(data => {
+                let selectedSitio = '';
+                let selectedUnidad = '';
                 if (Array.isArray(data) && data.length > 0) {
                     const d = data[0];
-                    sitioId = d.id;
+                    sitioRegistroId.value = d.id;
+                    selectedSitio = d.sitio_id || '';
+                    selectedUnidad = d.unidad_profundidad_id || '';
                     nombre.value = d.nombre ?? '';
                     lat.value = d.latitud ?? '';
                     lon.value = d.longitud ?? '';
+                    prof.value = d.profundidad ?? '';
                 }
+                loadUnidades(selectedUnidad);
+                loadSitios(selectedSitio);
                 card.classList.remove('d-none');
             })
-            .catch(() => card.classList.remove('d-none'));
+            .catch(() => {
+                loadUnidades();
+                loadSitios();
+                card.classList.remove('d-none');
+            });
 
         const form = document.getElementById('captura-form');
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            if (!sitioSelect.value || !prof.value || !unidad.value) {
+                alert('Complete los datos del sitio de pesca');
+                return;
+            }
             const payload = {
                 captura_id: capturaId,
+                sitio_id: parseInt(sitioSelect.value),
                 nombre: nombre.value || null,
                 latitud: lat.value || null,
                 longitud: lon.value || null,
+                profundidad: parseFloat(prof.value),
+                unidad_profundidad_id: parseInt(unidad.value)
             };
+            const sitioId = sitioRegistroId.value;
             const url = sitioId ? `/isospam/sitios-pesca/${sitioId}` : '/isospam/sitios-pesca';
             const method = sitioId ? 'PUT' : 'POST';
             try {
-                await fetch(url, {
+                const resp = await fetch(url, {
                     method,
                     headers: {
                         'Content-Type': 'application/json',
@@ -177,8 +269,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify(payload),
                 });
+                if (!resp.ok) {
+                    if (resp.status === 422) {
+                        const data = await resp.json();
+                        const errors = data.errors || {};
+                        const messages = [];
+                        Object.values(errors).forEach(arr => arr.forEach(m => messages.push(m)));
+                        alert(messages.join('\n'));
+                        return;
+                    }
+                    throw new Error('Error al guardar sitio de pesca');
+                }
             } catch (err) {
-                console.error('Error al guardar sitio de pesca:', err);
+                alert('Error al guardar sitio de pesca');
+                return;
             }
             form.submit();
         });
