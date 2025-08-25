@@ -586,7 +586,8 @@
                                 <input type="hidden" id="sitio-pesca-id">
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label class="form-label">Sitio existente <span class="text-danger">*</span></label>
+                                        <label class="form-label">Sitio existente <span
+                                                class="text-danger">*</span></label>
                                         <select id="sitio-id" class="form-control">
                                             <option value="">Seleccione...</option>
                                         </select>
@@ -594,14 +595,6 @@
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Nombre <span class="text-danger">*</span></label>
                                         <input type="text" id="sitio-nombre" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label">Latitud <span class="text-danger">*</span></label>
-                                        <input type="text" id="sitio-latitud" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label">Longitud <span class="text-danger">*</span></label>
-                                        <input type="text" id="sitio-longitud" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Profundidad <span class="text-danger">*</span></label>
@@ -615,103 +608,115 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
+                                        <label class="form-label">Latitud <span class="text-danger">*</span></label>
+                                        <input type="text" id="sitio-latitud" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Longitud <span class="text-danger">*</span></label>
+                                        <input type="text" id="sitio-longitud" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         <label class="form-label d-block">&nbsp;</label>
-                                        <button type="button" id="btn-geolocalizar" class="btn btn-secondary btn-sm mr-2">Obtener ubicación</button>
-                                        <button type="button" id="btn-mapa" class="btn btn-info btn-sm">Seleccionar en mapa</button>
+                                        <button type="button" id="btn-geolocalizar" class="btn btn-secondary btn-sm mr-2">Obtener ubicación <i class="fa-solid fa-location-crosshairs"></i></button>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label d-block">&nbsp;</label>
+                                        <button type="button" id="btn-mapa" class="btn btn-info btn-sm">Seleccionar en mapa <i class="fa-solid fa-map-location-dot"></i></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                                      <div id="arte-pesca-card" class="card mb-3 collapsed-card">
-                                          <div class="card-header border-0 bg-dark">
-                                              <h5 class="card-title mb-0">Arte de pesca</h5>
-                                              <div class="card-tools">
-                                                  <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
-                                                      <i class="fas fa-plus"></i>
-                                                  </button>
-                                              </div>
-                                          </div>
-                                            <div class="card-body collapse">
-                                                <input type="hidden" id="arte-pesca-id">
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label>Tipo de arte <span class="text-danger">*</span></label>
-                                                        <select id="tipo-arte-id" class="form-control" required>
-                                                            <option value="">Seleccione...</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-4 arte-linea-madre d-none">
-                                                        <label>Líneas madre</label>
-                                                        <input type="number" id="lineas-madre" class="form-control">
-                                                    </div>
-                                                </div>
+                        <div id="arte-pesca-card" class="card mb-3 collapsed-card">
+                            <div class="card-header border-0 bg-dark">
+                                <h5 class="card-title mb-0">Arte de pesca</h5>
+                                <div class="card-tools">
+                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body collapse">
+                                <input type="hidden" id="arte-pesca-id">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Tipo de arte <span class="text-danger">*</span></label>
+                                        <select id="tipo-arte-id" class="form-control" required>
+                                            <option value="">Seleccione...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4 arte-linea-madre d-none">
+                                        <label>Líneas madre</label>
+                                        <input type="number" id="lineas-madre" class="form-control">
+                                    </div>
+                                </div>
 
-                                                <div class="arte-linea">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-4">
-                                                            <label>Anzuelos</label>
-                                                            <input type="number" id="anzuelos" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Tipo anzuelo</label>
-                                                            <select id="tipo-anzuelo-id" class="form-control">
-                                                                <option value="">Seleccione...</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Tamaño anzuelo (pulg)</label>
-                                                            <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-4">
-                                                            <label>Carnada viva</label>
-                                                            <select id="carnadaviva" class="form-control">
-                                                                <option value="">Seleccione...</option>
-                                                                <option value="1">Sí</option>
-                                                                <option value="0">No</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Especie carnada</label>
-                                                            <input type="text" id="especie-carnada" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="arte-enmalle">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-4">
-                                                            <label>Largo red (m)</label>
-                                                            <input type="number" step="any" id="largo-red-m" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Ancho red (m)</label>
-                                                            <input type="number" step="any" id="alto-red-m" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Material malla</label>
-                                                            <select id="material-malla-id" class="form-control">
-                                                                <option value="">Seleccione...</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-4">
-                                                            <label>Ojo malla (cm)</label>
-                                                            <input type="number" step="any" id="ojo-malla-cm" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>Diámetro</label>
-                                                            <input type="number" step="any" id="diametro" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="arte-linea">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Anzuelos</label>
+                                            <input type="number" id="anzuelos" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Tipo anzuelo</label>
+                                            <select id="tipo-anzuelo-id" class="form-control">
+                                                <option value="">Seleccione...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Tamaño anzuelo (pulg)</label>
+                                            <input type="number" step="any" id="tamanio-anzuelo-pulg"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Carnada viva</label>
+                                            <select id="carnadaviva" class="form-control">
+                                                <option value="">Seleccione...</option>
+                                                <option value="1">Sí</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Especie carnada</label>
+                                            <input type="text" id="especie-carnada" class="form-control">
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="arte-enmalle">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Largo red (m)</label>
+                                            <input type="number" step="any" id="largo-red-m" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Ancho red (m)</label>
+                                            <input type="number" step="any" id="alto-red-m" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Material malla</label>
+                                            <select id="material-malla-id" class="form-control">
+                                                <option value="">Seleccione...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Ojo malla (cm)</label>
+                                            <input type="number" step="any" id="ojo-malla-cm" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Diámetro</label>
+                                            <input type="number" step="any" id="diametro" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -1629,21 +1634,21 @@
             sitioUnidad.val('');
             sitioCard.removeClass('d-none').show();
 
-                const arteCard = $('#arte-pesca-card');
-                arteCard.removeClass('d-none').show();
-                $('#arte-pesca-id').val('');
-                $('#tipo-arte-id').val('');
-                $('#lineas-madre').val('');
-                $('#anzuelos').val('');
-                $('#tamanio-anzuelo-pulg').val('');
-                $('#tipo-anzuelo-id').val('');
-                $('#largo-red-m').val('');
-                $('#alto-red-m').val('');
-                $('#material-malla-id').val('');
-                $('#ojo-malla-cm').val('');
-                $('#diametro').val('');
-                $('#carnadaviva').val('');
-                $('#especie-carnada').val('');
+            const arteCard = $('#arte-pesca-card');
+            arteCard.removeClass('d-none').show();
+            $('#arte-pesca-id').val('');
+            $('#tipo-arte-id').val('');
+            $('#lineas-madre').val('');
+            $('#anzuelos').val('');
+            $('#tamanio-anzuelo-pulg').val('');
+            $('#tipo-anzuelo-id').val('');
+            $('#largo-red-m').val('');
+            $('#alto-red-m').val('');
+            $('#material-malla-id').val('');
+            $('#ojo-malla-cm').val('');
+            $('#diametro').val('');
+            $('#carnadaviva').val('');
+            $('#especie-carnada').val('');
 
             if (data.id) {
                 promises.push(
@@ -1752,13 +1757,13 @@
                 );
             }
 
-                Promise.all(promises)
-                    .then(() => {
-                        changeArtePesca($('#tipo-arte-id').val(), !!data.id);
-                    })
-                    .finally(() => {
-                        $('.spinner-overlay').addClass('d-none');
-                    });
+            Promise.all(promises)
+                .then(() => {
+                    changeArtePesca($('#tipo-arte-id').val(), !!data.id);
+                })
+                .finally(() => {
+                    $('.spinner-overlay').addClass('d-none');
+                });
 
             $('#captura-modal').modal('show');
         }
@@ -2060,129 +2065,129 @@
             });
         });
 
-            $('#parametro-form').on('submit', function (e) {
-                e.preventDefault();
-                const id = $('#parametro-id').val();
-                const payload = {
-                    viaje_id: viajeId,
-                    hora: $('#hora').val(),
-                    sondeo_ppt: $('#sondeo_ppt').val(),
-                    tsmp: $('#tsmp').val(),
-                    estado_marea_id: $('#estado_marea_id').val(),
-                    condicion_mar_id: $('#condicion_mar_id').val(),
-                    oxigeno_mg_l: $('#oxigeno_mg_l').val()
-                };
-                const url = id ? `${ajaxBase}/parametros-ambientales/${id}` : `${ajaxBase}/parametros-ambientales`;
-                const method = id ? 'PUT' : 'POST';
-                $.ajax({
-                    url,
-                    method,
-                    contentType: 'application/json',
-                    data: JSON.stringify(payload),
-                    success: () => {
-                        $('#parametro-modal').modal('hide');
-                        cargarParametrosAmbientales();
-                    }
-                });
-            });
-
-            const ARTE_RULES = {
-                default: {
-                    show: ['#tipo-arte-id'],
-                    hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
-                    reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
-                },
-                'LÍNEA MANO, PALANGRE': {
-                    show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
-                    hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
-                    reset: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
-                },
-                'ENMALLE/TRASMALLO': {
-                    show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
-                    hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
-                    reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada']
-                }
+        $('#parametro-form').on('submit', function (e) {
+            e.preventDefault();
+            const id = $('#parametro-id').val();
+            const payload = {
+                viaje_id: viajeId,
+                hora: $('#hora').val(),
+                sondeo_ppt: $('#sondeo_ppt').val(),
+                tsmp: $('#tsmp').val(),
+                estado_marea_id: $('#estado_marea_id').val(),
+                condicion_mar_id: $('#condicion_mar_id').val(),
+                oxigeno_mg_l: $('#oxigeno_mg_l').val()
             };
-
-            function setFieldVisibility(selector, show, preserve = false) {
-                const $fg = $(selector).closest('.form-group');
-                if (show) {
-                    $fg.removeClass('d-none');
-                    $(selector).prop('required', true);
-                } else {
-                    $fg.addClass('d-none');
-                    $(selector).prop('required', false);
-                    if (!preserve) $(selector).val('');
+            const url = id ? `${ajaxBase}/parametros-ambientales/${id}` : `${ajaxBase}/parametros-ambientales`;
+            const method = id ? 'PUT' : 'POST';
+            $.ajax({
+                url,
+                method,
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: () => {
+                    $('#parametro-modal').modal('hide');
+                    cargarParametrosAmbientales();
                 }
+            });
+        });
+
+        const ARTE_RULES = {
+            default: {
+                show: ['#tipo-arte-id'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
+            },
+            'LÍNEA MANO, PALANGRE': {
+                show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
+            },
+            'ENMALLE/TRASMALLO': {
+                show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada']
+            }
+        };
+
+        function setFieldVisibility(selector, show, preserve = false) {
+            const $fg = $(selector).closest('.form-group');
+            if (show) {
+                $fg.removeClass('d-none');
+                $(selector).prop('required', true);
+            } else {
+                $fg.addClass('d-none');
+                $(selector).prop('required', false);
+                if (!preserve) $(selector).val('');
+            }
+        }
+
+        function changeArtePesca(id, preserve = false) {
+            const opt = $('#tipo-arte-id option').filter(function () { return String(this.value) === String(id); }).first();
+            const tipo = String(opt.data('tipo') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
+
+            const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
+
+            // Ocultar y resetear todos los campos
+            ARTE_RULES.default.hide.forEach(s => setFieldVisibility(s, false, preserve));
+
+            // Aplicar regla de reseteo
+            if (!preserve) {
+                (rules.reset || []).forEach(s => $(s).val(''));
             }
 
-            function changeArtePesca(id, preserve = false) {
-                const opt = $('#tipo-arte-id option').filter(function(){return String(this.value)===String(id);}).first();
-                const tipo = String(opt.data('tipo') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
+            // Mostrar/Ocultar según la regla seleccionada
+            (rules.hide || []).forEach(s => setFieldVisibility(s, false, preserve));
+            rules.show.forEach(s => setFieldVisibility(s, true));
+        }
 
-                const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
+        $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
 
-                // Ocultar y resetear todos los campos
-                ARTE_RULES.default.hide.forEach(s => setFieldVisibility(s, false, preserve));
-
-                // Aplicar regla de reseteo
-                if (!preserve) {
-                    (rules.reset || []).forEach(s => $(s).val(''));
-                }
-
-                // Mostrar/Ocultar según la regla seleccionada
-                (rules.hide || []).forEach(s => setFieldVisibility(s, false, preserve));
-                rules.show.forEach(s => setFieldVisibility(s, true));
+        $('#btn-geolocalizar').on('click', function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    $('#sitio-latitud').val(position.coords.latitude.toFixed(6));
+                    $('#sitio-longitud').val(position.coords.longitude.toFixed(6));
+                }, function () {
+                    alert('No se pudo obtener la ubicación');
+                });
+            } else {
+                alert('Geolocalización no soportada');
             }
+        });
 
-            $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
+        $('#btn-mapa').on('click', function () {
+            $('#mapa-modal').modal('show');
+        });
 
-            $('#btn-geolocalizar').on('click', function () {
+        $('#mapa-modal').on('shown.bs.modal', function () {
+            let lat = parseFloat($('#sitio-latitud').val());
+            let lng = parseFloat($('#sitio-longitud').val());
+            if (isNaN(lat) || isNaN(lng)) {
+                lat = -12.046374;
+                lng = -77.042793;
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        $('#sitio-latitud').val(position.coords.latitude.toFixed(6));
-                        $('#sitio-longitud').val(position.coords.longitude.toFixed(6));
-                    }, function () {
-                        alert('No se pudo obtener la ubicación');
+                    navigator.geolocation.getCurrentPosition(function (pos) {
+                        lat = pos.coords.latitude;
+                        lng = pos.coords.longitude;
+                        mapa.setCenter({ lat, lng });
+                        marcador.setPosition({ lat, lng });
                     });
-                } else {
-                    alert('Geolocalización no soportada');
                 }
-            });
+            }
+            if (!mapa) {
+                initMap(lat, lng);
+            } else {
+                mapa.setCenter({ lat, lng });
+                marcador.setPosition({ lat, lng });
+            }
+        });
 
-            $('#btn-mapa').on('click', function () {
-                $('#mapa-modal').modal('show');
-            });
-
-            $('#mapa-modal').on('shown.bs.modal', function () {
-                let lat = parseFloat($('#sitio-latitud').val());
-                let lng = parseFloat($('#sitio-longitud').val());
-                if (isNaN(lat) || isNaN(lng)) {
-                    lat = -12.046374;
-                    lng = -77.042793;
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (pos) {
-                            lat = pos.coords.latitude;
-                            lng = pos.coords.longitude;
-                            mapa.setCenter({ lat, lng });
-                            marcador.setPosition({ lat, lng });
-                        });
-                    }
-                }
-                if (!mapa) {
-                    initMap(lat, lng);
-                } else {
-                    mapa.setCenter({ lat, lng });
-                    marcador.setPosition({ lat, lng });
-                }
-            });
-
-            $('#guardar-mapa').on('click', function () {
-                const pos = marcador.getPosition();
-                $('#sitio-latitud').val(pos.lat().toFixed(6));
-                $('#sitio-longitud').val(pos.lng().toFixed(6));
-                $('#mapa-modal').modal('hide');
-            });
+        $('#guardar-mapa').on('click', function () {
+            const pos = marcador.getPosition();
+            $('#sitio-latitud').val(pos.lat().toFixed(6));
+            $('#sitio-longitud').val(pos.lng().toFixed(6));
+            $('#mapa-modal').modal('hide');
+        });
 
         if (viajeId && "{{ request()->boolean('por_finalizar') ? 'true' : 'false' }}" === 'true') {
             cargarCapturas();
@@ -2208,19 +2213,19 @@
         }
     });
 </script>
-    @parent
-    @if(session('success'))
-        <script>
-            Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
-        </script>
-    @endif
-    @if(session('error'))
-        <script>
-            Swal.fire({icon: 'error', title: 'Error', text: @json(session('error'))});
-        </script>
-    @elseif($errors->any())
-        <script>
-            Swal.fire({icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>`});
-        </script>
-    @endif
+@parent
+@if(session('success'))
+<script>
+    Swal.fire({ icon: 'success', title: 'Éxito', text: @json(session('success')) });
+</script>
+@endif
+@if(session('error'))
+<script>
+    Swal.fire({ icon: 'error', title: 'Error', text: @json(session('error')) });
+</script>
+@elseif($errors->any())
+<script>
+    Swal.fire({ icon: 'error', title: 'Error', html: `<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>` });
+</script>
+@endif
 @endsection
