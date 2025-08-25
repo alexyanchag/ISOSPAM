@@ -2046,45 +2046,45 @@
                 });
             });
 
-            function toggleArteFields($container, show) {
+            const ARTE_RULES = {
+                default: { show: ['#tipo-arte-id'], hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'] },
+                PALANGRE: {
+                    show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                    hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                    reset: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
+                },
+                ENMALLE: {
+                    show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                    hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                    reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada']
+                }
+            };
+
+            function setFieldVisibility(selector, show) {
+                const $fg = $(selector).closest('.form-group');
                 if (show) {
-                    $container.removeClass('d-none');
-                    $container.find(':input').prop('required', true);
+                    $fg.removeClass('d-none');
+                    $(selector).prop('required', true);
                 } else {
-                    $container.addClass('d-none');
-                    $container.find(':input').each(function () {
-                        $(this).val('').prop('required', false);
-                    });
+                    $fg.addClass('d-none');
+                    $(selector).val('').prop('required', false);
                 }
             }
 
-            function changeArtePesca(idSeleccionado) {
-                const option = $('#tipo-arte-id option').filter(function () {
-                    return String(this.value) === String(idSeleccionado);
-                }).first();
-                tipoArtePesca = option.length ? option.text() : '';
-                const clase = option.data('clase');
-                const nombre = (tipoArtePesca || '').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
-                const esLinea = clase ? String(clase).toLowerCase() === 'linea'
-                    : nombre.includes('linea') || nombre.includes('palangre');
-                const esEnmalle = clase ? String(clase).toLowerCase() === 'enmalle'
-                    : nombre.includes('enmalle') || nombre.includes('trasmallo');
-                switch (true) {
-                    case esLinea:
-                        toggleArteFields($('.arte-linea'), true);
-                        toggleArteFields($('.arte-linea-madre'), true);
-                        toggleArteFields($('.arte-enmalle'), false);
-                        break;
-                    case esEnmalle:
-                        toggleArteFields($('.arte-linea'), false);
-                        toggleArteFields($('.arte-linea-madre'), false);
-                        toggleArteFields($('.arte-enmalle'), true);
-                        break;
-                    default:
-                        toggleArteFields($('.arte-linea'), false);
-                        toggleArteFields($('.arte-linea-madre'), false);
-                        toggleArteFields($('.arte-enmalle'), false);
-                }
+            function changeArtePesca(id) {
+                const opt = $('#tipo-arte-id option').filter(function(){return String(this.value)===String(id);}).first();
+                const tipo = String(opt.data('clase') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
+                const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
+
+                // Ocultar y resetear todos los campos
+                ARTE_RULES.default.hide.forEach(s => setFieldVisibility(s, false));
+
+                // Aplicar regla de reseteo
+                (rules.reset || []).forEach(s => $(s).val(''));
+
+                // Mostrar/Ocultar según la regla seleccionada
+                rules.show.forEach(s => setFieldVisibility(s, true));
+                rules.hide.forEach(s => setFieldVisibility(s, false));
             }
 
             $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
