@@ -1035,7 +1035,7 @@
             function cargarEspecies(selected = '') {
                 const select = $('#especie_id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch("{{ route('api.especies') }}")
+                return fetch("{{ route('api.especies') }}")
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(e => {
@@ -1077,7 +1077,7 @@
             function cargarUnidadesProfundidad(selected = '') {
                 const select = $('#sitio-unidad-profundidad');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch("{{ route('api.unidades-profundidad') }}")
+                return fetch("{{ route('api.unidades-profundidad') }}")
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(u => {
@@ -1092,7 +1092,7 @@
             function cargarSitios(selected = '') {
                 const select = $('#sitio-id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch("{{ route('api.sitios') }}")
+                return fetch("{{ route('api.sitios') }}")
                     .then(r => r.json())
                     .then(data => {
                         sitiosCache = Array.isArray(data) ? data : [];
@@ -1366,10 +1366,12 @@
             });
 
             function abrirModal(data = {}) {
+                $('.spinner-overlay').removeClass('d-none');
                 const campaniaId = $('select[name="campania_id"]').val();
+                const promises = [];
                 $('#captura-id').val(data.id || '');
                 $('#nombre_comun').val(data.nombre_comun || '');
-                cargarEspecies(data.especie_id || '');
+                promises.push(cargarEspecies(data.especie_id || ''));
                 $('#numero_individuos').val(data.numero_individuos || '');
                 $('#peso_estimado').val(data.peso_estimado || '');
                 $('#peso_contado').val(data.peso_contado || '');
@@ -1399,34 +1401,39 @@
                 sitioCard.removeClass('d-none').show();
 
                 if (data.id) {
-                    fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
-                        .then(r => r.ok ? r.json() : Promise.reject(r))
-                        .then(sitios => {
-                            let unidadId = '';
-                            let sitioSeleccionado = '';
-                            if (Array.isArray(sitios) && sitios.length > 0) {
-                                const s = sitios[0];
-                                sitioRegistroId.val(s.id || '');
-                                sitioId.val(s.sitio_id || '');
-                                sitioNombre.val(s.nombre || '');
-                                sitioLatitud.val(s.latitud || '');
-                                sitioLongitud.val(s.longitud || '');
-                                sitioProfundidad.val(s.profundidad || '');
-                                unidadId = s.unidad_profundidad_id || '';
-                                sitioSeleccionado = s.sitio_id || '';
-                            }
-                            cargarUnidadesProfundidad(unidadId);
-                            cargarSitios(sitioSeleccionado);
-                        })
-                        .catch(err => {
-                            console.error('Error al cargar sitio de pesca:', err);
-                            alert('Error al cargar sitio de pesca');
-                            cargarUnidadesProfundidad('');
-                            cargarSitios('');
-                        });
+                    promises.push(
+                        fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
+                            .then(r => r.ok ? r.json() : Promise.reject(r))
+                            .then(sitios => {
+                                let unidadId = '';
+                                let sitioSeleccionado = '';
+                                if (Array.isArray(sitios) && sitios.length > 0) {
+                                    const s = sitios[0];
+                                    sitioRegistroId.val(s.id || '');
+                                    sitioId.val(s.sitio_id || '');
+                                    sitioNombre.val(s.nombre || '');
+                                    sitioLatitud.val(s.latitud || '');
+                                    sitioLongitud.val(s.longitud || '');
+                                    sitioProfundidad.val(s.profundidad || '');
+                                    unidadId = s.unidad_profundidad_id || '';
+                                    sitioSeleccionado = s.sitio_id || '';
+                                }
+                                return Promise.all([
+                                    cargarUnidadesProfundidad(unidadId),
+                                    cargarSitios(sitioSeleccionado)
+                                ]);
+                            })
+                            .catch(err => {
+                                console.error('Error al cargar sitio de pesca:', err);
+                                alert('Error al cargar sitio de pesca');
+                                return Promise.all([
+                                    cargarUnidadesProfundidad(''),
+                                    cargarSitios('')
+                                ]);
+                            })
+                    );
                 } else {
-                    cargarUnidadesProfundidad('');
-                    cargarSitios('');
+                    promises.push(cargarUnidadesProfundidad(''), cargarSitios(''));
                 }
                 if (data.id) {
                     const campos = (data.respuestas_multifinalitaria || []).map(r => ({
@@ -1438,10 +1445,17 @@
                     }));
                     renderCamposDinamicosCaptura(campos, data.respuestas_multifinalitaria || []);
                 } else if (campaniaId) {
-                    $.get("{{ url('ajax/campos-dinamicos') }}", { campania_id: campaniaId, tabla_relacionada: 'captura' }, function (campos) {
-                        renderCamposDinamicosCaptura(campos || []);
-                    });
+                    promises.push(
+                        $.get("{{ url('ajax/campos-dinamicos') }}", { campania_id: campaniaId, tabla_relacionada: 'captura' }, function (campos) {
+                            renderCamposDinamicosCaptura(campos || []);
+                        })
+                    );
                 }
+
+                Promise.all(promises).finally(() => {
+                    $('.spinner-overlay').addClass('d-none');
+                });
+
                 $('#captura-modal').modal('show');
             }
 
