@@ -1259,6 +1259,9 @@
                 .then(data => {
                     data.forEach(t => {
                         const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                        if (t.clase) {
+                            opt.dataset.clase = t.clase;
+                        }
                         select.append(opt);
                     });
                 })
@@ -2055,8 +2058,22 @@
                     return String(this.value) === String(idSeleccionado);
                 }).first();
                 tipoArtePesca = option.length ? option.text() : '';
-                toggleArteFields($('.arte-linea'), tipoArtePesca === 'Línea mano, palangre');
-                toggleArteFields($('.arte-enmalle'), tipoArtePesca === 'Enmalle/Trasmallo');
+                const clase = option.data('clase');
+                const esLinea = clase ? String(clase).toLowerCase() === 'linea' : tipoArtePesca === 'Línea mano, palangre';
+                const esEnmalle = clase ? String(clase).toLowerCase() === 'enmalle' : tipoArtePesca === 'Enmalle/Trasmallo';
+                switch (true) {
+                    case esLinea:
+                        toggleArteFields($('.arte-linea'), true);
+                        toggleArteFields($('.arte-enmalle'), false);
+                        break;
+                    case esEnmalle:
+                        toggleArteFields($('.arte-linea'), false);
+                        toggleArteFields($('.arte-enmalle'), true);
+                        break;
+                    default:
+                        toggleArteFields($('.arte-linea'), false);
+                        toggleArteFields($('.arte-enmalle'), false);
+                }
             }
 
             $('#tipo-arte-id').on('change', e => changeArtePesca(e.target.value)).trigger('change');
