@@ -481,18 +481,18 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label>Nombre común</label>
-                                            <input type="text" class="form-control" id="nombre_comun">
+                                            <input type="text" class="form-control" id="nombre_comun" required>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Especie</label>
-                                            <select class="form-control" id="especie_id">
+                                            <select class="form-control" id="especie_id" required>
                                                 <option value="">Seleccione...</option>
                                             </select>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label>Tipo Nº Individuos</label>
-                                            <select class="form-control" id="tipo_numero_individuos">
+                                            <select class="form-control" id="tipo_numero_individuos" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="ESTIMADO">Estimado</option>
                                                 <option value="MEDIDO">Medido</option>
@@ -500,12 +500,12 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Nº Individuos</label>
-                                            <input type="number" min="0" step="1" class="form-control no-negative" id="numero_individuos">
+                                            <input type="number" min="0" step="1" class="form-control no-negative" id="numero_individuos" required>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label>Tipo Peso</label>
-                                            <select class="form-control" id="tipo_peso">
+                                            <select class="form-control" id="tipo_peso" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="ESTIMADO">Estimado</option>
                                                 <option value="MEDIDO">Medido</option>
@@ -513,12 +513,12 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Peso de captura</label>
-                                            <input type="number" step="any" min="0" class="form-control no-negative" id="peso_estimado">
+                                            <input type="number" step="any" min="0" class="form-control no-negative" id="peso_estimado" required>
                                         </div>
 
                                         <div class="form-group col-md-6">
                                             <label>Estado Producto</label>
-                                            <select class="form-control" id="estado_producto">
+                                            <select class="form-control" id="estado_producto" required>
                                                 <option value="">Seleccione...</option>
                                                 <option value="EVISCERADO">Eviscerado</option>
                                                 <option value="ENTERO">Entero</option>
@@ -528,15 +528,21 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group col-md-6 d-flex align-items-center">
-                                            <div class="form-check mr-3">
-                                                <input type="checkbox" class="form-check-input" id="es_incidental">
-                                                <label class="form-check-label" for="es_incidental">Es Incidental</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="es_descartada">
-                                                <label class="form-check-label" for="es_descartada">Es Descartada</label>
-                                            </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Es Incidental</label>
+                                            <select class="form-control" id="es_incidental" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="1">Sí</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Es Descartada</label>
+                                            <select class="form-control" id="es_descartada" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="1">Sí</option>
+                                                <option value="0">No</option>
+                                            </select>
                                         </div>
                                       </div>
                                       <div id="campos-dinamicos-captura" class="row"></div>
@@ -1375,8 +1381,16 @@
                 $('#numero_individuos').val(data.numero_individuos || '');
                 $('#peso_estimado').val(data.peso_estimado || '');
                 $('#peso_contado').val(data.peso_contado || '');
-                $('#es_incidental').prop('checked', data.es_incidental || false);
-                $('#es_descartada').prop('checked', data.es_descartada || false);
+                const incVal =
+                    data.es_incidental === undefined || data.es_incidental === null
+                        ? ''
+                        : data.es_incidental ? '1' : '0';
+                $('#es_incidental').val(incVal);
+                const descVal =
+                    data.es_descartada === undefined || data.es_descartada === null
+                        ? ''
+                        : data.es_descartada ? '1' : '0';
+                $('#es_descartada').val(descVal);
                 $('#tipo_numero_individuos').val(data.tipo_numero_individuos || '');
                 $('#tipo_peso').val(data.tipo_peso || '');
                 $('#estado_producto').val(data.estado_producto || '');
@@ -1537,6 +1551,11 @@
 
             $('#captura-form').on('submit', async function (e) {
                 e.preventDefault();
+                const form = this;
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
                 const id = $('#captura-id').val();
                 const payload = {
                     nombre_comun: $('#nombre_comun').val(),
@@ -1545,8 +1564,8 @@
                     peso_contado: $('#peso_contado').val(),
                     especie_id: $('#especie_id').val(),
                     viaje_id: viajeId,
-                    es_incidental: $('#es_incidental').is(':checked'),
-                    es_descartada: $('#es_descartada').is(':checked'),
+                    es_incidental: $('#es_incidental').val() === '1',
+                    es_descartada: $('#es_descartada').val() === '1',
                     tipo_numero_individuos: $('#tipo_numero_individuos').val(),
                     tipo_peso: $('#tipo_peso').val(),
                     estado_producto: $('#estado_producto').val()
