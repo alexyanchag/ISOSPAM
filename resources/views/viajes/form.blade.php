@@ -1076,7 +1076,7 @@
             function cargarUnidadesProfundidad(selected = '') {
                 const select = $('#sitio-unidad-profundidad');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch(`${ajaxBase}/unidades-profundidad`)
+                fetch("{{ route('api.unidades-profundidad') }}")
                     .then(r => r.json())
                     .then(data => {
                         data.forEach(u => {
@@ -1091,7 +1091,7 @@
             function cargarSitios(selected = '') {
                 const select = $('#sitio-id');
                 select.empty().append('<option value="">Seleccione...</option>');
-                fetch(`${ajaxBase}/sitios`)
+                fetch("{{ route('api.sitios') }}")
                     .then(r => r.json())
                     .then(data => {
                         sitiosCache = Array.isArray(data) ? data : [];

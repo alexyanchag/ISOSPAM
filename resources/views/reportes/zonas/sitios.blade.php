@@ -12,7 +12,7 @@
 const map = L.map('map').setView([-0.7,-80.1], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
 
-fetch(`{{ route('api.sitios') }}`)
+fetch(`{{ route('api.sitios.reporte') }}`)
   .then(r=>r.json())
   .then(rows=>{
     rows.forEach(r=>{
