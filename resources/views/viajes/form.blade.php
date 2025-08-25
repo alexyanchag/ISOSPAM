@@ -1260,8 +1260,8 @@
                     .then(data => {
                         data.forEach(t => {
                             const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
-                            if (t.clase !== undefined && t.clase !== null) {
-                                opt.dataset.clase = t.clase;
+                            if (t.tipo !== undefined && t.tipo !== null) {
+                                opt.dataset.tipo = t.tipo;
                             }
                             select.append(opt);
                         });
@@ -2047,7 +2047,11 @@
             });
 
             const ARTE_RULES = {
-                default: { show: ['#tipo-arte-id'], hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'] },
+                default: {
+                    show: ['#tipo-arte-id'],
+                    hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                    reset: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro']
+                },
                 PALANGRE: {
                     show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
                     hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
@@ -2073,7 +2077,7 @@
 
             function changeArtePesca(id) {
                 const opt = $('#tipo-arte-id option').filter(function(){return String(this.value)===String(id);}).first();
-                const tipo = String(opt.data('clase') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
+                const tipo = String(opt.data('tipo') || '').toUpperCase(); // esperado: PALANGRE o ENMALLE
                 const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
 
                 // Ocultar y resetear todos los campos
