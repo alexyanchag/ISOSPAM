@@ -618,87 +618,95 @@
                             </div>
                         </div>
 
-                        <div id="arte-pesca-card" class="card mb-3 collapsed-card">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Arte de pesca</h5>
-                                <div class="card-tools">
-                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                      <div id="arte-pesca-card" class="card mb-3 collapsed-card">
+                                          <div class="card-header border-0 bg-dark">
+                                              <h5 class="card-title mb-0">Arte de pesca</h5>
+                                              <div class="card-tools">
+                                                  <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                                      <i class="fas fa-plus"></i>
+                                                  </button>
+                                              </div>
+                                          </div>
+                                            <div class="card-body collapse">
+                                                <input type="hidden" id="arte-pesca-id">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label>Tipo de arte <span class="text-danger">*</span></label>
+                                                        <select id="tipo-arte-id" class="form-control" required>
+                                                            <option value="">Seleccione...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Líneas madre</label>
+                                                        <input type="number" id="lineas-madre" class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="arte-linea d-none">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Anzuelos</label>
+                                                            <input type="number" id="anzuelos" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Tipo anzuelo</label>
+                                                            <select id="tipo-anzuelo-id" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Tamaño anzuelo (pulg)</label>
+                                                            <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Carnada viva</label>
+                                                            <select id="carnadaviva" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                                <option value="1">Sí</option>
+                                                                <option value="0">No</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Especie carnada</label>
+                                                            <input type="text" id="especie-carnada" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="arte-enmalle d-none">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Largo red (m)</label>
+                                                            <input type="number" step="any" id="largo-red-m" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Alto red (m)</label>
+                                                            <input type="number" step="any" id="alto-red-m" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Material malla</label>
+                                                            <select id="material-malla-id" class="form-control">
+                                                                <option value="">Seleccione...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label>Ojo malla (cm)</label>
+                                                            <input type="number" step="any" id="ojo-malla-cm" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>Diámetro</label>
+                                                            <input type="number" step="any" id="diametro" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body collapse">
-                                <input type="hidden" id="arte-pesca-id">
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label>Tipo de arte <span class="text-danger">*</span></label>
-                                        <select id="tipo-arte-id" class="form-control" required>
-                                            <option value="">Seleccione...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Anzuelos</label>
-                                        <input type="number" id="anzuelos" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Tipo anzuelo</label>
-                                        <select id="tipo-anzuelo-id" class="form-control">
-                                            <option value="">Seleccione...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label>Tamaño anzuelo (pulg)</label>
-                                        <input type="number" step="any" id="tamanio-anzuelo-pulg" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Líneas madre</label>
-                                        <input type="number" id="lineas-madre" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Largo red (m)</label>
-                                        <input type="number" step="any" id="largo-red-m" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label>Alto red (m)</label>
-                                        <input type="number" step="any" id="alto-red-m" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Material malla</label>
-                                        <select id="material-malla-id" class="form-control">
-                                            <option value="">Seleccione...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Ojo malla (cm)</label>
-                                        <input type="number" step="any" id="ojo-malla-cm" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label>Diámetro</label>
-                                        <input type="number" step="any" id="diametro" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Carnada viva</label>
-                                        <select id="carnadaviva" class="form-control">
-                                            <option value="">Seleccione...</option>
-                                            <option value="1">Sí</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label>Especie carnada</label>
-                                        <input type="text" id="especie-carnada" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -1569,21 +1577,22 @@
             sitioUnidad.val('');
             sitioCard.removeClass('d-none').show();
 
-            const arteCard = $('#arte-pesca-card');
-            arteCard.removeClass('d-none').show();
-            $('#arte-pesca-id').val('');
-            $('#tipo-arte-id').val('');
-            $('#lineas-madre').val('');
-            $('#anzuelos').val('');
-            $('#tamanio-anzuelo-pulg').val('');
-            $('#tipo-anzuelo-id').val('');
-            $('#largo-red-m').val('');
-            $('#alto-red-m').val('');
-            $('#material-malla-id').val('');
-            $('#ojo-malla-cm').val('');
-            $('#diametro').val('');
-            $('#carnadaviva').val('');
-            $('#especie-carnada').val('');
+                const arteCard = $('#arte-pesca-card');
+                arteCard.removeClass('d-none').show();
+                $('#arte-pesca-id').val('');
+                $('#tipo-arte-id').val('');
+                $('#lineas-madre').val('');
+                $('#anzuelos').val('');
+                $('#tamanio-anzuelo-pulg').val('');
+                $('#tipo-anzuelo-id').val('');
+                $('#largo-red-m').val('');
+                $('#alto-red-m').val('');
+                $('#material-malla-id').val('');
+                $('#ojo-malla-cm').val('');
+                $('#diametro').val('');
+                $('#carnadaviva').val('');
+                $('#especie-carnada').val('');
+                $('#tipo-arte-id').trigger('change');
 
             if (data.id) {
                 promises.push(
@@ -1692,9 +1701,13 @@
                 );
             }
 
-            Promise.all(promises).finally(() => {
-                $('.spinner-overlay').addClass('d-none');
-            });
+                Promise.all(promises)
+                    .then(() => {
+                        $('#tipo-arte-id').trigger('change');
+                    })
+                    .finally(() => {
+                        $('.spinner-overlay').addClass('d-none');
+                    });
 
             $('#captura-modal').modal('show');
         }
@@ -1994,31 +2007,51 @@
             });
         });
 
-        $('#parametro-form').on('submit', function (e) {
-            e.preventDefault();
-            const id = $('#parametro-id').val();
-            const payload = {
-                viaje_id: viajeId,
-                hora: $('#hora').val(),
-                sondeo_ppt: $('#sondeo_ppt').val(),
-                tsmp: $('#tsmp').val(),
-                estado_marea_id: $('#estado_marea_id').val(),
-                condicion_mar_id: $('#condicion_mar_id').val(),
-                oxigeno_mg_l: $('#oxigeno_mg_l').val()
-            };
-            const url = id ? `${ajaxBase}/parametros-ambientales/${id}` : `${ajaxBase}/parametros-ambientales`;
-            const method = id ? 'PUT' : 'POST';
-            $.ajax({
-                url,
-                method,
-                contentType: 'application/json',
-                data: JSON.stringify(payload),
-                success: () => {
-                    $('#parametro-modal').modal('hide');
-                    cargarParametrosAmbientales();
-                }
+            $('#parametro-form').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#parametro-id').val();
+                const payload = {
+                    viaje_id: viajeId,
+                    hora: $('#hora').val(),
+                    sondeo_ppt: $('#sondeo_ppt').val(),
+                    tsmp: $('#tsmp').val(),
+                    estado_marea_id: $('#estado_marea_id').val(),
+                    condicion_mar_id: $('#condicion_mar_id').val(),
+                    oxigeno_mg_l: $('#oxigeno_mg_l').val()
+                };
+                const url = id ? `${ajaxBase}/parametros-ambientales/${id}` : `${ajaxBase}/parametros-ambientales`;
+                const method = id ? 'PUT' : 'POST';
+                $.ajax({
+                    url,
+                    method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: () => {
+                        $('#parametro-modal').modal('hide');
+                        cargarParametrosAmbientales();
+                    }
+                });
             });
-        });
+
+            function toggleArteFields($container, show) {
+                if (show) {
+                    $container.removeClass('d-none');
+                    $container.find(':input').prop('required', true);
+                } else {
+                    $container.addClass('d-none');
+                    $container.find(':input').each(function () {
+                        $(this).val('').prop('required', false);
+                    });
+                }
+            }
+
+            $('#tipo-arte-id').on('change', function () {
+                const texto = $(this).find('option:selected').text().toLowerCase();
+                const esLinea = texto.includes('línea') || texto.includes('linea') || texto.includes('palangre');
+                const esEnmalle = texto.includes('enmalle') || texto.includes('trasmallo');
+                toggleArteFields($('.arte-linea'), esLinea);
+                toggleArteFields($('.arte-enmalle'), esEnmalle);
+            }).trigger('change');
 
         if (viajeId && "{{ request()->boolean('por_finalizar') ? 'true' : 'false' }}" === 'true') {
             cargarCapturas();
