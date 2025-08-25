@@ -211,6 +211,9 @@ Route::get('/api/tipo-observador', [ApiProxyController::class, 'getTipoObservado
 Route::get('/api/tipos-tripulante', [ApiProxyController::class, 'getTiposTripulante'])->name('api.tipos-tripulante');
 Route::get('/api/estados-marea', [ApiProxyController::class, 'getEstadosMarea'])->name('api.estados-marea');
 Route::get('/api/condiciones-mar', [ApiProxyController::class, 'getCondicionesMar'])->name('api.condiciones-mar');
+Route::get('/api/tipos-arte', [ApiProxyController::class, 'getTiposArte'])->name('api.tipos-arte');
+Route::get('/api/tipos-anzuelo', [ApiProxyController::class, 'getTiposAnzuelo'])->name('api.tipos-anzuelo');
+Route::get('/api/materiales-malla', [ApiProxyController::class, 'getMaterialesMalla'])->name('api.materiales-malla');
 Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->name('api.tipos-insumo');
 Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
 Route::get('/api/unidades-profundidad', [ApiProxyController::class, 'getUnidadesProfundidad'])->name('api.unidades-profundidad');

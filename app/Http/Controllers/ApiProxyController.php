@@ -41,6 +41,24 @@ class ApiProxyController extends Controller
         return response()->json($resp->json(), $resp->status());
     }
 
+    public function getTiposArte(): JsonResponse
+    {
+        $resp = $this->apiService->get('/tipos-arte');
+        return response()->json($resp->json(), $resp->status());
+    }
+
+    public function getTiposAnzuelo(): JsonResponse
+    {
+        $resp = $this->apiService->get('/tipos-anzuelo');
+        return response()->json($resp->json(), $resp->status());
+    }
+
+    public function getMaterialesMalla(): JsonResponse
+    {
+        $resp = $this->apiService->get('/materiales-malla');
+        return response()->json($resp->json(), $resp->status());
+    }
+
     public function getTiposInsumo(): JsonResponse
     {
         $resp = $this->apiService->get('/tipos-insumo');
