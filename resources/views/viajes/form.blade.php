@@ -1267,6 +1267,7 @@
             campos.forEach(function (campo, index) {
                 var control = '';
                 var requerido = campo.requerido ? 'required' : '';
+                var asterisk = campo.requerido ? ' <span class="text-danger">*</span>' : '';
                 var resp = respMap[campo.id] || {};
                 var key = campo.id != null ? campo.id : index;
                 switch (campo.tipo_pregunta) {
@@ -1303,7 +1304,7 @@
                 control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][nombre_pregunta]" value="' + campo.nombre_pregunta + '">';
                 control += '<input type="hidden" name="respuestas_multifinalitaria[' + key + '][tipo_pregunta]" value="' + campo.tipo_pregunta + '">';
                 var col = $('<div class="col-md-4 mb-3"></div>');
-                col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
+                col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + asterisk + '</label>');
                 col.append(control);
                 row.append(col);
             });
