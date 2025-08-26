@@ -2174,6 +2174,11 @@
         }
 
         $('#captura-form').on('submit', async function (e) {
+            $('#captura-modal .collapsed-card').each(function () {
+                $(this).CardWidget('expand'); // AdminLTE
+                $(this).find('.collapse').collapse('show'); // Bootstrap
+            });
+
             e.preventDefault();
             const form = this;
             if (!form.checkValidity()) {
