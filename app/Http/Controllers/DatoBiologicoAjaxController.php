@@ -13,7 +13,7 @@ class DatoBiologicoAjaxController extends Controller
 
     public function index(Request $request)
     {
-        $resp = $this->apiService->get('/isospam/datos-biologicos', [
+        $resp = $this->apiService->get('/datos-biologicos', [
             'captura_id' => $request->query('captura_id'),
         ]);
 
@@ -22,7 +22,7 @@ class DatoBiologicoAjaxController extends Controller
 
     public function show(string $id)
     {
-        $resp = $this->apiService->get("/isospam/datos-biologicos/{$id}");
+        $resp = $this->apiService->get("/datos-biologicos/{$id}");
 
         return response()->json($resp->json(), $resp->status());
     }
@@ -39,7 +39,7 @@ class DatoBiologicoAjaxController extends Controller
             'estado_desarrollo_gonadal_id' => ['nullable', 'integer'],
         ]);
 
-        $resp = $this->apiService->post('/isospam/datos-biologicos', $data);
+        $resp = $this->apiService->post('/datos-biologicos', $data);
 
         return response()->json($resp->json(), $resp->status());
     }
@@ -56,14 +56,14 @@ class DatoBiologicoAjaxController extends Controller
             'estado_desarrollo_gonadal_id' => ['nullable', 'integer'],
         ]);
 
-        $resp = $this->apiService->put("/isospam/datos-biologicos/{$id}", $data);
+        $resp = $this->apiService->put("/datos-biologicos/{$id}", $data);
 
         return response()->json($resp->json(), $resp->status());
     }
 
     public function destroy(string $id)
     {
-        $resp = $this->apiService->delete("/isospam/datos-biologicos/{$id}");
+        $resp = $this->apiService->delete("/datos-biologicos/{$id}");
 
         return response()->json($resp->json(), $resp->status());
     }
