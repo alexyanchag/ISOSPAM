@@ -1218,6 +1218,7 @@
             campos.forEach(function (campo, index) {
                 var control = '';
                 var requerido = campo.requerido ? 'required' : '';
+                var asterisk = campo.requerido ? ' <span class="text-danger">*</span>' : '';
                 switch (campo.tipo_pregunta) {
                     case 'COMBO':
                         var opciones = [];
@@ -1246,7 +1247,7 @@
                 control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][tabla_multifinalitaria_id]" value="' + tablaId + '">';
                 control += '<input type="hidden" name="respuestas_multifinalitaria[' + index + '][id]" value="0">';
                 var col = $('<div class="col-md-4 mb-3"></div>');
-                col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + '</label>');
+                col.append('<label class="form-label">' + (campo.nombre_pregunta || '') + asterisk + '</label>');
                 col.append(control);
                 row.append(col);
             });
