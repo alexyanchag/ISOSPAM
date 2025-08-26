@@ -83,6 +83,18 @@ class ApiProxyController extends Controller
         return response()->json($resp->json(), $resp->status());
     }
 
+    public function getUnidadesLongitud(): JsonResponse
+    {
+        $resp = $this->apiService->get('/unidad-longitud');
+        return response()->json($resp->json(), $resp->status());
+    }
+
+    public function getEstadosDesarrolloGonadal(): JsonResponse
+    {
+        $resp = $this->apiService->get('/estado-desarrollo-gonadal');
+        return response()->json($resp->json(), $resp->status());
+    }
+
     public function getSitios(): JsonResponse
     {
         $resp = $this->apiService->get('/sitios');

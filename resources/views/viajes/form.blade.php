@@ -748,9 +748,94 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="dato-biologico-card" class="card mb-3 collapsed-card">
+                            <div class="card-header border-0 bg-dark">
+                                <h5 class="card-title mb-0">Dato biológico</h5>
+                                <div class="card-tools">
+                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body collapse">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped table-compact mb-0" id="datos-biologicos-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Longitud</th>
+                                                <th>Peso</th>
+                                                <th>Sexo</th>
+                                                <th>Ovada</th>
+                                                <th>Estado</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <button id="agregar-dato-biologico" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dato-biologico-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="dato-biologico-form">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dato biológico</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="dato-biologico-id">
+                    <div class="form-group">
+                        <label>Unidad longitud</label>
+                        <select id="unidad_longitud_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud</label>
+                        <input type="number" step="any" id="longitud" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Peso</label>
+                        <input type="number" step="any" id="peso" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="sexo" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="M">Macho</option>
+                            <option value="H">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ovada</label>
+                        <select id="ovada" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado desarrollo gonadal</label>
+                        <select id="estado_desarrollo_gonadal_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -1658,6 +1743,157 @@
             });
         });
 
+        function cargarUnidadesLongitud(selected = '') {
+            const select = $('#unidad_longitud_id').empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-longitud') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                })
+                .catch(err => console.error('Error al cargar unidades de longitud:', err));
+        }
+
+        function cargarEstadosDesarrolloGonadal(selected = '') {
+            const select = $('#estado_desarrollo_gonadal_id').empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.estados-desarrollo-gonadal') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(e => {
+                        const opt = new Option(e.descripcion || e.nombre || '', e.id, false, String(e.id) === String(selected));
+                        select.append(opt);
+                    });
+                })
+                .catch(err => console.error('Error al cargar estados de desarrollo gonadal:', err));
+        }
+
+        function cargarDatosBiologicos(capturaId) {
+            if (!capturaId) {
+                $('#datos-biologicos-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`${ajaxBase}/datos-biologicos?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#datos-biologicos-table tbody').empty();
+                    (data || []).forEach(d => {
+                        const row = `<tr data-id="${d.id}">
+                                <td>${d.longitud ?? ''}</td>
+                                <td>${d.peso ?? ''}</td>
+                                <td>${d.sexo ?? ''}</td>
+                                <td>${d.ovada ? 'Sí' : 'No'}</td>
+                                <td>${d.estado_desarrollo_gonadal_descripcion ?? ''}</td>
+                                <td class=\"text-right\">
+                                    <button class=\"btn btn-xs btn-secondary editar-dato-biologico\" data-id=\"${d.id}\">Editar</button>
+                                    <button class=\"btn btn-xs btn-danger eliminar-dato-biologico\" data-id=\"${d.id}\">Eliminar</button>
+                                </td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error al cargar datos biológicos:', err);
+                    $('#datos-biologicos-table tbody').empty();
+                });
+        }
+
+        function abrirDatoBiologicoModal(data = {}) {
+            $('#dato-biologico-id').val(data.id || '');
+            $('#longitud').val(data.longitud || '');
+            $('#peso').val(data.peso || '');
+            $('#sexo').val(data.sexo || '');
+            $('#ovada').val(data.ovada === undefined || data.ovada === null ? '' : (data.ovada ? '1' : '0'));
+            cargarUnidadesLongitud(data.unidad_longitud_id || '');
+            cargarEstadosDesarrolloGonadal(data.estado_desarrollo_gonadal_id || '');
+            $('#dato-biologico-modal').modal('show');
+        }
+
+        function editarDatoBiologico(id) {
+            const row = $(`#datos-biologicos-table tbody tr[data-id="${id}"]`);
+            if (row.data('pending')) {
+                const item = row.data('item');
+                abrirDatoBiologicoModal(Object.assign({ id }, item));
+                return;
+            }
+            $.ajax({
+                url: `${ajaxBase}/datos-biologicos/${id}`,
+                success: data => abrirDatoBiologicoModal(data)
+            });
+        }
+
+        function eliminarDatoBiologico(id) {
+            const row = $(`#datos-biologicos-table tbody tr[data-id="${id}"]`);
+            if (row.data('pending')) {
+                row.remove();
+                return;
+            }
+            if (!confirm('¿Eliminar dato biológico?')) return;
+            $.ajax({
+                url: `${ajaxBase}/datos-biologicos/${id}`,
+                method: 'DELETE',
+                success: () => cargarDatosBiologicos($('#captura-id').val())
+            });
+        }
+
+        $('#dato-biologico-form').on('submit', async function (e) {
+            e.preventDefault();
+            const id = $('#dato-biologico-id').val();
+            const capturaId = $('#captura-id').val();
+            const payload = {
+                unidad_longitud_id: $('#unidad_longitud_id').val(),
+                longitud: $('#longitud').val(),
+                peso: $('#peso').val(),
+                sexo: $('#sexo').val(),
+                ovada: $('#ovada').val() === '1',
+                estado_desarrollo_gonadal_id: $('#estado_desarrollo_gonadal_id').val(),
+            };
+            if (capturaId) {
+                payload.captura_id = capturaId;
+                const url = id ? `${ajaxBase}/datos-biologicos/${id}` : `${ajaxBase}/datos-biologicos`;
+                const method = id ? 'PUT' : 'POST';
+                const resp = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(payload)
+                });
+                if (resp.ok) {
+                    $('#dato-biologico-modal').modal('hide');
+                    cargarDatosBiologicos(capturaId);
+                } else {
+                    alert('Error al guardar dato biológico');
+                }
+                return;
+            }
+
+            const rowId = id || `tmp-${Date.now()}`;
+            const row = `<tr data-id="${rowId}" data-pending="1">
+                    <td>${payload.longitud || ''}</td>
+                    <td>${payload.peso || ''}</td>
+                    <td>${payload.sexo || ''}</td>
+                    <td>${payload.ovada ? 'Sí' : 'No'}</td>
+                    <td>${$('#estado_desarrollo_gonadal_id option:selected').text()}</td>
+                    <td class="text-right">
+                        <button class="btn btn-xs btn-secondary editar-dato-biologico" data-id="${rowId}">Editar</button>
+                        <button class="btn btn-xs btn-danger eliminar-dato-biologico" data-id="${rowId}">Eliminar</button>
+                    </td>
+                </tr>`;
+            const tbody = $('#datos-biologicos-table tbody');
+            const existing = tbody.find(`tr[data-id="${id}"]`);
+            if (existing.length) {
+                existing.replaceWith(row);
+            } else {
+                tbody.append(row);
+            }
+            tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('item', payload);
+            $('#dato-biologico-modal').modal('hide');
+        });
+
         function abrirModal(data = {}) {
             $('.spinner-overlay').removeClass('d-none');
             const campaniaId = $('select[name="campania_id"]').val();
@@ -1724,6 +1960,10 @@
             $('#destino').val('');
             $('#precio').val('');
             $('#unidad-venta-id').val('');
+
+            const bioCard = $('#dato-biologico-card');
+            bioCard.removeClass('d-none').show();
+            $('#datos-biologicos-table tbody').empty();
 
             if (data.id) {
                 promises.push(
@@ -1808,6 +2048,7 @@
                 );
 
                 promises.push(cargarEconomiaVenta(data.id));
+                promises.push(cargarDatosBiologicos(data.id));
             } else {
                 promises.push(
                     cargarUnidadesProfundidad(''),
@@ -2124,6 +2365,26 @@
                     return;
                 }
 
+                const pendientes = $('#datos-biologicos-table tbody tr[data-pending="1"]').toArray();
+                for (const tr of pendientes) {
+                    const item = $(tr).data('item');
+                    item.captura_id = capturaId;
+                    const respBio = await fetch(`${ajaxBase}/datos-biologicos`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(item)
+                    });
+                    if (respBio.ok) {
+                        const dataBio = await respBio.json();
+                        $(tr).attr('data-id', dataBio.id || dataBio.data?.id).removeAttr('data-pending').removeData('item');
+                    }
+                }
+                cargarDatosBiologicos(capturaId);
+
                 $('#captura-modal').modal('hide');
                 cargarCapturas();
             } catch (err) {
@@ -2323,6 +2584,9 @@
             $('#agregar-economia-insumo').on('click', () => abrirEconomiaInsumoModal());
             $('#economia-insumo-table').on('click', '.editar-economia-insumo', function () { editarEconomiaInsumo($(this).data('id')); });
             $('#economia-insumo-table').on('click', '.eliminar-economia-insumo', function () { eliminarEconomiaInsumo($(this).data('id')); });
+            $('#agregar-dato-biologico').on('click', () => abrirDatoBiologicoModal());
+            $('#datos-biologicos-table').on('click', '.editar-dato-biologico', function () { editarDatoBiologico($(this).data('id')); });
+            $('#datos-biologicos-table').on('click', '.eliminar-dato-biologico', function () { eliminarDatoBiologico($(this).data('id')); });
         }
     });
 </script>

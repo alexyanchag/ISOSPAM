@@ -55,6 +55,7 @@ use App\Http\Controllers\ApiProxyController;
 use App\Http\Controllers\ParametroAmbientalAjaxController;
 use App\Http\Controllers\EconomiaInsumoAjaxController;
 use App\Http\Controllers\EconomiaVentaAjaxController;
+use App\Http\Controllers\DatoBiologicoAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -104,6 +105,12 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/capturas', [CapturaAjaxController::class, 'store'])->name('ajax.capturas.store');
     Route::put('ajax/capturas/{id}', [CapturaAjaxController::class, 'update'])->name('ajax.capturas.update');
     Route::delete('ajax/capturas/{id}', [CapturaAjaxController::class, 'destroy'])->name('ajax.capturas.destroy');
+
+    Route::get('ajax/datos-biologicos', [DatoBiologicoAjaxController::class, 'index']);
+    Route::get('ajax/datos-biologicos/{id}', [DatoBiologicoAjaxController::class, 'show']);
+    Route::post('ajax/datos-biologicos', [DatoBiologicoAjaxController::class, 'store']);
+    Route::put('ajax/datos-biologicos/{id}', [DatoBiologicoAjaxController::class, 'update']);
+    Route::delete('ajax/datos-biologicos/{id}', [DatoBiologicoAjaxController::class, 'destroy']);
 
     Route::get('ajax/sitios-pesca', [SitioPescaAjaxController::class, 'index']);
     Route::post('ajax/sitios-pesca', [SitioPescaAjaxController::class, 'store']);
@@ -224,6 +231,8 @@ Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->
 Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
 Route::get('/api/unidades-venta', [ApiProxyController::class, 'getUnidadesVenta'])->name('api.unidades-venta');
 Route::get('/api/unidades-profundidad', [ApiProxyController::class, 'getUnidadesProfundidad'])->name('api.unidades-profundidad');
+Route::get('/api/unidades-longitud', [ApiProxyController::class, 'getUnidadesLongitud'])->name('api.unidades-longitud');
+Route::get('/api/estados-desarrollo-gonadal', [ApiProxyController::class, 'getEstadosDesarrolloGonadal'])->name('api.estados-desarrollo-gonadal');
 Route::get('/api/sitios', [ApiProxyController::class, 'getSitios'])->name('api.sitios');
 Route::get('/api/personas', [ApiProxyController::class, 'getPersonas'])->name('api.personas');
 Route::get('/api/personas/{id}', [ApiProxyController::class, 'getPersona'])->name('api.personas.show');
