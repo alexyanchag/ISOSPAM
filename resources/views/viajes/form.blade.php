@@ -1003,24 +1003,24 @@
                 <div class="modal-body">
                     <input type="hidden" id="economia-insumo-id">
                     <div class="form-group">
-                        <label>Tipo de Insumo</label>
-                        <select class="form-control" id="tipo_insumo_id">
+                        <label>Tipo de Insumo <span class="text-danger">*</span></label>
+                        <select class="form-control" id="tipo_insumo_id" required>
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Unidad de Insumo</label>
-                        <select class="form-control" id="unidad_insumo_id">
+                        <label>Unidad de Insumo <span class="text-danger">*</span></label>
+                        <select class="form-control" id="unidad_insumo_id" required>
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Cantidad</label>
-                        <input type="number" step="any" class="form-control" id="cantidad">
+                        <label>Cantidad <span class="text-danger">*</span></label>
+                        <input type="number" step="any" class="form-control" id="cantidad" required>
                     </div>
                     <div class="form-group">
-                        <label>Precio</label>
-                        <input type="number" step="any" class="form-control" id="precio_insumo">
+                        <label>Precio <span class="text-danger">*</span></label>
+                        <input type="number" step="any" class="form-control" id="precio_insumo" required>
                     </div>
                 </div>
                 <div class="modal-footer">
