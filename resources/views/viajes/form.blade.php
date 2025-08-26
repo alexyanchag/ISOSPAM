@@ -1839,6 +1839,7 @@
 
         $('#dato-biologico-form').on('submit', async function (e) {
             e.preventDefault();
+            e.stopPropagation();
             $('.spinner-overlay').removeClass('d-none');
             try {
                 const id = $('#dato-biologico-id').val();
