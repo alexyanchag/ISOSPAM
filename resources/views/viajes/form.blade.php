@@ -1895,6 +1895,7 @@
             }
             tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('item', payload);
             $('#dato-biologico-modal').modal('hide');
+            $('.spinner-overlay').addClass('d-none')
         });
 
         function abrirModal(data = {}) {
