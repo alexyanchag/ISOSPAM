@@ -588,13 +588,13 @@
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Sitio existente <span
                                                 class="text-danger">*</span></label>
-                                        <select id="sitio-id" class="form-control">
+                                        <select id="sitio-id" class="form-control" required>
                                             <option value="">Seleccione...</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Nombre <span class="text-danger">*</span></label>
-                                        <input type="text" id="sitio-nombre" class="form-control">
+                                        <input type="text" id="sitio-nombre" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Profundidad <span class="text-danger">*</span></label>
@@ -609,11 +609,11 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Latitud <span class="text-danger">*</span></label>
-                                        <input type="text" id="sitio-latitud" class="form-control" readonly>
+                                        <input type="text" id="sitio-latitud" class="form-control" required readonly>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Longitud <span class="text-danger">*</span></label>
-                                        <input type="text" id="sitio-longitud" class="form-control" readonly>
+                                        <input type="text" id="sitio-longitud" class="form-control" required readonly>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label d-block">&nbsp;</label>
