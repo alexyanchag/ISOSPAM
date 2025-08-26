@@ -1786,8 +1786,8 @@
                                 <td>${d.ovada ? 'Sí' : 'No'}</td>
                                 <td>${d.estado_desarrollo_gonadal_descripcion ?? ''}</td>
                                 <td class=\"text-right\">
-                                    <button class=\"btn btn-xs btn-secondary editar-dato-biologico\" data-id=\"${d.id}\">Editar</button>
-                                    <button class=\"btn btn-xs btn-danger eliminar-dato-biologico\" data-id=\"${d.id}\">Eliminar</button>
+                                    <button type=\"button\" class=\"btn btn-xs btn-secondary editar-dato-biologico\" data-id=\"${d.id}\">Editar</button>
+                                    <button type=\"button\" class=\"btn btn-xs btn-danger eliminar-dato-biologico\" data-id=\"${d.id}\">Eliminar</button>
                                 </td>
                             </tr>`;
                         tbody.append(row);
@@ -1842,17 +1842,19 @@
             const id = $('#dato-biologico-id').val();
             const capturaId = $('#captura-id').val();
             const payload = {
+                id: id ? parseInt(id) : null,
                 unidad_longitud_id: $('#unidad_longitud_id').val(),
                 longitud: $('#longitud').val(),
                 peso: $('#peso').val(),
                 sexo: $('#sexo').val(),
                 ovada: $('#ovada').val() === '1',
-                estado_desarrollo_gonadal_id: $('#estado_desarrollo_gonadal_id').val(),
+                estado_desarrollo_gonadal_id: $('#estado_desarrollo_gonadal_id').val() ? $('#estado_desarrollo_gonadal_id').val() : null,
             };
             if (capturaId) {
                 payload.captura_id = capturaId;
                 const url = id ? `${ajaxBase}/datos-biologicos/${id}` : `${ajaxBase}/datos-biologicos`;
                 const method = id ? 'PUT' : 'POST';
+                console.log(payload)
                 const resp = await fetch(url, {
                     method,
                     headers: {
