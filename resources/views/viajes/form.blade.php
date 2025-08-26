@@ -784,63 +784,63 @@
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
-        <div class="modal fade" id="dato-biologico-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form id="dato-biologico-form">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Dato biológico</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="dato-biologico-id">
-                            <div class="form-group">
-                                <label>Unidad longitud</label>
-                                <select id="unidad_longitud_id" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Longitud</label>
-                                <input type="number" step="any" id="longitud" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>Peso</label>
-                                <input type="number" step="any" id="peso" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label>Sexo</label>
-                                <select id="sexo" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                    <option value="M">Macho</option>
-                                    <option value="H">Hembra</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Ovada</label>
-                                <select id="ovada" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                    <option value="1">Sí</option>
-                                    <option value="0">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Estado desarrollo gonadal</label>
-                                <select id="estado_desarrollo_gonadal_id" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
+    </div>
+</div>
+<div class="modal fade" id="dato-biologico-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="dato-biologico-form">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dato biológico</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="dato-biologico-id">
+                    <div class="form-group">
+                        <label>Unidad longitud</label>
+                        <select id="unidad_longitud_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud</label>
+                        <input type="number" step="any" id="longitud" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Peso</label>
+                        <input type="number" step="any" id="peso" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="sexo" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="M">Macho</option>
+                            <option value="H">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ovada</label>
+                        <select id="ovada" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado desarrollo gonadal</label>
+                        <select id="estado_desarrollo_gonadal_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1054,17 +1054,6 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWFpxWyWOOOfzceN1ycIhCv9hzpeK7nHg"></script>
 
 <script>
-    $(document).on('show.bs.modal', '.modal', function () {
-        const zIndex = 1050 + 10 * $('.modal:visible').length;
-        $(this).css('z-index', zIndex);
-        setTimeout(() => $('.modal-backdrop').not('.stacked')
-            .css('z-index', zIndex - 1)
-            .addClass('stacked'));
-    });
-    $(document).on('hidden.bs.modal', '.modal', function () {
-        $('.modal:visible').length || $('body').removeClass('modal-open');
-    });
-
     function mostrarErrorCaptura(mensaje) {
         Swal.fire({ icon: 'error', title: 'Error', text: mensaje });
     }
