@@ -715,6 +715,39 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="economia-venta-card" class="card mb-3 collapsed-card">
+                            <div class="card-header border-0 bg-dark">
+                                <h5 class="card-title mb-0">Dato económico</h5>
+                                <div class="card-tools">
+                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body collapse">
+                                <input type="hidden" id="economia-venta-id">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Vendido a</label>
+                                        <input type="text" id="vendido-a" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Destino</label>
+                                        <input type="text" id="destino" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Precio</label>
+                                        <input type="number" step="any" id="precio" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Unidad de venta</label>
+                                        <select id="unidad-venta-id" class="form-control">
+                                            <option value="">Seleccione...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1545,6 +1578,40 @@
                 });
         }
 
+        function cargarUnidadesVenta(selected = '') {
+            const select = $('#unidad-venta-id').empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-venta') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                })
+                .catch(err => console.error('Error al cargar unidades de venta:', err));
+        }
+
+        function cargarEconomiaVenta(capturaId) {
+            return fetch(`${ajaxBase}/economia-ventas?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : Promise.reject(r))
+                .then(data => {
+                    const ev = Array.isArray(data) && data.length ? data[0] : null;
+                    $('#economia-venta-id').val(ev?.id || '');
+                    $('#vendido-a').val(ev?.vendido_a || '');
+                    $('#destino').val(ev?.destino || '');
+                    $('#precio').val(ev?.precio || '');
+                    return cargarUnidadesVenta(ev?.unidad_venta_id || '');
+                })
+                .catch(err => {
+                    console.error('Error al cargar dato económico:', err);
+                    $('#economia-venta-id').val('');
+                    $('#vendido-a').val('');
+                    $('#destino').val('');
+                    $('#precio').val('');
+                    return cargarUnidadesVenta('');
+                });
+        }
+
         function abrirEconomiaInsumoModal(data = {}) {
             $('#economia-insumo-id').val(data.id || '');
             $('#cantidad').val(data.cantidad || '');
@@ -1650,6 +1717,14 @@
             $('#carnadaviva').val('');
             $('#especie-carnada').val('');
 
+            const econCard = $('#economia-venta-card');
+            econCard.removeClass('d-none').show();
+            $('#economia-venta-id').val('');
+            $('#vendido-a').val('');
+            $('#destino').val('');
+            $('#precio').val('');
+            $('#unidad-venta-id').val('');
+
             if (data.id) {
                 promises.push(
                     fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
@@ -1731,13 +1806,16 @@
                             ]);
                         })
                 );
+
+                promises.push(cargarEconomiaVenta(data.id));
             } else {
                 promises.push(
                     cargarUnidadesProfundidad(''),
                     cargarSitios(''),
                     cargarTiposArte(''),
                     cargarTiposAnzuelo(''),
-                    cargarMaterialesMalla('')
+                    cargarMaterialesMalla(''),
+                    cargarUnidadesVenta('')
                 );
             }
             if (data.id) {
@@ -2006,6 +2084,41 @@
                     } else {
                         const data = await arteResp.json().catch(() => ({}));
                         const msg = data.message || 'Error al guardar el arte de pesca';
+                        mostrarErrorCaptura(msg);
+                    }
+                    return;
+                }
+                const economiaId = $('#economia-venta-id').val();
+                const payloadEconomia = {
+                    vendido_a: $('#vendido-a').val(),
+                    destino: $('#destino').val(),
+                    precio: $('#precio').val(),
+                    unidad_venta_id: $('#unidad-venta-id').val(),
+                    captura_id: capturaId
+                };
+                const urlEconomia = economiaId ? `${ajaxBase}/economia-ventas/${economiaId}` : `${ajaxBase}/economia-ventas`;
+                const methodEconomia = economiaId ? 'PUT' : 'POST';
+                const economiaResp = await fetch(urlEconomia, {
+                    method: methodEconomia,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(payloadEconomia)
+                });
+
+                if (!economiaResp.ok) {
+                    if (economiaResp.status === 422) {
+                        const data = await economiaResp.json();
+                        const messages = [];
+                        Object.entries(data.errors || {}).forEach(([field, arr]) => {
+                            arr.forEach(msg => messages.push(`${field}: ${msg}`));
+                        });
+                        mostrarErrorCaptura(messages.join('\n'));
+                    } else {
+                        const data = await economiaResp.json().catch(() => ({}));
+                        const msg = data.message || 'Error al guardar el dato económico';
                         mostrarErrorCaptura(msg);
                     }
                     return;

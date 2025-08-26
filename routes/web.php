@@ -54,6 +54,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ApiProxyController;
 use App\Http\Controllers\ParametroAmbientalAjaxController;
 use App\Http\Controllers\EconomiaInsumoAjaxController;
+use App\Http\Controllers\EconomiaVentaAjaxController;
 
 Route::get('/', function () {
     return view('home');
@@ -139,6 +140,11 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::put('ajax/economia-insumo/{id}', [EconomiaInsumoAjaxController::class, 'update'])->name('ajax.economia-insumo.update');
     Route::delete('ajax/economia-insumo/{id}', [EconomiaInsumoAjaxController::class, 'destroy'])->name('ajax.economia-insumo.destroy');
 
+    Route::get('ajax/economia-ventas', [EconomiaVentaAjaxController::class, 'index'])->name('ajax.economia-ventas');
+    Route::get('ajax/economia-ventas/{id}', [EconomiaVentaAjaxController::class, 'show'])->name('ajax.economia-ventas.show');
+    Route::post('ajax/economia-ventas', [EconomiaVentaAjaxController::class, 'store'])->name('ajax.economia-ventas.store');
+    Route::put('ajax/economia-ventas/{id}', [EconomiaVentaAjaxController::class, 'update'])->name('ajax.economia-ventas.update');
+
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
     Route::get('rolmenu/{idrol}/{idmenu}/edit', [RolMenuController::class, 'edit'])->name('rolmenu.edit');
@@ -216,6 +222,7 @@ Route::get('/api/tipos-anzuelo', [ApiProxyController::class, 'getTiposAnzuelo'])
 Route::get('/api/materiales-malla', [ApiProxyController::class, 'getMaterialesMalla'])->name('api.materiales-malla');
 Route::get('/api/tipos-insumo', [ApiProxyController::class, 'getTiposInsumo'])->name('api.tipos-insumo');
 Route::get('/api/unidades-insumo', [ApiProxyController::class, 'getUnidadesInsumo'])->name('api.unidades-insumo');
+Route::get('/api/unidades-venta', [ApiProxyController::class, 'getUnidadesVenta'])->name('api.unidades-venta');
 Route::get('/api/unidades-profundidad', [ApiProxyController::class, 'getUnidadesProfundidad'])->name('api.unidades-profundidad');
 Route::get('/api/sitios', [ApiProxyController::class, 'getSitios'])->name('api.sitios');
 Route::get('/api/personas', [ApiProxyController::class, 'getPersonas'])->name('api.personas');
