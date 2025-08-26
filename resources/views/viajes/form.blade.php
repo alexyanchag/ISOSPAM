@@ -964,6 +964,7 @@
                         <th>Tipo</th>
                         <th>Unidad</th>
                         <th>Cantidad</th>
+                        <th>Precio</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -973,6 +974,7 @@
                         <td>{{ $e['nombre_tipo'] ?? '' }}</td>
                         <td>{{ $e['nombre_unidad'] ?? '' }}</td>
                         <td>{{ $e['cantidad'] ?? '' }}</td>
+                        <td>{{ $e['precio'] ?? '' }}</td>
                         <td class="text-right">
                             <button class="btn btn-xs btn-secondary editar-economia-insumo"
                                 data-id="{{ $e['id'] }}">Editar</button>
@@ -1015,6 +1017,10 @@
                     <div class="form-group">
                         <label>Cantidad</label>
                         <input type="number" step="any" class="form-control" id="cantidad">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="number" step="any" class="form-control" id="precio_insumo">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1630,6 +1636,7 @@
                                 <td>${e.nombre_tipo ?? ''}</td>
                                 <td>${e.nombre_unidad ?? ''}</td>
                                 <td>${e.cantidad ?? ''}</td>
+                                <td>${e.precio ?? ''}</td>
                                 <td class="text-right">
                                     <button class=\"btn btn-xs btn-secondary editar-economia-insumo\" data-id=\"${e.id}\">Editar</button>
                                     <button class=\"btn btn-xs btn-danger eliminar-economia-insumo\" data-id=\"${e.id}\">Eliminar</button>
@@ -1702,6 +1709,7 @@
         function abrirEconomiaInsumoModal(data = {}) {
             $('#economia-insumo-id').val(data.id || '');
             $('#cantidad').val(data.cantidad || '');
+            $('#precio_insumo').val(data.precio || '');
             cargarTiposInsumo(data.tipo_insumo_id || '');
             cargarUnidadesInsumo(data.unidad_insumo_id || '');
             $('#economia-insumo-modal').modal('show');
@@ -1730,7 +1738,8 @@
                 viaje_id: viajeId,
                 tipo_insumo_id: $('#tipo_insumo_id').val(),
                 unidad_insumo_id: $('#unidad_insumo_id').val(),
-                cantidad: $('#cantidad').val()
+                cantidad: $('#cantidad').val(),
+                precio: $('#precio_insumo').val()
             };
             const url = id ? `${ajaxBase}/economia-insumo/${id}` : `${ajaxBase}/economia-insumo`;
             const method = id ? 'PUT' : 'POST';
