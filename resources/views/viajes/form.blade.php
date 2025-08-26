@@ -1839,63 +1839,66 @@
 
         $('#dato-biologico-form').on('submit', async function (e) {
             e.preventDefault();
-            const id = $('#dato-biologico-id').val();
-            const capturaId = $('#captura-id').val();
-            const payload = {
-                id: id ? parseInt(id) : null,
-                unidad_longitud_id: $('#unidad_longitud_id').val(),
-                longitud: $('#longitud').val(),
-                peso: $('#peso').val(),
-                sexo: $('#sexo').val(),
-                ovada: $('#ovada').val() === '1',
-                estado_desarrollo_gonadal_id: $('#estado_desarrollo_gonadal_id').val() ? $('#estado_desarrollo_gonadal_id').val() : null,
-            };
-            if (capturaId) {
-                payload.captura_id = capturaId;
-                const url = id ? `${ajaxBase}/datos-biologicos/${id}` : `${ajaxBase}/datos-biologicos`;
-                const method = id ? 'PUT' : 'POST';
-                console.log(payload)
-                $('.spinner-overlay').removeClass('d-none');
-                const resp = await fetch(url, {
-                    method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify(payload)
-                }).finally(() => $('.spinner-overlay').addClass('d-none'));
-                if (resp.ok) {
-                    $('#dato-biologico-modal').modal('hide');
-                    cargarDatosBiologicos(capturaId);
-                } else {
-                    alert('Error al guardar dato biológico');
+            $('.spinner-overlay').removeClass('d-none');
+            try {
+                const id = $('#dato-biologico-id').val();
+                const capturaId = $('#captura-id').val();
+                const payload = {
+                    id: id ? parseInt(id) : null,
+                    unidad_longitud_id: $('#unidad_longitud_id').val(),
+                    longitud: $('#longitud').val(),
+                    peso: $('#peso').val(),
+                    sexo: $('#sexo').val(),
+                    ovada: $('#ovada').val() === '1',
+                    estado_desarrollo_gonadal_id: $('#estado_desarrollo_gonadal_id').val() ? $('#estado_desarrollo_gonadal_id').val() : null,
+                };
+                if (capturaId) {
+                    payload.captura_id = capturaId;
+                    const url = id ? `${ajaxBase}/datos-biologicos/${id}` : `${ajaxBase}/datos-biologicos`;
+                    const method = id ? 'PUT' : 'POST';
+                    console.log(payload)
+                    const resp = await fetch(url, {
+                        method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(payload)
+                    });
+                    if (resp.ok) {
+                        $('#dato-biologico-modal').modal('hide');
+                        cargarDatosBiologicos(capturaId);
+                    } else {
+                        alert('Error al guardar dato biológico');
+                    }
+                    return;
                 }
-                return;
-            }
 
-            const rowId = id || `tmp-${Date.now()}`;
-            const row = `<tr data-id="${rowId}" data-pending="1">
-                    <td>${payload.longitud || ''}</td>
-                    <td>${payload.peso || ''}</td>
-                    <td>${payload.sexo || ''}</td>
-                    <td>${payload.ovada ? 'Sí' : 'No'}</td>
-                    <td>${$('#estado_desarrollo_gonadal_id option:selected').text()}</td>
-                    <td class="text-right">
-                        <button class="btn btn-xs btn-secondary editar-dato-biologico" data-id="${rowId}">Editar</button>
-                        <button class="btn btn-xs btn-danger eliminar-dato-biologico" data-id="${rowId}">Eliminar</button>
-                    </td>
-                </tr>`;
-            const tbody = $('#datos-biologicos-table tbody');
-            const existing = tbody.find(`tr[data-id="${id}"]`);
-            if (existing.length) {
-                existing.replaceWith(row);
-            } else {
-                tbody.append(row);
+                const rowId = id || `tmp-${Date.now()}`;
+                const row = `<tr data-id="${rowId}" data-pending="1">
+                        <td>${payload.longitud || ''}</td>
+                        <td>${payload.peso || ''}</td>
+                        <td>${payload.sexo || ''}</td>
+                        <td>${payload.ovada ? 'Sí' : 'No'}</td>
+                        <td>${$('#estado_desarrollo_gonadal_id option:selected').text()}</td>
+                        <td class="text-right">
+                            <button class="btn btn-xs btn-secondary editar-dato-biologico" data-id="${rowId}">Editar</button>
+                            <button class="btn btn-xs btn-danger eliminar-dato-biologico" data-id="${rowId}">Eliminar</button>
+                        </td>
+                    </tr>`;
+                const tbody = $('#datos-biologicos-table tbody');
+                const existing = tbody.find(`tr[data-id="${id}"]`);
+                if (existing.length) {
+                    existing.replaceWith(row);
+                } else {
+                    tbody.append(row);
+                }
+                tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('item', payload);
+                $('#dato-biologico-modal').modal('hide');
+            } finally {
+                $('.spinner-overlay').addClass('d-none');
             }
-            tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('item', payload);
-            $('#dato-biologico-modal').modal('hide');
-            $('.spinner-overlay').addClass('d-none')
         });
 
         function abrirModal(data = {}) {
