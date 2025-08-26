@@ -1054,6 +1054,17 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWFpxWyWOOOfzceN1ycIhCv9hzpeK7nHg"></script>
 
 <script>
+    $(document).on('show.bs.modal', '.modal', function () {
+        const zIndex = 1050 + 10 * $('.modal:visible').length;
+        $(this).css('z-index', zIndex);
+        setTimeout(() => $('.modal-backdrop').not('.stacked')
+            .css('z-index', zIndex - 1)
+            .addClass('stacked'));
+    });
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        $('.modal:visible').length || $('body').removeClass('modal-open');
+    });
+
     function mostrarErrorCaptura(mensaje) {
         Swal.fire({ icon: 'error', title: 'Error', text: mensaje });
     }
