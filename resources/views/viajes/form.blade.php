@@ -1855,6 +1855,7 @@
                 const url = id ? `${ajaxBase}/datos-biologicos/${id}` : `${ajaxBase}/datos-biologicos`;
                 const method = id ? 'PUT' : 'POST';
                 console.log(payload)
+                $('.spinner-overlay').removeClass('d-none');
                 const resp = await fetch(url, {
                     method,
                     headers: {
@@ -1863,7 +1864,7 @@
                     },
                     credentials: 'same-origin',
                     body: JSON.stringify(payload)
-                });
+                }).finally(() => $('.spinner-overlay').addClass('d-none'));
                 if (resp.ok) {
                     $('#dato-biologico-modal').modal('hide');
                     cargarDatosBiologicos(capturaId);
