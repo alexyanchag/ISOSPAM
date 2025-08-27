@@ -56,6 +56,7 @@ use App\Http\Controllers\ParametroAmbientalAjaxController;
 use App\Http\Controllers\EconomiaInsumoAjaxController;
 use App\Http\Controllers\EconomiaVentaAjaxController;
 use App\Http\Controllers\DatoBiologicoAjaxController;
+use App\Http\Controllers\CostosIngresosController;
 
 Route::get('/', function () {
     return view('home');
@@ -198,6 +199,8 @@ Route::get('/economia/precios', [EconomiaController::class, 'precioPromedio'])->
 Route::get('/economia/margen', [EconomiaController::class, 'margen'])->name('economia.margen');
 Route::get('/economia/destino', [EconomiaController::class, 'destinoVenta'])->name('economia.destino');
 Route::get('/economia/insumos', [EconomiaController::class, 'costoInsumos'])->name('economia.insumos');
+Route::get('/reportes/costos-ingresos', [CostosIngresosController::class, 'index'])->name('reportes.costos_ingresos');
+Route::get('/ajax/costos-ingresos', [CostosIngresosController::class, 'data'])->name('ajax.costos_ingresos');
 
 // Flota
 Route::get('/flota/inventario', [FlotaController::class, 'inventario'])->name('flota.inventario');

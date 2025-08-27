@@ -383,6 +383,10 @@
                                             class="far fa-circle nav-icon"></i>
                                         <p>Insumos por viaje</p>
                                     </a></li>
+                                <li class="nav-item"><a href="{{ route('reportes.costos_ingresos') }}" class="nav-link"><i
+                                            class="far fa-circle nav-icon"></i>
+                                        <p>Costos e ingresos</p>
+                                    </a></li>
 
                                 <!-- Flota -->
                                 <li class="nav-header">FLOTA</li>
