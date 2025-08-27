@@ -776,6 +776,31 @@
                                 <button id="agregar-dato-biologico" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                             </div>
                         </div>
+                        <div id="archivo-captura-card" class="card mb-3 collapsed-card">
+                            <div class="card-header border-0 bg-dark">
+                                <h5 class="card-title mb-0">Archivos</h5>
+                                <div class="card-tools">
+                                    <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body collapse">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped table-compact mb-0" id="archivos-captura-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Tamaño</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <button id="agregar-archivo-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -839,6 +864,27 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="archivo-captura-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="archivo-captura-form">
+                <div class="modal-header">
+                    <h5 class="modal-title">Archivo de captura</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" id="archivo-input" multiple>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Cargar</button>
                 </div>
             </form>
         </div>
@@ -1913,6 +1959,98 @@
             }
         });
 
+        function cargarArchivos(capturaId) {
+            if (!capturaId) {
+                $('#archivos-captura-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`/isospam/capturas/${capturaId}/archivos`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#archivos-captura-table tbody').empty();
+                    (data || []).forEach(a => {
+                        const row = `<tr data-id="${a.id}">
+                                <td><a href="${a.url}" target="_blank">${a.nombre_original}</a></td>
+                                <td>${a.tamano ?? ''}</td>
+                                <td class="text-right">
+                                    <button type="button" class="btn btn-xs btn-danger eliminar-archivo-captura" data-id="${a.id}">Eliminar</button>
+                                </td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error al cargar archivos:', err);
+                    $('#archivos-captura-table tbody').empty();
+                });
+        }
+
+        function abrirArchivoCapturaModal() {
+            $('#archivo-input').val('');
+            $('#archivo-captura-modal').modal('show');
+        }
+
+        function eliminarArchivoCaptura(id) {
+            const row = $(`#archivos-captura-table tbody tr[data-id="${id}"]`);
+            if (row.data('pending')) {
+                row.remove();
+                if (!$('#captura-id').val() && !$('#archivos-captura-table tbody tr').length) {
+                    $('#archivo-captura-card').hide();
+                }
+                return;
+            }
+            if (!confirm('¿Eliminar archivo?')) return;
+            fetch(`/isospam/archivos/${id}`, {
+                method: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                credentials: 'same-origin'
+            }).then(() => cargarArchivos($('#captura-id').val()));
+        }
+
+        $('#archivo-captura-form').on('submit', function (e) {
+            e.preventDefault();
+            const capturaId = $('#captura-id').val();
+            const files = $('#archivo-input')[0].files;
+            if (!files.length) {
+                $('#archivo-captura-modal').modal('hide');
+                return;
+            }
+            if (capturaId) {
+                const formData = new FormData();
+                Array.from(files).forEach(f => formData.append('archivos[]', f));
+                fetch(`/isospam/capturas/${capturaId}/archivos-form`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrfToken },
+                    body: formData,
+                    credentials: 'same-origin'
+                }).then(r => {
+                    if (r.ok) {
+                        $('#archivo-captura-modal').modal('hide');
+                        cargarArchivos(capturaId);
+                    } else {
+                        alert('Error al subir archivo');
+                    }
+                });
+                return;
+            }
+            const tbody = $('#archivos-captura-table tbody');
+            Array.from(files).forEach(f => {
+                const rowId = `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                const url = URL.createObjectURL(f);
+                const row = `<tr data-id="${rowId}" data-pending="1">
+                        <td><a href="${url}" target="_blank">${f.name}</a></td>
+                        <td>${f.size}</td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn-xs btn-danger eliminar-archivo-captura" data-id="${rowId}">Eliminar</button>
+                        </td>
+                    </tr>`;
+                tbody.append(row);
+                tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('file', f);
+            });
+            $('#archivo-captura-card').removeClass('d-none').show();
+            $('#archivo-captura-modal').modal('hide');
+        });
+
         function abrirModal(data = {}) {
             $('.spinner-overlay').removeClass('d-none');
             const campaniaId = $('select[name="campania_id"]').val();
@@ -1983,6 +2121,16 @@
             const bioCard = $('#dato-biologico-card');
             bioCard.removeClass('d-none').show();
             $('#datos-biologicos-table tbody').empty();
+
+            const archivoCard = $('#archivo-captura-card');
+            archivoCard.removeClass('d-none');
+            $('#archivos-captura-table tbody').empty();
+            if (data.id) {
+                archivoCard.show();
+                promises.push(cargarArchivos(data.id));
+            } else {
+                archivoCard.hide();
+            }
 
             if (data.id) {
                 promises.push(
@@ -2407,7 +2555,20 @@
                         $(tr).attr('data-id', dataBio.id || dataBio.data?.id).removeAttr('data-pending').removeData('item');
                     }
                 }
+                const pendientesArch = $('#archivos-captura-table tbody tr[data-pending="1"]').toArray();
+                for (const tr of pendientesArch) {
+                    const file = $(tr).data('file');
+                    const fd = new FormData();
+                    fd.append('archivos[]', file);
+                    await fetch(`/isospam/capturas/${capturaId}/archivos-form`, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': csrfToken },
+                        body: fd,
+                        credentials: 'same-origin'
+                    });
+                }
                 cargarDatosBiologicos(capturaId);
+                cargarArchivos(capturaId);
 
                 $('#captura-modal').modal('hide');
                 cargarCapturas();
@@ -2611,6 +2772,8 @@
             $('#agregar-dato-biologico').on('click', () => abrirDatoBiologicoModal());
             $('#datos-biologicos-table').on('click', '.editar-dato-biologico', function () { editarDatoBiologico($(this).data('id')); });
             $('#datos-biologicos-table').on('click', '.eliminar-dato-biologico', function () { eliminarDatoBiologico($(this).data('id')); });
+            $('#agregar-archivo-captura').on('click', () => abrirArchivoCapturaModal());
+            $('#archivos-captura-table').on('click', '.eliminar-archivo-captura', function () { eliminarArchivoCaptura($(this).data('id')); });
         }
     });
 </script>
