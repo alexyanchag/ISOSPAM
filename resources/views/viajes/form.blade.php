@@ -261,6 +261,69 @@
 
 @isset($viaje)
 @if(request()->boolean('por_finalizar'))
+
+
+<div class="card mt-3">
+
+    <div class="card-header border-0 bg-dark">
+        <h3 class="card-title">
+            <i class="fas fa-th mr-1"></i>
+            Capturas
+        </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body collapse show" id="capturas-collapse">
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-compact mb-0" id="capturas-table">
+                <thead>
+                    <tr>
+                        <th>Nombre común</th>
+                        <th>Especie</th>
+                        <th>Nº Individuos</th>
+                        <th>Peso Estimado</th>
+                        <th>Peso Contado</th>
+                        <th>Incidental</th>
+                        <th>Descartada</th>
+                        <th>Tipo Nº Individuos</th>
+                        <th>Tipo Peso</th>
+                        <th>Estado Producto</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($capturas ?? [] as $c)
+                    <tr>
+                        <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                        <td>{{ $c['especie_nombre'] ?? '' }}</td>
+                        <td>{{ $c['numero_individuos'] ?? '' }}</td>
+                        <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                        <td>{{ $c['peso_contado'] ?? '' }}</td>
+                        <td>{{ ($c['es_incidental'] ?? false) ? 'Sí' : 'No' }}</td>
+                        <td>{{ ($c['es_descartada'] ?? false) ? 'Sí' : 'No' }}</td>
+                        <td>{{ $c['tipo_numero_individuos'] ?? '' }}</td>
+                        <td>{{ $c['tipo_peso'] ?? '' }}</td>
+                        <td>{{ $c['estado_producto'] ?? '' }}</td>
+                        <td class="text-right">
+                            <button class="btn btn-xs btn-secondary editar-captura"
+                                data-id="{{ $c['id'] }}">Editar</button>
+                            <button class="btn btn-xs btn-danger eliminar-captura"
+                                data-id="{{ $c['id'] }}">Eliminar</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <button id="agregar-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+    </div>
+</div>
+
 <div class="card mt-3">
     <div class="card-header border-0 bg-dark">
         <h3 class="card-title">
@@ -422,67 +485,6 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
-
-<div class="card mt-3">
-
-    <div class="card-header border-0 bg-dark">
-        <h3 class="card-title">
-            <i class="fas fa-th mr-1"></i>
-            Capturas
-        </h3>
-
-        <div class="card-tools">
-            <button type="button" class="btn bg-gray btn-xs" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="card-body collapse show" id="capturas-collapse">
-        <div class="table-responsive">
-            <table class="table table-dark table-striped table-compact mb-0" id="capturas-table">
-                <thead>
-                    <tr>
-                        <th>Nombre común</th>
-                        <th>Especie</th>
-                        <th>Nº Individuos</th>
-                        <th>Peso Estimado</th>
-                        <th>Peso Contado</th>
-                        <th>Incidental</th>
-                        <th>Descartada</th>
-                        <th>Tipo Nº Individuos</th>
-                        <th>Tipo Peso</th>
-                        <th>Estado Producto</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($capturas ?? [] as $c)
-                    <tr>
-                        <td>{{ $c['nombre_comun'] ?? '' }}</td>
-                        <td>{{ $c['especie_nombre'] ?? '' }}</td>
-                        <td>{{ $c['numero_individuos'] ?? '' }}</td>
-                        <td>{{ $c['peso_estimado'] ?? '' }}</td>
-                        <td>{{ $c['peso_contado'] ?? '' }}</td>
-                        <td>{{ ($c['es_incidental'] ?? false) ? 'Sí' : 'No' }}</td>
-                        <td>{{ ($c['es_descartada'] ?? false) ? 'Sí' : 'No' }}</td>
-                        <td>{{ $c['tipo_numero_individuos'] ?? '' }}</td>
-                        <td>{{ $c['tipo_peso'] ?? '' }}</td>
-                        <td>{{ $c['estado_producto'] ?? '' }}</td>
-                        <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-captura"
-                                data-id="{{ $c['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-captura"
-                                data-id="{{ $c['id'] }}">Eliminar</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <button id="agregar-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
     </div>
 </div>
 
