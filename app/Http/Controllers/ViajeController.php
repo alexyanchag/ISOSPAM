@@ -348,6 +348,15 @@ class ViajeController extends Controller
         $puertos = $this->getPuertos();
         $muelles = $this->getMuelles();
 
+        $respObservadores = $this->apiService->get('/observadores-viaje', ['viaje_id' => $id]);
+        $observadores = $respObservadores->successful() ? $respObservadores->json() : [];
+
+        $respParametros = $this->apiService->get('/parametros-ambientales', ['viaje_id' => $id]);
+        $parametrosAmbientales = $respParametros->successful() ? $respParametros->json() : [];
+
+        $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
+        $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
+
         if (
             ! empty($viaje['campania_id'] ?? null)
             && empty($viaje['respuestas_multifinalitaria'] ?? null)
@@ -376,6 +385,9 @@ class ViajeController extends Controller
             'embarcaciones' => $embarcaciones,
             'puertos' => $puertos,
             'muelles' => $muelles,
+            'observadores' => $observadores,
+            'parametrosAmbientales' => $parametrosAmbientales,
+            'economiaInsumos' => $economiaInsumos,
         ]);
     }
 
