@@ -26,7 +26,7 @@ class ArchivoCapturaAjaxController extends Controller
         ]);
 
         $resp = $this->apiService->postFiles(
-            "/capturas/{$capturaId}/archivos",
+            "/capturas/{$capturaId}/archivos-form",
             $request->file('archivos'),
             $request->except('archivos')
         );
