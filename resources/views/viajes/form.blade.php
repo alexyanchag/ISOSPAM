@@ -489,7 +489,7 @@
 <div class="modal fade" id="captura-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document"> <!-- Ampliado horizontalmente -->
         <div class="modal-content">
-            <form id="captura-form">
+            <form id="captura-form" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title">Captura</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -2350,6 +2350,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).addClass('was-validated');
+                this.reportValidity();
                 return;
             }
             e.preventDefault();
