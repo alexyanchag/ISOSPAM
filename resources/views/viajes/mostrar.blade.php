@@ -6,43 +6,71 @@
         <h3 class="card-title">Detalle del viaje</h3>
     </div>
     <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-4">Campaña</dt>
-            <dd class="col-sm-8">{{ $viaje['campania_descripcion'] ?? '' }}</dd>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Campaña</label>
+                <input type="text" class="form-control" value="{{ $viaje['campania_descripcion'] ?? '' }}" readonly>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Responsable</dt>
-            <dd class="col-sm-8">{{ $viaje['pescador_nombres'] ?? '' }} {{ $viaje['pescador_apellidos'] ?? '' }}</dd>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Responsable Viaje</label>
+                <input type="text" class="form-control" value="{{ $viaje['pescador_nombres'] ?? '' }} {{ $viaje['pescador_apellidos'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Digitador</label>
+                <input type="text" class="form-control" value="{{ $viaje['digitador_nombres'] ?? '' }} {{ $viaje['digitador_apellidos'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Embarcación</label>
+                <input type="text" class="form-control" value="{{ $viaje['embarcacion_nombre'] ?? '' }}" readonly>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Digitador</dt>
-            <dd class="col-sm-8">{{ $viaje['digitador_nombres'] ?? '' }} {{ $viaje['digitador_apellidos'] ?? '' }}</dd>
+        <div class="row">
+            <div class="col-md-3 col-lg-2 mb-3">
+                <label class="form-label">Fecha Zarpe</label>
+                <input type="date" class="form-control" value="{{ $viaje['fecha_zarpe'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-3 col-lg-2 mb-3">
+                <label class="form-label">Hora Zarpe</label>
+                <input type="time" class="form-control" value="{{ $viaje['hora_zarpe'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Puerto Zarpe</label>
+                <input type="text" class="form-control" value="{{ $viaje['puerto_zarpe_nombre'] ?? '' }}" readonly>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Embarcación</dt>
-            <dd class="col-sm-8">{{ $viaje['embarcacion_nombre'] ?? '' }}</dd>
+        <div class="row">
+            <div class="col-md-3 col-lg-2 mb-3">
+                <label class="form-label">Fecha Arribo</label>
+                <input type="date" class="form-control" value="{{ $viaje['fecha_arribo'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-3 col-lg-2 mb-3">
+                <label class="form-label">Hora Arribo</label>
+                <input type="time" class="form-control" value="{{ $viaje['hora_arribo'] ?? '' }}" readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Puerto Arribo</label>
+                <input type="text" class="form-control" value="{{ $viaje['puerto_arribo_nombre'] ?? '' }}" readonly>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Fecha Zarpe</dt>
-            <dd class="col-sm-8">{{ $viaje['fecha_zarpe'] ?? '' }}</dd>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Muelle</label>
+                <input type="text" class="form-control" value="{{ $viaje['muelle_nombre'] ?? '' }}" readonly>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Hora Zarpe</dt>
-            <dd class="col-sm-8">{{ $viaje['hora_zarpe'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Puerto Zarpe</dt>
-            <dd class="col-sm-8">{{ $viaje['puerto_zarpe_nombre'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Fecha Arribo</dt>
-            <dd class="col-sm-8">{{ $viaje['fecha_arribo'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Hora Arribo</dt>
-            <dd class="col-sm-8">{{ $viaje['hora_arribo'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Puerto Arribo</dt>
-            <dd class="col-sm-8">{{ $viaje['puerto_arribo_nombre'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Muelle</dt>
-            <dd class="col-sm-8">{{ $viaje['muelle_nombre'] ?? '' }}</dd>
-
-            <dt class="col-sm-4">Observaciones</dt>
-            <dd class="col-sm-8">{{ $viaje['observaciones'] ?? '' }}</dd>
-        </dl>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Observaciones</label>
+                <textarea class="form-control" readonly>{{ $viaje['observaciones'] ?? '' }}</textarea>
+            </div>
+        </div>
     </div>
 </div>
 @if(!empty($viaje['respuestas_multifinalitaria']))
