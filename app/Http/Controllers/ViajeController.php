@@ -120,6 +120,13 @@ class ViajeController extends Controller
         $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
         $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
 
+        $campanias = $this->getCampanias();
+        $responsables = $this->getPersonasPorRol('RESPVJ');
+        $digitadores = $this->getPersonasPorRol('CTF');
+        $embarcaciones = $this->getEmbarcaciones();
+        $puertos = $this->getPuertos();
+        $muelles = $this->getMuelles();
+
         $respObservadores = $this->apiService->get('/observadores-viaje', ['viaje_id' => $id]);
         $observadores = $respObservadores->successful() ? $respObservadores->json() : [];
 
@@ -334,6 +341,13 @@ class ViajeController extends Controller
         $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
         $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
 
+        $campanias = $this->getCampanias();
+        $responsables = $this->getPersonasPorRol('RESPVJ');
+        $digitadores = $this->getPersonasPorRol('CTF');
+        $embarcaciones = $this->getEmbarcaciones();
+        $puertos = $this->getPuertos();
+        $muelles = $this->getMuelles();
+
         if (
             ! empty($viaje['campania_id'] ?? null)
             && empty($viaje['respuestas_multifinalitaria'] ?? null)
@@ -356,6 +370,12 @@ class ViajeController extends Controller
             'viaje' => $viaje,
             'tripulantes' => $tripulantes,
             'capturas' => $capturas,
+            'campanias' => $campanias,
+            'responsables' => $responsables,
+            'digitadores' => $digitadores,
+            'embarcaciones' => $embarcaciones,
+            'puertos' => $puertos,
+            'muelles' => $muelles,
         ]);
     }
 
