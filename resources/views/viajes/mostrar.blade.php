@@ -4,6 +4,15 @@
 <div class="card mb-3">
     <div class="card-header">
         <h3 class="card-title">Detalle del viaje</h3>
+        <div class="card-tools">
+            @if(!($viajeSeleccionado ?? false))
+                <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}" class="seleccionar-form d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary btn-sm">Seleccionar</button>
+                </form>
+            @endif
+            <a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary btn-sm">Volver</a>
+        </div>
     </div>
     <div class="card-body">
         <div class="row">
@@ -235,11 +244,21 @@
 </div>
 </div>
 
-@if(!($viajeSeleccionado ?? false))
-    <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}" class="d-inline">
-        @csrf
-        <button type="submit" class="btn btn-primary btn-sm">Seleccionar</button>
-    </form>
-@endif
-<a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
+@endsection
+
+@section('scripts')
+<script>
+document.querySelectorAll('.seleccionar-form').forEach(form=>{
+    form.addEventListener('submit', e=>{
+        e.preventDefault();
+        Swal.fire({
+            title:'¿Seleccionar este viaje?',
+            icon:'question',
+            showCancelButton:true,
+            confirmButtonText:'Sí, seleccionar',
+            cancelButtonText:'Cancelar'
+        }).then(res=>{ if(res.isConfirmed) form.submit(); });
+    });
+});
+</script>
 @endsection
