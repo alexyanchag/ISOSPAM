@@ -334,17 +334,22 @@ class ViajeController extends Controller
         $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
         $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
 
-        if (! empty($viaje['campania_id'] ?? null)) {
+        if (
+            ! empty($viaje['campania_id'] ?? null)
+            && empty($viaje['respuestas_multifinalitaria'] ?? null)
+        ) {
             $respMulti = $this->apiService->get('/respuestas-multifinalitaria', [
                 'campania_id' => $viaje['campania_id'],
                 'tabla_relacionada' => 'viaje',
                 'relacion_id' => $viaje['id'] ?? $id,
             ]);
-            $viaje['respuestas_multifinalitaria'] = $respMulti->successful()
-                ? $respMulti->json()
-                : [];
-        } else {
-            $viaje['respuestas_multifinalitaria'] = [];
+
+            if ($respMulti->successful()) {
+                $respuestas = $respMulti->json();
+                if (! empty($respuestas)) {
+                    $viaje['respuestas_multifinalitaria'] = $respuestas;
+                }
+            }
         }
 
         return view('viajes.mostrar', [
