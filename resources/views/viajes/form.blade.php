@@ -2030,7 +2030,7 @@
                     } else {
                         alert('Error al subir archivo');
                     }
-                });
+                }).catch(err => mostrarErrorCaptura('Error de red al subir archivo'));
                 return;
             }
             const tbody = $('#archivos-captura-table tbody');
@@ -2565,8 +2565,8 @@
                         headers: { 'X-CSRF-TOKEN': csrfToken },
                         body: fd,
                         credentials: 'same-origin'
-                    });
-                    if (!respArch.ok) {
+                    }).catch(err => mostrarErrorCaptura('Error de red al subir archivo'));
+                    if (!respArch?.ok) {
                         mostrarErrorCaptura('Error al subir el archivo');
                         return;
                     }
