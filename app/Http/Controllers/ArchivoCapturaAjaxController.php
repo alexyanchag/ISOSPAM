@@ -21,13 +21,16 @@ class ArchivoCapturaAjaxController extends Controller
     public function store(Request $request, int $capturaId)
     {
         $request->validate([
-            'archivos' => ['required', 'array'],
+            'archivos' => ['required'],
             'archivos.*' => ['file'],
         ]);
 
+        $files = $request->file('archivos');
+        $files = is_array($files) ? $files : [$files];
+
         $resp = $this->apiService->postFiles(
             "/capturas/{$capturaId}/archivos-form",
-            $request->file('archivos'),
+            $files,
             $request->except('archivos')
         );
 
