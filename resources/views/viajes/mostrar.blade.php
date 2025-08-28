@@ -278,140 +278,135 @@
                             @endforeach
                         @endif
                     </div>
-                    @if(!empty($captura['sitios_pesca']))
-                        @php $s = $captura['sitios_pesca'][0] ?? null; @endphp
-                        <div id="sitio-pesca-card" class="card mb-3">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Sitio de pesca</h5>
-                            </div>
-                            <div class="card-body">
-                                @if($s)
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label>Nombre</label>
-                                            <p class="form-control-plaintext">{{ $s['nombre'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Latitud</label>
-                                            <p class="form-control-plaintext">{{ $s['latitud'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Longitud</label>
-                                            <p class="form-control-plaintext">{{ $s['longitud'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Profundidad</label>
-                                            <p class="form-control-plaintext">{{ $s['profundidad'] ?? '' }} {{ $s['unidad_profundidad_nombre'] ?? '' }}</p>
-                                        </div>
-                                    </div>
-                                @else
-                                    <p class="mb-0">No registrado.</p>
-                                @endif
-                            </div>
+                    @php $s = $captura['sitios_pesca'][0] ?? null; @endphp
+                    <div id="sitio-pesca-card" class="card mb-3">
+                        <div class="card-header border-0 bg-dark">
+                            <h5 class="card-title mb-0">Sitio de pesca</h5>
                         </div>
-                    @endif
-                    @if(!empty($captura['artes_pesca']))
-                        @php $a = $captura['artes_pesca'][0] ?? null; @endphp
-                        <div id="arte-pesca-card" class="card mb-3">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Arte de pesca</h5>
-                            </div>
-                            <div class="card-body">
-                                @if($a)
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label>Tipo de arte</label>
-                                            <p class="form-control-plaintext">{{ $a['tipo_arte_nombre'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Líneas madre</label>
-                                            <p class="form-control-plaintext">{{ $a['lineas_madre'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Anzuelos</label>
-                                            <p class="form-control-plaintext">{{ $a['anzuelos'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Tipo anzuelo</label>
-                                            <p class="form-control-plaintext">{{ $a['tipo_anzuelo_nombre'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Tamaño anzuelo (pulg)</label>
-                                            <p class="form-control-plaintext">{{ $a['tamanio_anzuelo_pulg'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Largo red (m)</label>
-                                            <p class="form-control-plaintext">{{ $a['largo_red_m'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Ancho red (m)</label>
-                                            <p class="form-control-plaintext">{{ $a['alto_red_m'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Material malla</label>
-                                            <p class="form-control-plaintext">{{ $a['material_malla_nombre'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Ojo malla (cm)</label>
-                                            <p class="form-control-plaintext">{{ $a['ojo_malla_cm'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Diámetro</label>
-                                            <p class="form-control-plaintext">{{ $a['diametro'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Carnada viva</label>
-                                            <p class="form-control-plaintext">{{ isset($a['carnadaviva']) ? ($a['carnadaviva'] ? 'Sí' : 'No') : '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Especie carnada</label>
-                                            <p class="form-control-plaintext">{{ $a['especiecarnada'] ?? '' }}</p>
-                                        </div>
+                        <div class="card-body">
+                            @if($s)
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>Nombre</label>
+                                        <p class="form-control-plaintext">{{ $s['nombre'] ?? '' }}</p>
                                     </div>
-                                @else
-                                    <p class="mb-0">No registrado.</p>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-                    @if(!empty($captura['economia_ventas']))
-                        @php $ev = $captura['economia_ventas'][0] ?? null; @endphp
-                        <div id="economia-venta-card" class="card mb-3">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Dato económico</h5>
-                            </div>
-                            <div class="card-body">
-                                @if($ev)
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label>Vendido a</label>
-                                            <p class="form-control-plaintext">{{ $ev['vendido_a'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Destino</label>
-                                            <p class="form-control-plaintext">{{ $ev['destino'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Precio</label>
-                                            <p class="form-control-plaintext">{{ $ev['precio'] ?? '' }}</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label>Unidad de venta</label>
-                                            <p class="form-control-plaintext">{{ $ev['unidad_venta_nombre'] ?? '' }}</p>
-                                        </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Latitud</label>
+                                        <p class="form-control-plaintext">{{ $s['latitud'] ?? '' }}</p>
                                     </div>
-                                @else
-                                    <p class="mb-0">No registrado.</p>
-                                @endif
-                            </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Longitud</label>
+                                        <p class="form-control-plaintext">{{ $s['longitud'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Profundidad</label>
+                                        <p class="form-control-plaintext">{{ $s['profundidad'] ?? '' }} {{ $s['unidad_profundidad_nombre'] ?? '' }}</p>
+                                    </div>
+                                </div>
+                            @else
+                                <p class="mb-0">No registrado.</p>
+                            @endif
                         </div>
-                    @endif
-                    @if(!empty($captura['datos_biologicos']))
-                        <div id="dato-biologico-card" class="card mb-3">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Datos biológicos</h5>
-                            </div>
-                            <div class="card-body">
+                    </div>
+                    @php $a = $captura['artes_pesca'][0] ?? null; @endphp
+                    <div id="arte-pesca-card" class="card mb-3">
+                        <div class="card-header border-0 bg-dark">
+                            <h5 class="card-title mb-0">Arte de pesca</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($a)
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>Tipo de arte</label>
+                                        <p class="form-control-plaintext">{{ $a['tipo_arte_nombre'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Líneas madre</label>
+                                        <p class="form-control-plaintext">{{ $a['lineas_madre'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Anzuelos</label>
+                                        <p class="form-control-plaintext">{{ $a['anzuelos'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Tipo anzuelo</label>
+                                        <p class="form-control-plaintext">{{ $a['tipo_anzuelo_nombre'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Tamaño anzuelo (pulg)</label>
+                                        <p class="form-control-plaintext">{{ $a['tamanio_anzuelo_pulg'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Largo red (m)</label>
+                                        <p class="form-control-plaintext">{{ $a['largo_red_m'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Ancho red (m)</label>
+                                        <p class="form-control-plaintext">{{ $a['alto_red_m'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Material malla</label>
+                                        <p class="form-control-plaintext">{{ $a['material_malla_nombre'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Ojo malla (cm)</label>
+                                        <p class="form-control-plaintext">{{ $a['ojo_malla_cm'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Diámetro</label>
+                                        <p class="form-control-plaintext">{{ $a['diametro'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Carnada viva</label>
+                                        <p class="form-control-plaintext">{{ isset($a['carnadaviva']) ? ($a['carnadaviva'] ? 'Sí' : 'No') : '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Especie carnada</label>
+                                        <p class="form-control-plaintext">{{ $a['especiecarnada'] ?? '' }}</p>
+                                    </div>
+                                </div>
+                            @else
+                                <p class="mb-0">No registrado.</p>
+                            @endif
+                        </div>
+                    </div>
+                    @php $ev = $captura['economia_ventas'][0] ?? null; @endphp
+                    <div id="economia-venta-card" class="card mb-3">
+                        <div class="card-header border-0 bg-dark">
+                            <h5 class="card-title mb-0">Dato económico</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($ev)
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>Vendido a</label>
+                                        <p class="form-control-plaintext">{{ $ev['vendido_a'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Destino</label>
+                                        <p class="form-control-plaintext">{{ $ev['destino'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Precio</label>
+                                        <p class="form-control-plaintext">{{ $ev['precio'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Unidad de venta</label>
+                                        <p class="form-control-plaintext">{{ $ev['unidad_venta_nombre'] ?? '' }}</p>
+                                    </div>
+                                </div>
+                            @else
+                                <p class="mb-0">No registrado.</p>
+                            @endif
+                        </div>
+                    </div>
+                    @php $db = $captura['datos_biologicos'] ?? []; @endphp
+                    <div id="dato-biologico-card" class="card mb-3">
+                        <div class="card-header border-0 bg-dark">
+                            <h5 class="card-title mb-0">Datos biológicos</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($db)
                                 <div class="table-responsive">
                                     <table class="table table-striped table-compact mb-0">
                                         <thead>
@@ -424,7 +419,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($captura['datos_biologicos'] as $d)
+                                            @foreach($db as $d)
                                                 <tr>
                                                     <td>{{ $d['longitud'] ?? '' }}</td>
                                                     <td>{{ $d['peso'] ?? '' }}</td>
@@ -432,23 +427,22 @@
                                                     <td>{{ ($d['ovada'] ?? false) ? 'Sí' : 'No' }}</td>
                                                     <td>{{ $d['estado_desarrollo_gonadal_descripcion'] ?? '' }}</td>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center">No hay datos registrados.</td>
-                                                </tr>
-                                            @endforelse
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            @else
+                                <p class="mb-0">No registrado.</p>
+                            @endif
                         </div>
-                    @endif
-                    @if(!empty($captura['archivos']))
-                        <div id="archivo-captura-card" class="card mb-3">
-                            <div class="card-header border-0 bg-dark">
-                                <h5 class="card-title mb-0">Archivos</h5>
-                            </div>
-                            <div class="card-body">
+                    </div>
+                    @php $arch = $captura['archivos'] ?? []; @endphp
+                    <div id="archivo-captura-card" class="card mb-3">
+                        <div class="card-header border-0 bg-dark">
+                            <h5 class="card-title mb-0">Archivos</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($arch)
                                 <div class="table-responsive">
                                     <table class="table table-striped table-compact mb-0">
                                         <thead>
@@ -458,22 +452,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($captura['archivos'] as $a)
+                                            @foreach($arch as $file)
                                                 <tr>
-                                                    <td><a href="{{ $a['url'] ?? '#' }}" target="_blank">{{ $a['nombre_original'] ?? '' }}</a></td>
-                                                    <td>{{ $a['tamano'] ?? '' }}</td>
+                                                    <td><a href="{{ $file['url'] ?? '#' }}" target="_blank">{{ $file['nombre_original'] ?? '' }}</a></td>
+                                                    <td>{{ $file['tamano'] ?? '' }}</td>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="2" class="text-center">No hay archivos.</td>
-                                                </tr>
-                                            @endforelse
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            @else
+                                <p class="mb-0">No registrado.</p>
+                            @endif
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
