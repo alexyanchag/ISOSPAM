@@ -74,47 +74,54 @@
     </div>
 </div>
 @if(!empty($viaje['respuestas_multifinalitaria']))
-    <div class="card mb-3">
-        <div class="card-header">
-            <h3 class="card-title">Campos dinámicos</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                @foreach($viaje['respuestas_multifinalitaria'] as $r)
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">{{ $r['nombre_pregunta'] ?? '' }}</label>
-                        @switch($r['tipo_pregunta'])
-                            @case('COMBO')
-                                @php $opciones = json_decode($r['opciones'] ?? '[]', true) ?: []; @endphp
-                                <select class="form-control" disabled>
-                                    <option value="">Seleccione...</option>
-                                    @foreach($opciones as $opt)
-                                        @php
-                                            $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
-                                            $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
-                                        @endphp
-                                        <option value="{{ $value }}" @selected(($r['respuesta'] ?? '')==$value)>{{ $text }}</option>
-                                    @endforeach
-                                </select>
-                                @break
-                            @case('INTEGER')
-                                <input type="number" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
-                                @break
-                            @case('DATE')
-                                <input type="date" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
-                                @break
-                            @case('TIME')
-                                <input type="time" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
-                                @break
-                            @case('INPUT')
-                            @default
-                                <input type="text" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
-                        @endswitch
-                    </div>
-                @endforeach
+    @php
+        $respuestas = array_filter($viaje['respuestas_multifinalitaria'], function($r) {
+            return isset($r['respuesta']) && $r['respuesta'] !== '';
+        });
+    @endphp
+    @if(!empty($respuestas))
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Campos dinámicos</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach($respuestas as $r)
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ $r['nombre_pregunta'] ?? '' }}</label>
+                            @switch($r['tipo_pregunta'])
+                                @case('COMBO')
+                                    @php $opciones = json_decode($r['opciones'] ?? '[]', true) ?: []; @endphp
+                                    <select class="form-control" disabled>
+                                        <option value="">Seleccione...</option>
+                                        @foreach($opciones as $opt)
+                                            @php
+                                                $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
+                                                $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                                            @endphp
+                                            <option value="{{ $value }}" @selected(($r['respuesta'] ?? '')==$value)>{{ $text }}</option>
+                                        @endforeach
+                                    </select>
+                                    @break
+                                @case('INTEGER')
+                                    <input type="number" class="form-control" value="{{ $r['respuesta'] ?? '' }}" disabled>
+                                    @break
+                                @case('DATE')
+                                    <input type="date" class="form-control" value="{{ $r['respuesta'] ?? '' }}" disabled>
+                                    @break
+                                @case('TIME')
+                                    <input type="time" class="form-control" value="{{ $r['respuesta'] ?? '' }}" disabled>
+                                    @break
+                                @case('INPUT')
+                                @default
+                                    <input type="text" class="form-control" value="{{ $r['respuesta'] ?? '' }}" disabled>
+                            @endswitch
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 @endif
 
 <div class="card mb-3">
