@@ -231,9 +231,15 @@
                     @endforelse
                 </tbody>
             </table>
-        </div>
-    </div>
+</div>
+</div>
 </div>
 
+@if(!($viajeSeleccionado ?? false))
+    <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-primary btn-sm">Seleccionar</button>
+    </form>
+@endif
 <a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
 @endsection
