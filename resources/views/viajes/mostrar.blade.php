@@ -79,12 +79,40 @@
             <h3 class="card-title">Campos dinámicos</h3>
         </div>
         <div class="card-body">
-            <dl class="row">
+            <div class="row">
                 @foreach($viaje['respuestas_multifinalitaria'] as $r)
-                    <dt class="col-sm-4">{{ $r['nombre_pregunta'] ?? '' }}</dt>
-                    <dd class="col-sm-8">{{ $r['respuesta'] ?? '' }}</dd>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">{{ $r['nombre_pregunta'] ?? '' }}</label>
+                        @switch($r['tipo_pregunta'])
+                            @case('COMBO')
+                                @php $opciones = json_decode($r['opciones'] ?? '[]', true) ?: []; @endphp
+                                <select class="form-control" disabled>
+                                    <option value="">Seleccione...</option>
+                                    @foreach($opciones as $opt)
+                                        @php
+                                            $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
+                                            $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                                        @endphp
+                                        <option value="{{ $value }}" @selected(($r['respuesta'] ?? '')==$value)>{{ $text }}</option>
+                                    @endforeach
+                                </select>
+                                @break
+                            @case('INTEGER')
+                                <input type="number" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
+                                @break
+                            @case('DATE')
+                                <input type="date" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
+                                @break
+                            @case('TIME')
+                                <input type="time" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
+                                @break
+                            @case('INPUT')
+                            @default
+                                <input type="text" class="form-control" value="{{ $r['respuesta'] ?? '' }}" readonly>
+                        @endswitch
+                    </div>
                 @endforeach
-            </dl>
+            </div>
         </div>
     </div>
 @endif
