@@ -2017,7 +2017,7 @@
             }
             if (capturaId) {
                 const formData = new FormData();
-                Array.from(files).forEach(f => formData.append('archivos[]', f));
+                Array.from(files).forEach(f => formData.append('archivos', f));
                 fetch(`/ajax/capturas/${capturaId}/archivos`, {
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': csrfToken },
@@ -2559,7 +2559,7 @@
                 for (const tr of pendientesArch) {
                     const file = $(tr).data('file');
                     const fd = new FormData();
-                    fd.append('archivos[]', file);
+                    fd.append('archivos', file);
                     await fetch(`/ajax/capturas/${capturaId}/archivos`, {
                         method: 'POST',
                         headers: { 'X-CSRF-TOKEN': csrfToken },
