@@ -2007,48 +2007,57 @@
             }).then(() => cargarArchivos($('#captura-id').val()));
         }
 
-        $('#archivo-captura-form').on('submit', function (e) {
+        $('#archivo-captura-form').on('submit', async function (e) {
             e.preventDefault();
-            const capturaId = $('#captura-id').val();
-            const files = $('#archivo-input')[0].files;
-            if (!files.length) {
-                $('#archivo-captura-modal').modal('hide');
-                return;
-            }
-            if (capturaId) {
-                const formData = new FormData();
-                Array.from(files).forEach(f => formData.append('archivos[]', f));
-                fetch(`/ajax/capturas/${capturaId}/archivos`, {
-                    method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrfToken },
-                    body: formData,
-                    credentials: 'same-origin'
-                }).then(r => {
+            $('.spinner-overlay').removeClass('d-none');
+            try {
+                const capturaId = $('#captura-id').val();
+                const files = $('#archivo-input')[0].files;
+                if (!files.length) {
+                    $('#archivo-captura-modal').modal('hide');
+                    $('.spinner-overlay').addClass('d-none');
+                    return;
+                }
+                if (capturaId) {
+                    const formData = new FormData();
+                    Array.from(files).forEach(f => formData.append('archivos[]', f));
+                    const r = await fetch(`/ajax/capturas/${capturaId}/archivos`, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': csrfToken },
+                        body: formData,
+                        credentials: 'same-origin'
+                    });
                     if (r.ok) {
                         $('#archivo-captura-modal').modal('hide');
-                        cargarArchivos(capturaId);
+                        await cargarArchivos(capturaId);
+                        Swal.fire({icon:'success', title:'Éxito', text:'Archivo subido correctamente'});
                     } else {
-                        alert('Error al subir archivo');
+                        Swal.fire({icon:'error', title:'Error', text:'Error al subir archivo'});
                     }
-                }).catch(err => mostrarErrorCaptura('Error de red al subir archivo'));
-                return;
+                    $('.spinner-overlay').addClass('d-none');
+                    return;
+                }
+                const tbody = $('#archivos-captura-table tbody');
+                Array.from(files).forEach(f => {
+                    const rowId = `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                    const url = URL.createObjectURL(f);
+                    const row = `<tr data-id="${rowId}" data-pending="1">
+                            <td><a href="${url}" target="_blank">${f.name}</a></td>
+                            <td>${f.size}</td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-xs btn-danger eliminar-archivo-captura" data-id="${rowId}">Eliminar</button>
+                            </td>
+                        </tr>`;
+                    tbody.append(row);
+                    tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('file', f);
+                });
+                $('#archivo-captura-card').removeClass('d-none').show();
+                $('#archivo-captura-modal').modal('hide');
+            } catch (err) {
+                mostrarErrorCaptura('Error de red al subir archivo');
+            } finally {
+                $('.spinner-overlay').addClass('d-none');
             }
-            const tbody = $('#archivos-captura-table tbody');
-            Array.from(files).forEach(f => {
-                const rowId = `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-                const url = URL.createObjectURL(f);
-                const row = `<tr data-id="${rowId}" data-pending="1">
-                        <td><a href="${url}" target="_blank">${f.name}</a></td>
-                        <td>${f.size}</td>
-                        <td class="text-right">
-                            <button type="button" class="btn btn-xs btn-danger eliminar-archivo-captura" data-id="${rowId}">Eliminar</button>
-                        </td>
-                    </tr>`;
-                tbody.append(row);
-                tbody.find(`tr[data-id="${rowId}"]`).data('pending', true).data('file', f);
-            });
-            $('#archivo-captura-card').removeClass('d-none').show();
-            $('#archivo-captura-modal').modal('hide');
         });
 
         function abrirModal(data = {}) {
