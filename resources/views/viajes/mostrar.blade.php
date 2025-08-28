@@ -89,5 +89,81 @@
     </div>
 @endif
 
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Capturas</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Nombre común</th>
+                        <th>Especie</th>
+                        <th>Nº Individuos</th>
+                        <th>Peso Estimado</th>
+                        <th>Peso Contado</th>
+                        <th>Incidental</th>
+                        <th>Descartada</th>
+                        <th>Tipo Nº Individuos</th>
+                        <th>Tipo Peso</th>
+                        <th>Estado Producto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($capturas ?? [] as $c)
+                        <tr>
+                            <td>{{ $c['nombre_comun'] ?? '' }}</td>
+                            <td>{{ $c['especie_nombre'] ?? '' }}</td>
+                            <td>{{ $c['numero_individuos'] ?? '' }}</td>
+                            <td>{{ $c['peso_estimado'] ?? '' }}</td>
+                            <td>{{ $c['peso_contado'] ?? '' }}</td>
+                            <td>{{ ($c['es_incidental'] ?? false) ? 'Sí' : 'No' }}</td>
+                            <td>{{ ($c['es_descartada'] ?? false) ? 'Sí' : 'No' }}</td>
+                            <td>{{ $c['tipo_numero_individuos'] ?? '' }}</td>
+                            <td>{{ $c['tipo_peso'] ?? '' }}</td>
+                            <td>{{ $c['estado_producto'] ?? '' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10" class="text-center">No hay capturas registradas.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Tripulantes</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Persona</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($tripulantes ?? [] as $t)
+                        <tr>
+                            <td>{{ $t['tipo_tripulante_nombre'] ?? '' }}</td>
+                            <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="text-center">No hay tripulantes registrados.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <a href="{{ route('viajes.pendientes') }}" class="btn btn-secondary">Volver</a>
 @endsection
