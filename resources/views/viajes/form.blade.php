@@ -2062,7 +2062,15 @@
 
         function mostrarTodasLasCards() {
             ['#sitio-pesca-card', '#arte-pesca-card', '#economia-venta-card', '#dato-biologico-card', '#archivo-captura-card']
-                .forEach(id => $(id).removeClass('d-none').show().find('.collapse').collapse('show'));
+                .forEach(id => {
+                    const card = $(id);
+                    card.removeClass('d-none');
+                    if (typeof card.CardWidget === 'function') {
+                        card.CardWidget('expand'); // Expande el cuerpo de la card
+                    } else {
+                        card.removeClass('collapsed-card').find('.card-body').show();
+                    }
+                });
         }
 
         function abrirModal(data = {}) {
