@@ -1964,7 +1964,7 @@
                 $('#archivos-captura-table tbody').empty();
                 return Promise.resolve();
             }
-            return fetch(`/isospam/capturas/${capturaId}/archivos`)
+            return fetch(`/ajax/capturas/${capturaId}/archivos`)
                 .then(r => r.ok ? r.json() : [])
                 .then(data => {
                     const tbody = $('#archivos-captura-table tbody').empty();
@@ -2000,7 +2000,7 @@
                 return;
             }
             if (!confirm('¿Eliminar archivo?')) return;
-            fetch(`/isospam/archivos/${id}`, {
+            fetch(`/ajax/archivos/${id}`, {
                 method: 'DELETE',
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 credentials: 'same-origin'
@@ -2018,7 +2018,7 @@
             if (capturaId) {
                 const formData = new FormData();
                 Array.from(files).forEach(f => formData.append('archivos[]', f));
-                fetch(`/isospam/capturas/${capturaId}/archivos-form`, {
+                fetch(`/ajax/capturas/${capturaId}/archivos`, {
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': csrfToken },
                     body: formData,
@@ -2560,7 +2560,7 @@
                     const file = $(tr).data('file');
                     const fd = new FormData();
                     fd.append('archivos[]', file);
-                    await fetch(`/isospam/capturas/${capturaId}/archivos-form`, {
+                    await fetch(`/ajax/capturas/${capturaId}/archivos`, {
                         method: 'POST',
                         headers: { 'X-CSRF-TOKEN': csrfToken },
                         body: fd,

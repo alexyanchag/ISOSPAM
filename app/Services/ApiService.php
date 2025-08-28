@@ -54,6 +54,21 @@ class ApiService
         return $this->withToken()->post($url, $data);
     }
 
+    public function postFiles(string $url, array $files, array $data = [])
+    {
+        $request = $this->withToken()->asMultipart();
+
+        foreach ($files as $name => $file) {
+            $request = $request->attach(
+                is_string($name) ? $name : 'archivos[]',
+                fopen($file->getRealPath(), 'r'),
+                $file->getClientOriginalName()
+            );
+        }
+
+        return $request->post($url, $data);
+    }
+
     public function put(string $url, array $data = [])
     {
         return $this->withToken()->put($url, $data);
