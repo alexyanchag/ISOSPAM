@@ -32,7 +32,7 @@
                 @isset($viaje)
                 @if(request()->boolean('por_finalizar'))
                 <button type="submit" formaction="{{ route('viajes.por-finalizar.update', $viaje['id']) }}"
-                    class="btn btn-warning">Finalizar</button>
+                    class="btn btn-warning" id="btn-finalizar">Finalizar</button>
                 @endif
                 @endisset
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
@@ -1130,6 +1130,23 @@
     }
 
     $(function () {
+        document.getElementById('btn-finalizar')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Finalizar viaje?',
+                text: 'Esta acción no se puede deshacer',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, finalizar',
+                cancelButtonText: 'Cancelar'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('viaje-form');
+                    form.action = this.getAttribute('formaction');
+                    form.submit();
+                }
+            });
+        });
         // Validación de fechas y horas de zarpe y arribo
         const fechaZarpe = document.getElementById('fecha_zarpe');
         const fechaArribo = document.getElementById('fecha_arribo');
