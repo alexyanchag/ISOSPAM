@@ -60,13 +60,19 @@ class ApiService
 
         foreach ($files as $name => $file) {
             $request = $request->attach(
-                is_string($name) ? $name : 'archivos[]',
+                is_string($name) ? $name : 'archivos',
                 fopen($file->getRealPath(), 'r'),
                 $file->getClientOriginalName()
             );
         }
 
-        return $request->post($url, $data);
+        $response = $request->post($url, $data);
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+
+        return $response;
     }
 
     public function put(string $url, array $data = [])
