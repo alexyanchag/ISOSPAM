@@ -9,22 +9,42 @@
         <div class="row">
             <div class="col-md-3 mb-3">
                 <label class="form-label">Campaña</label>
-                <input type="text" class="form-control" value="{{ $viaje['campania_descripcion'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($campanias as $c)
+                        <option value="{{ $c['id'] }}" @selected(($viaje['campania_id'] ?? '')==$c['id'])>{{ $c['descripcion'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Responsable Viaje</label>
-                <input type="text" class="form-control" value="{{ $viaje['pescador_nombres'] ?? '' }} {{ $viaje['pescador_apellidos'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($responsables as $per)
+                        <option value="{{ $per['idpersona'] }}" @selected(($viaje['persona_idpersona'] ?? '')==$per['idpersona'])>{{ $per['nombres'] ?? '' }} {{ $per['apellidos'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label">Digitador</label>
-                <input type="text" class="form-control" value="{{ $viaje['digitador_nombres'] ?? '' }} {{ $viaje['digitador_apellidos'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($digitadores as $d)
+                        <option value="{{ $d['idpersona'] }}" @selected(($viaje['digitador_id'] ?? '')==$d['idpersona'])>{{ $d['nombres'] ?? '' }} {{ $d['apellidos'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label">Embarcación</label>
-                <input type="text" class="form-control" value="{{ $viaje['embarcacion_nombre'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($embarcaciones as $e)
+                        <option value="{{ $e['id'] }}" @selected(($viaje['embarcacion_id'] ?? '')==$e['id'])>{{ $e['nombre'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -39,7 +59,12 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label">Puerto Zarpe</label>
-                <input type="text" class="form-control" value="{{ $viaje['puerto_zarpe_nombre'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($puertos as $p)
+                        <option value="{{ $p['id'] }}" @selected(($viaje['puerto_zarpe_id'] ?? '')==$p['id'])>{{ $p['nombre'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -54,14 +79,24 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label">Puerto Arribo</label>
-                <input type="text" class="form-control" value="{{ $viaje['puerto_arribo_nombre'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($puertos as $p)
+                        <option value="{{ $p['id'] }}" @selected(($viaje['puerto_arribo_id'] ?? '')==$p['id'])>{{ $p['nombre'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Muelle</label>
-                <input type="text" class="form-control" value="{{ $viaje['muelle_nombre'] ?? '' }}" readonly>
+                <select class="form-control" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach($muelles as $m)
+                        <option value="{{ $m['id'] }}" @selected(($viaje['muelle_id'] ?? '')==$m['id'])>{{ $m['nombre'] ?? '' }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
