@@ -2560,12 +2560,16 @@
                     const file = $(tr).data('file');
                     const fd = new FormData();
                     fd.append('archivos', file);
-                    await fetch(`/ajax/capturas/${capturaId}/archivos`, {
+                    const respArch = await fetch(`/ajax/capturas/${capturaId}/archivos`, {
                         method: 'POST',
                         headers: { 'X-CSRF-TOKEN': csrfToken },
                         body: fd,
                         credentials: 'same-origin'
                     });
+                    if (!respArch.ok) {
+                        mostrarErrorCaptura('Error al subir el archivo');
+                        return;
+                    }
                 }
                 cargarDatosBiologicos(capturaId);
                 cargarArchivos(capturaId);
