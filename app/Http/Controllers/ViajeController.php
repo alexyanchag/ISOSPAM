@@ -328,6 +328,12 @@ class ViajeController extends Controller
 
         $viaje = $response->json();
 
+        $respTripulantes = $this->apiService->get('/tripulantes-viaje', ['viaje_id' => $id]);
+        $tripulantes = $respTripulantes->successful() ? $respTripulantes->json() : [];
+
+        $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
+        $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
+
         if (! empty($viaje['campania_id'] ?? null)) {
             $respMulti = $this->apiService->get('/respuestas-multifinalitaria', [
                 'campania_id' => $viaje['campania_id'],
@@ -343,6 +349,8 @@ class ViajeController extends Controller
 
         return view('viajes.mostrar', [
             'viaje' => $viaje,
+            'tripulantes' => $tripulantes,
+            'capturas' => $capturas,
         ]);
     }
 
