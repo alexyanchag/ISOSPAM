@@ -7,24 +7,39 @@
     </div>
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-4">Fecha Zarpe</dt>
-            <dd class="col-sm-8">{{ $viaje['fecha_zarpe'] ?? '' }} {{ $viaje['hora_zarpe'] ?? '' }}</dd>
-            <dt class="col-sm-4">Fecha Arribo</dt>
-            <dd class="col-sm-8">{{ $viaje['fecha_arribo'] ?? '' }} {{ $viaje['hora_arribo'] ?? '' }}</dd>
-            <dt class="col-sm-4">Embarcación</dt>
-            <dd class="col-sm-8">{{ $viaje['embarcacion_nombre'] ?? '' }}</dd>
             <dt class="col-sm-4">Campaña</dt>
             <dd class="col-sm-8">{{ $viaje['campania_descripcion'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Responsable</dt>
-            <dd class="col-sm-8">{{ ($viaje['pescador_nombres'] ?? '') . ' ' . ($viaje['pescador_apellidos'] ?? '') }}</dd>
+            <dd class="col-sm-8">{{ $viaje['pescador_nombres'] ?? '' }} {{ $viaje['pescador_apellidos'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Digitador</dt>
-            <dd class="col-sm-8">{{ ($viaje['digitador_nombres'] ?? '') . ' ' . ($viaje['digitador_apellidos'] ?? '') }}</dd>
+            <dd class="col-sm-8">{{ $viaje['digitador_nombres'] ?? '' }} {{ $viaje['digitador_apellidos'] ?? '' }}</dd>
+
+            <dt class="col-sm-4">Embarcación</dt>
+            <dd class="col-sm-8">{{ $viaje['embarcacion_nombre'] ?? '' }}</dd>
+
+            <dt class="col-sm-4">Fecha Zarpe</dt>
+            <dd class="col-sm-8">{{ $viaje['fecha_zarpe'] ?? '' }}</dd>
+
+            <dt class="col-sm-4">Hora Zarpe</dt>
+            <dd class="col-sm-8">{{ $viaje['hora_zarpe'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Puerto Zarpe</dt>
             <dd class="col-sm-8">{{ $viaje['puerto_zarpe_nombre'] ?? '' }}</dd>
+
+            <dt class="col-sm-4">Fecha Arribo</dt>
+            <dd class="col-sm-8">{{ $viaje['fecha_arribo'] ?? '' }}</dd>
+
+            <dt class="col-sm-4">Hora Arribo</dt>
+            <dd class="col-sm-8">{{ $viaje['hora_arribo'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Puerto Arribo</dt>
             <dd class="col-sm-8">{{ $viaje['puerto_arribo_nombre'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Muelle</dt>
             <dd class="col-sm-8">{{ $viaje['muelle_nombre'] ?? '' }}</dd>
+
             <dt class="col-sm-4">Observaciones</dt>
             <dd class="col-sm-8">{{ $viaje['observaciones'] ?? '' }}</dd>
         </dl>
