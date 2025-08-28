@@ -17,6 +17,14 @@
             <dd class="col-sm-8">{{ $viaje['campania_descripcion'] ?? '' }}</dd>
             <dt class="col-sm-4">Responsable</dt>
             <dd class="col-sm-8">{{ ($viaje['pescador_nombres'] ?? '') . ' ' . ($viaje['pescador_apellidos'] ?? '') }}</dd>
+            <dt class="col-sm-4">Digitador</dt>
+            <dd class="col-sm-8">{{ ($viaje['digitador_nombres'] ?? '') . ' ' . ($viaje['digitador_apellidos'] ?? '') }}</dd>
+            <dt class="col-sm-4">Puerto Zarpe</dt>
+            <dd class="col-sm-8">{{ $viaje['puerto_zarpe_nombre'] ?? '' }}</dd>
+            <dt class="col-sm-4">Puerto Arribo</dt>
+            <dd class="col-sm-8">{{ $viaje['puerto_arribo_nombre'] ?? '' }}</dd>
+            <dt class="col-sm-4">Muelle</dt>
+            <dd class="col-sm-8">{{ $viaje['muelle_nombre'] ?? '' }}</dd>
             <dt class="col-sm-4">Observaciones</dt>
             <dd class="col-sm-8">{{ $viaje['observaciones'] ?? '' }}</dd>
         </dl>
