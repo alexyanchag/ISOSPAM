@@ -2060,7 +2060,13 @@
             }
         });
 
+        function mostrarTodasLasCards() {
+            ['#sitio-pesca-card', '#arte-pesca-card', '#economia-venta-card', '#dato-biologico-card', '#archivo-captura-card']
+                .forEach(id => $(id).removeClass('d-none').show().find('.collapse').collapse('show'));
+        }
+
         function abrirModal(data = {}) {
+            mostrarTodasLasCards();
             $('.spinner-overlay').removeClass('d-none');
             const campaniaId = $('select[name="campania_id"]').val();
             const promises = [];
@@ -2085,7 +2091,6 @@
             $('#estado_producto').val(data.estado_producto || '');
             renderCamposDinamicosCaptura([]);
 
-            const sitioCard = $('#sitio-pesca-card');
             const sitioRegistroId = $('#sitio-pesca-id');
             const sitioId = $('#sitio-id');
             const sitioNombre = $('#sitio-nombre');
@@ -2101,10 +2106,7 @@
             sitioLongitud.val('');
             sitioProfundidad.val('');
             sitioUnidad.val('');
-            sitioCard.removeClass('d-none').show();
 
-            const arteCard = $('#arte-pesca-card');
-            arteCard.removeClass('d-none').show();
             $('#arte-pesca-id').val('');
             $('#tipo-arte-id').val('');
             $('#lineas-madre').val('');
@@ -2119,20 +2121,15 @@
             $('#carnadaviva').val('');
             $('#especie-carnada').val('');
 
-            const econCard = $('#economia-venta-card');
-            econCard.removeClass('d-none').show();
             $('#economia-venta-id').val('');
             $('#vendido-a').val('');
             $('#destino').val('');
             $('#precio').val('');
             $('#unidad-venta-id').val('');
 
-            const bioCard = $('#dato-biologico-card');
-            bioCard.removeClass('d-none').show();
             $('#datos-biologicos-table tbody').empty();
 
             const archivoCard = $('#archivo-captura-card');
-            archivoCard.removeClass('d-none');
             $('#archivos-captura-table tbody').empty();
             if (data.id) {
                 archivoCard.show();
@@ -2340,17 +2337,14 @@
         }
 
         $('#captura-form').on('submit', async function (e) {
-            $('#captura-modal .collapsed-card').each(function () {
-                $(this).CardWidget('expand'); // AdminLTE
-                $(this).find('.collapse').collapse('show'); // Bootstrap
-            });
-
-            e.preventDefault();
-            const form = this;
-            if (!form.checkValidity()) {
-                form.reportValidity();
+            mostrarTodasLasCards();
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('was-validated');
                 return;
             }
+            e.preventDefault();
             const id = $('#captura-id').val();
             const payload = {
                 nombre_comun: $('#nombre_comun').val(),
