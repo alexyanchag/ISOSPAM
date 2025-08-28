@@ -244,6 +244,108 @@
 </div>
 </div>
 
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Observadores</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Persona</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($observadores ?? [] as $o)
+                        <tr>
+                            <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
+                            <td>{{ $o['persona_nombres'] ?? '' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="text-center">No hay observadores registrados.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Parámetros Ambientales</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Sondeo PPT</th>
+                        <th>TSMP</th>
+                        <th>Estado Marea</th>
+                        <th>Condición Mar</th>
+                        <th>Oxígeno mg/l</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($parametrosAmbientales ?? [] as $p)
+                        <tr>
+                            <td>{{ $p['hora'] ?? '' }}</td>
+                            <td>{{ $p['sondeo_ppt'] ?? '' }}</td>
+                            <td>{{ $p['tsmp'] ?? '' }}</td>
+                            <td>{{ $p['estado_marea_descripcion'] ?? '' }}</td>
+                            <td>{{ $p['condicion_mar_descripcion'] ?? '' }}</td>
+                            <td>{{ $p['oxigeno_mg_l'] ?? '' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center">No hay parámetros registrados.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3 class="card-title">Economía de Insumos</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($economiaInsumos ?? [] as $e)
+                        <tr>
+                            <td>{{ $e['nombre_tipo'] ?? '' }}</td>
+                            <td>{{ $e['nombre_unidad'] ?? '' }}</td>
+                            <td>{{ $e['cantidad'] ?? '' }}</td>
+                            <td>{{ $e['precio'] ?? '' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center">No hay economía de insumos registrada.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
