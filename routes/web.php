@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\EmbarcacionController;
 use App\Http\Controllers\CampaniaController;
+use App\Http\Controllers\TablaMultifinalitariaController;
 use App\Http\Controllers\PuertoController;
 use App\Http\Controllers\MuelleController;
 use App\Http\Controllers\TipoArteController;
@@ -57,6 +58,7 @@ use App\Http\Controllers\EconomiaInsumoAjaxController;
 use App\Http\Controllers\EconomiaVentaAjaxController;
 use App\Http\Controllers\DatoBiologicoAjaxController;
 use App\Http\Controllers\ArchivoCapturaAjaxController;
+use App\Http\Controllers\ArchivoController;
 
 Route::get('/', function () {
     return view('home');
@@ -69,6 +71,12 @@ Route::get('/logout', [LoginController::class, 'logout'])->middleware('ensure.lo
 Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('embarcaciones', EmbarcacionController::class)->except(['show']);
     Route::resource('campanias', CampaniaController::class)->except(['show']);
+    Route::prefix('campanias/{campania}')->group(function () {
+        Route::get('tabla-multifinalitaria', [TablaMultifinalitariaController::class, 'index'])->name('campanias.tabla-multifinalitaria.index');
+        Route::post('tabla-multifinalitaria', [TablaMultifinalitariaController::class, 'store'])->name('campanias.tabla-multifinalitaria.store');
+        Route::put('tabla-multifinalitaria/{id}', [TablaMultifinalitariaController::class, 'update'])->name('campanias.tabla-multifinalitaria.update');
+        Route::delete('tabla-multifinalitaria/{id}', [TablaMultifinalitariaController::class, 'destroy'])->name('campanias.tabla-multifinalitaria.destroy');
+    });
     Route::get('ajax/campos-dinamicos', [CampaniaController::class, 'camposDinamicos']);
     Route::resource('puertos', PuertoController::class)->except(['show']);
     Route::resource('muelles', MuelleController::class)->except(['show']);
@@ -109,6 +117,8 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::get('ajax/capturas/{captura}/archivos', [ArchivoCapturaAjaxController::class, 'index']);
     Route::post('ajax/capturas/{captura}/archivos', [ArchivoCapturaAjaxController::class, 'store']);
     Route::delete('ajax/archivos/{archivo}', [ArchivoCapturaAjaxController::class, 'destroy']);
+
+    Route::get('archivos/{path}', [ArchivoController::class, 'show'])->where('path', '.*');
 
     Route::get('ajax/datos-biologicos', [DatoBiologicoAjaxController::class, 'index']);
     Route::get('ajax/datos-biologicos/{id}', [DatoBiologicoAjaxController::class, 'show']);

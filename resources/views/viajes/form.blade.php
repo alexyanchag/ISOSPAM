@@ -224,8 +224,8 @@
                         <option value="">Seleccione...</option>
                         @foreach($opciones as $opt)
                         @php
-                        $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
-                        $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                        $value = is_array($opt) ? ($opt['value'] ?? '') : (string) $opt;
+                        $text = is_array($opt) ? ($opt['key'] ?? $opt['value'] ?? '') : (string) $opt;
                         @endphp
                         <option value="{{ $value }}" @selected(($resp['respuesta'] ?? '' )==$value)>{{ $text }}</option>
                         @endforeach
@@ -1156,9 +1156,25 @@
                 cancelButtonText: 'Cancelar'
             }).then(result => {
                 if (result.isConfirmed) {
-                    const form = document.getElementById('viaje-form');
-                    form.action = this.getAttribute('formaction');
-                    form.submit();
+                    const btn = this;
+                    const form = $('#viaje-form');
+                    $.ajax({
+                        url: btn.getAttribute('formaction'),
+                        method: 'POST',
+                        data: form.serialize(),
+                        success: resp => {
+                            Swal.fire({ icon: 'success', title: 'Éxito', text: resp.message || 'Viaje finalizado' })
+                                .then(() => { if (resp.redirect) window.location.href = resp.redirect; });
+                        },
+                        error: xhr => {
+                            const json = xhr.responseJSON || {};
+                            let msg = json.message || 'Error al finalizar';
+                            if (json.errors) {
+                                msg = Object.values(json.errors).flat().join(' ');
+                            }
+                            Swal.fire({ icon: 'error', title: 'Error', text: msg });
+                        }
+                    });
                 }
             });
         });
@@ -1311,8 +1327,8 @@
                         try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
                         control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
                         opciones.forEach(function (opt) {
-                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
-                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var value = (typeof opt === 'object') ? (opt.value || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.key || opt.value || '') : String(opt);
                             control += '<option value="' + value + '">' + text + '</option>';
                         });
                         control += '</select>';
@@ -1363,8 +1379,8 @@
                         try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
                         control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + key + '][respuesta]"><option value="">Seleccione...</option>';
                         opciones.forEach(function (opt) {
-                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
-                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var value = (typeof opt === 'object') ? (opt.value || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.key || opt.value || '') : String(opt);
                             var selected = (resp.respuesta || '') == value ? ' selected' : '';
                             control += '<option value="' + value + '"' + selected + '>' + text + '</option>';
                         });

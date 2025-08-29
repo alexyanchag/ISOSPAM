@@ -287,32 +287,60 @@ class ViajeController extends Controller
         ]);
 
         if ($data['fecha_arribo'] === $data['fecha_zarpe'] && $data['hora_arribo'] <= $data['hora_zarpe']) {
+            $msg = 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.';
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+
             return redirect()
                 ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-                ->withErrors([
-                    'error' => 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.',
-                ])
+                ->withErrors(['error' => $msg])
                 ->withInput();
         }
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
         if ($response->failed()) {
+            $msg = 'Error al actualizar';
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 500);
+            }
+
             return redirect()
                 ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-                ->withErrors(['error' => 'Error al actualizar'])
+                ->with('error', $msg)
+                ->withErrors(['error' => $msg])
                 ->withInput();
         }
 
         $final = $this->apiService->post("/viajes/{$id}/finalizar");
         if ($final->successful()) {
+            $msg = 'Viaje finalizado correctamente';
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $msg,
+                    'redirect' => route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']]),
+                ]);
+            }
+
             return redirect()
                 ->route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']])
-                ->with('success', 'Viaje finalizado correctamente');
+                ->with('success', $msg);
+        }
+
+        $msg = 'Error al finalizar';
+
+        if ($request->ajax()) {
+            return response()->json(['success' => false, 'message' => $msg], 500);
         }
 
         return redirect()
             ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-            ->withErrors(['error' => 'Error al finalizar'])
+            ->with('error', $msg)
+            ->withErrors(['error' => $msg])
             ->withInput();
     }
 
@@ -381,23 +409,18 @@ class ViajeController extends Controller
         $respEconomia = $this->apiService->get("/economia-insumo-viaje/{$id}");
         $economiaInsumos = $respEconomia->successful() ? $respEconomia->json() : [];
 
-        if (
-            ! empty($viaje['campania_id'] ?? null)
-            && empty($viaje['respuestas_multifinalitaria'] ?? null)
-        ) {
-            $respMulti = $this->apiService->get('/respuestas-multifinalitaria', [
-                'campania_id' => $viaje['campania_id'],
-                'tabla_relacionada' => 'viaje',
-                'relacion_id' => $viaje['id'] ?? $id,
-            ]);
+        $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
 
-            if ($respMulti->successful()) {
-                $respuestas = $respMulti->json();
-                if (! empty($respuestas)) {
-                    $viaje['respuestas_multifinalitaria'] = $respuestas;
-                }
-            }
-        }
+        $camposDinamicos = collect($respuestasMulti)
+            ->map(fn($r) => [
+                'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
+                'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
+                'opciones' => is_array($r['opciones'] ?? null)
+                    ? json_encode($r['opciones'])
+                    : ($r['opciones'] ?? '[]'),
+                'requerido' => $r['requerido'] ?? false,
+            ])->all();
 
         $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
         $camposDinamicos = collect($respuestasMulti)

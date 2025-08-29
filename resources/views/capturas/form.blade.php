@@ -89,20 +89,20 @@
         <div class="mb-3">
             <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }} @if($required)<span class="text-danger">*</span>@endif</label>
             @switch($campo['tipo_pregunta'])
-                @case('SELECT')
+                @case('COMBO')
                     @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
                     <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" {{ $required }}>
                         <option value="">Seleccione...</option>
                         @foreach($opciones as $opt)
                             @php
-                                $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
-                                $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                                $value = is_array($opt) ? ($opt['value'] ?? '') : (string) $opt;
+                                $text = is_array($opt) ? ($opt['key'] ?? ($opt['value'] ?? '')) : (string) $opt;
                             @endphp
                             <option value="{{ $value }}" @selected(($resp['respuesta'] ?? '') == $value)>{{ $text }}</option>
                         @endforeach
                     </select>
                     @break
-                @case('NUMBER')
+                @case('INTEGER')
                     <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
                     @break
                 @case('DATE')

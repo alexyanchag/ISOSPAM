@@ -29,6 +29,9 @@
     @endif
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('campanias.index') }}" class="btn btn-secondary">Cancelar</a>
+    @if(isset($campania))
+        <a href="{{ route('campanias.tabla-multifinalitaria.index', $campania['id']) }}" class="btn btn-info">Tabla Multifinalitaria</a>
+    @endif
 </form>
 @endsection
 
