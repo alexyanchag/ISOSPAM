@@ -57,6 +57,7 @@ use App\Http\Controllers\EconomiaInsumoAjaxController;
 use App\Http\Controllers\EconomiaVentaAjaxController;
 use App\Http\Controllers\DatoBiologicoAjaxController;
 use App\Http\Controllers\ArchivoCapturaAjaxController;
+use App\Http\Controllers\ArchivoController;
 
 Route::get('/', function () {
     return view('home');
@@ -109,6 +110,8 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::get('ajax/capturas/{captura}/archivos', [ArchivoCapturaAjaxController::class, 'index']);
     Route::post('ajax/capturas/{captura}/archivos', [ArchivoCapturaAjaxController::class, 'store']);
     Route::delete('ajax/archivos/{archivo}', [ArchivoCapturaAjaxController::class, 'destroy']);
+
+    Route::get('archivos/{path}', [ArchivoController::class, 'show'])->where('path', '.*');
 
     Route::get('ajax/datos-biologicos', [DatoBiologicoAjaxController::class, 'index']);
     Route::get('ajax/datos-biologicos/{id}', [DatoBiologicoAjaxController::class, 'show']);
