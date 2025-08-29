@@ -269,14 +269,16 @@
                             <label>Es Descartada</label>
                             <p class="form-control-plaintext">{{ ($captura['es_descartada'] ?? false) ? 'Sí' : 'No' }}</p>
                         </div>
-                        @if(!empty($captura['respuestas_multifinalitaria']))
-                            @foreach($captura['respuestas_multifinalitaria'] as $r)
-                                <div class="col-md-4 mb-3">
-                                    <label>{{ $r['nombre_pregunta'] ?? '' }}</label>
-                                    <p class="form-control-plaintext">{{ $r['respuesta'] ?? '' }}</p>
-                                </div>
-                            @endforeach
-                        @endif
+                        @forelse(($captura['respuestas_multifinalitaria'] ?? []) as $r)
+                            <div class="col-md-4 mb-3">
+                                <label>{{ $r['nombre_pregunta'] ?? '' }}</label>
+                                <p class="form-control-plaintext">{{ $r['respuesta'] ?? '' }}</p>
+                            </div>
+                        @empty
+                            <div class="col-12">
+                                <p class="mb-0">No registrado.</p>
+                            </div>
+                        @endforelse
                     </div>
                     <div id="sitio-pesca-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
@@ -406,70 +408,64 @@
                             @endforelse
                         </div>
                     </div>
-                    @php $db = $captura['datos_biologicos'] ?? []; @endphp
                     <div id="dato-biologico-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
                             <h5 class="card-title mb-0">Datos biológicos</h5>
                         </div>
                         <div class="card-body">
-                            @if($db)
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-compact mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Longitud</th>
-                                                <th>Peso</th>
-                                                <th>Sexo</th>
-                                                <th>Ovada</th>
-                                                <th>Estado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($db as $d)
-                                                <tr>
-                                                    <td>{{ $d['longitud'] ?? '' }}</td>
-                                                    <td>{{ $d['peso'] ?? '' }}</td>
-                                                    <td>{{ $d['sexo'] ?? '' }}</td>
-                                                    <td>{{ ($d['ovada'] ?? false) ? 'Sí' : 'No' }}</td>
-                                                    <td>{{ $d['estado_desarrollo_gonadal_descripcion'] ?? '' }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                            @forelse(($captura['datos_biologicos'] ?? []) as $d)
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>Longitud</label>
+                                        <p class="form-control-plaintext">{{ $d['longitud'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Peso</label>
+                                        <p class="form-control-plaintext">{{ $d['peso'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Sexo</label>
+                                        <p class="form-control-plaintext">{{ $d['sexo'] ?? '' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Ovada</label>
+                                        <p class="form-control-plaintext">{{ ($d['ovada'] ?? false) ? 'Sí' : 'No' }}</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Estado</label>
+                                        <p class="form-control-plaintext">{{ $d['estado_desarrollo_gonadal_descripcion'] ?? '' }}</p>
+                                    </div>
                                 </div>
-                            @else
+                                @if(!$loop->last)
+                                    <hr>
+                                @endif
+                            @empty
                                 <p class="mb-0">No registrado.</p>
-                            @endif
+                            @endforelse
                         </div>
                     </div>
-                    @php $arch = $captura['archivos'] ?? []; @endphp
                     <div id="archivo-captura-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
                             <h5 class="card-title mb-0">Archivos</h5>
                         </div>
                         <div class="card-body">
-                            @if($arch)
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-compact mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Tamaño</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($arch as $file)
-                                                <tr>
-                                                    <td><a href="{{ $file['url'] ?? '#' }}" target="_blank">{{ $file['nombre_original'] ?? '' }}</a></td>
-                                                    <td>{{ $file['tamano'] ?? '' }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                            @forelse(($captura['archivos'] ?? []) as $file)
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label>Nombre</label>
+                                        <p class="form-control-plaintext"><a href="{{ $file['url'] ?? '#' }}" target="_blank">{{ $file['nombre_original'] ?? '' }}</a></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Tamaño</label>
+                                        <p class="form-control-plaintext">{{ $file['tamano'] ?? '' }}</p>
+                                    </div>
                                 </div>
-                            @else
+                                @if(!$loop->last)
+                                    <hr>
+                                @endif
+                            @empty
                                 <p class="mb-0">No registrado.</p>
-                            @endif
+                            @endforelse
                         </div>
                     </div>
                 </div>
