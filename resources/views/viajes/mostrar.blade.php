@@ -1385,6 +1385,7 @@
             $('.spinner-overlay').removeClass('d-none');
             $.ajax({
                 url: `${ajaxBase}/capturas/${id}`,
+                global: false,
                 success: data => abrirModal(data),
                 error: () => $('.spinner-overlay').addClass('d-none')
             });
