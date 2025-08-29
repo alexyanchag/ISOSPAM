@@ -24,17 +24,22 @@
     @if(request()->boolean('por_finalizar'))
     <input type="hidden" name="por_finalizar" value="1">
     @endif
+    @if(!empty($soloLectura))
+    <fieldset disabled>
+    @endif
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
             <div class="card-tools">
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                @empty($soloLectura)
+                <button type="submit" class="btn btn-primary">{{ isset($viaje) ? 'Actualizar' : 'Guardar' }}</button>
                 @isset($viaje)
                 @if(request()->boolean('por_finalizar'))
                 <button type="submit" formaction="{{ route('viajes.por-finalizar.update', $viaje['id']) }}"
                     class="btn btn-warning" id="btn-finalizar">Finalizar</button>
                 @endif
                 @endisset
+                @endempty
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </div>
@@ -205,6 +210,8 @@
                 @php
                 $resp = $respuestas->get($campo['id'], []);
                 $required = !empty($campo['requerido']) ? 'required' : '';
+                $disabled = !empty($soloLectura) ? 'disabled' : '';
+                $readonly = !empty($soloLectura) ? 'readonly' : '';
                 @endphp
                 <div class="col-md-4 mb-3">
                     <label class="form-label">{{ $campo['nombre_pregunta'] ?? '' }} @if($required)<span
@@ -213,7 +220,7 @@
                     @case('COMBO')
                     @php $opciones = json_decode($campo['opciones'] ?? '[]', true) ?: []; @endphp
                     <select name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]" class="form-control" {{
-                        $required }}>
+                        $required }} {{ $disabled }}>
                         <option value="">Seleccione...</option>
                         @foreach($opciones as $opt)
                         @php
@@ -226,20 +233,20 @@
                     @break
                     @case('INTEGER')
                     <input type="number" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]"
-                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }} {{ $readonly }}>
                     @break
                     @case('DATE')
                     <input type="date" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]"
-                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }} {{ $readonly }}>
                     @break
                     @case('TIME')
                     <input type="time" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]"
-                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }} {{ $readonly }}>
                     @break
                     @case('INPUT')
                     @default
                     <input type="text" name="respuestas_multifinalitaria[{{ $loop->index }}][respuesta]"
-                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }}>
+                        class="form-control" value="{{ $resp['respuesta'] ?? '' }}" {{ $required }} {{ $readonly }}>
                     @endswitch
                     @if(!empty($campo['id']))
                     <input type="hidden"
@@ -257,6 +264,9 @@
             </div>
         </div>
     </div>
+    @if(!empty($soloLectura))
+    </fieldset>
+    @endif
 </form>
 
 @isset($viaje)
@@ -1128,8 +1138,13 @@
             draggable: true
         });
     }
+    const soloLectura = {{ json_encode($soloLectura ?? false) }};
 
     $(function () {
+        if (soloLectura) {
+            $('.select2').prop('disabled', true);
+            return;
+        }
         document.getElementById('btn-finalizar')?.addEventListener('click', function (e) {
             e.preventDefault();
             Swal.fire({
