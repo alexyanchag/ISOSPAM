@@ -278,13 +278,12 @@
                             @endforeach
                         @endif
                     </div>
-                    @php $s = $captura['sitios_pesca'][0] ?? null; @endphp
                     <div id="sitio-pesca-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
                             <h5 class="card-title mb-0">Sitio de pesca</h5>
                         </div>
                         <div class="card-body">
-                            @if($s)
+                            @forelse(($captura['sitios_pesca'] ?? []) as $s)
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label>Nombre</label>
@@ -303,18 +302,20 @@
                                         <p class="form-control-plaintext">{{ $s['profundidad'] ?? '' }} {{ $s['unidad_profundidad_nombre'] ?? '' }}</p>
                                     </div>
                                 </div>
-                            @else
+                                @if(!$loop->last)
+                                    <hr>
+                                @endif
+                            @empty
                                 <p class="mb-0">No registrado.</p>
-                            @endif
+                            @endforelse
                         </div>
                     </div>
-                    @php $a = $captura['artes_pesca'][0] ?? null; @endphp
                     <div id="arte-pesca-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
                             <h5 class="card-title mb-0">Arte de pesca</h5>
                         </div>
                         <div class="card-body">
-                            @if($a)
+                            @forelse(($captura['artes_pesca'] ?? []) as $a)
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label>Tipo de arte</label>
@@ -365,18 +366,20 @@
                                         <p class="form-control-plaintext">{{ $a['especiecarnada'] ?? '' }}</p>
                                     </div>
                                 </div>
-                            @else
+                                @if(!$loop->last)
+                                    <hr>
+                                @endif
+                            @empty
                                 <p class="mb-0">No registrado.</p>
-                            @endif
+                            @endforelse
                         </div>
                     </div>
-                    @php $ev = $captura['economia_ventas'][0] ?? null; @endphp
                     <div id="economia-venta-card" class="card mb-3">
                         <div class="card-header border-0 bg-dark">
                             <h5 class="card-title mb-0">Dato económico</h5>
                         </div>
                         <div class="card-body">
-                            @if($ev)
+                            @forelse(($captura['economia_ventas'] ?? []) as $ev)
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label>Vendido a</label>
@@ -395,9 +398,12 @@
                                         <p class="form-control-plaintext">{{ $ev['unidad_venta_nombre'] ?? '' }}</p>
                                     </div>
                                 </div>
-                            @else
+                                @if(!$loop->last)
+                                    <hr>
+                                @endif
+                            @empty
                                 <p class="mb-0">No registrado.</p>
-                            @endif
+                            @endforelse
                         </div>
                     </div>
                     @php $db = $captura['datos_biologicos'] ?? []; @endphp
