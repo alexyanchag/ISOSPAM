@@ -68,7 +68,7 @@ class TablaMultifinalitariaController extends Controller
     {
         $data = $request->validate([
             'tabla_relacionada' => ['required', 'string'],
-            'campo' => ['required', 'string'],
+            'nombre_pregunta' => ['required', 'string'],
             'tipo_pregunta' => ['required', Rule::in(['COMBO','INTEGER','DATE','TIME','INPUT'])],
             'opciones' => ['nullable', 'string'],
         ]);
