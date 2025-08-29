@@ -238,7 +238,6 @@
 </form>
 
 @isset($viaje)
-@if(request()->boolean('por_finalizar'))
 
 
 <div class="card mt-3">
@@ -1078,7 +1077,6 @@
     </div>
 </div>
 
-@endif
 @endisset
 @endsection
 
