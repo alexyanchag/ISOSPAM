@@ -30,8 +30,8 @@
                 <td>{{ $campo['nombre_pregunta'] ?? '' }}</td>
                 <td>{{ $campo['tipo_pregunta'] ?? '' }}</td>
                 <td>
-                    @if(isset($campo['opciones']) && is_array($campo['opciones']))
-                        {{ implode(', ', array_map(fn($o) => $o['value'] ?? $o['key'] ?? '', $campo['opciones'])) }}
+                    @if(!empty($campo['opciones']))
+                        {{ implode(', ', array_map(fn($o) => $o['value'] ?? $o['key'], $campo['opciones'])) }}
                     @endif
                 </td>
                 <td>
@@ -40,7 +40,7 @@
                         data-tabla="{{ $campo['tabla_relacionada'] }}"
                         data-nombre_pregunta="{{ $campo['nombre_pregunta'] }}"
                         data-tipo="{{ $campo['tipo_pregunta'] }}"
-                        data-opciones='{{ json_encode(array_map(fn($o) => $o['value'] ?? $o['key'] ?? '', $campo['opciones'] ?? [])) }}'>Editar</button>
+                        data-opciones='{{ json_encode($campo["opciones"] ?? []) }}'>Editar</button>
                     <form method="POST" action="{{ route('campanias.tabla-multifinalitaria.destroy', [$campaniaId, $campo['id']]) }}" style="display:inline">
                         @csrf
                         @method('DELETE')
@@ -149,15 +149,16 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.tipo === 'COMBO') {
                 opcionesSection.classList.remove('d-none');
                 opciones.forEach(o => {
+                    const val = o.value ?? o.key ?? '';
                     const div = document.createElement('div');
                     div.classList.add('input-group','mb-2');
-                    div.innerHTML = `<input type="text" class="form-control opcion" value="${o}"><div class="input-group-append"><button class="btn btn-danger remove-opcion" type="button"><i class="fas fa-times"></i></button></div>`;
+                    div.innerHTML = `<input type="text" class="form-control opcion" value="${val}"><div class="input-group-append"><button class="btn btn-danger remove-opcion" type="button"><i class="fas fa-times"></i></button></div>`;
                     container.appendChild(div);
                 });
             } else {
                 opcionesSection.classList.add('d-none');
             }
-            opcionesInput.value = JSON.stringify(opciones);
+            opcionesInput.value = JSON.stringify(opciones.map(o => o.value ?? o.key ?? ''));
             cancelBtn.style.display = 'inline-block';
             formTitle.textContent = 'Editar Campo';
         });
