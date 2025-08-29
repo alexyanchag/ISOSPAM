@@ -60,7 +60,11 @@
     <div id="method-field"></div>
     <div class="mb-3">
         <label class="form-label">Tabla Relacionada</label>
-        <input type="text" name="tabla_relacionada" class="form-control" id="tabla_relacionada">
+        <select name="tabla_relacionada" class="form-control" id="tabla_relacionada">
+            <option value="">Seleccione</option>
+            <option value="captura">captura</option>
+            <option value="viaje">viaje</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Campo</label>
