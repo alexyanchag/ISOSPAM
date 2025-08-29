@@ -75,7 +75,7 @@ class TablaMultifinalitariaController extends Controller
     protected function validateData(Request $request): array
     {
         $data = $request->validate([
-            'tabla_relacionada' => ['required', 'string'],
+            'tabla_relacionada' => ['required', Rule::in(['captura','viaje'])],
             'nombre_pregunta' => ['required', 'string'],
             'tipo_pregunta' => ['required', Rule::in(['COMBO','INTEGER','DATE','TIME','INPUT'])],
             'opciones' => ['nullable', 'string'],
