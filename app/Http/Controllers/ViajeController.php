@@ -341,6 +341,30 @@ class ViajeController extends Controller
         $respCapturas = $this->apiService->get('/capturas-viaje', ['viaje_id' => $id]);
         $capturas = $respCapturas->successful() ? $respCapturas->json() : [];
 
+        foreach ($capturas as &$c) {
+            if (empty($c['id'])) {
+                continue;
+            }
+
+            $capturaId = $c['id'];
+
+            $respSitios = $this->apiService->get('/sitios-pesca', ['captura_id' => $capturaId]);
+            $c['sitios_pesca'] = $respSitios->successful() ? $respSitios->json() : [];
+
+            $respArtes = $this->apiService->get('/artes-pesca', ['captura_id' => $capturaId]);
+            $c['artes_pesca'] = $respArtes->successful() ? $respArtes->json() : [];
+
+            $respEconomiaVentas = $this->apiService->get('/economia-ventas', ['captura_id' => $capturaId]);
+            $c['economia_ventas'] = $respEconomiaVentas->successful() ? $respEconomiaVentas->json() : [];
+
+            $respDatosBio = $this->apiService->get('/datos-biologicos', ['captura_id' => $capturaId]);
+            $c['datos_biologicos'] = $respDatosBio->successful() ? $respDatosBio->json() : [];
+
+            $respArchivos = $this->apiService->get("/capturas/{$capturaId}/archivos");
+            $c['archivos'] = $respArchivos->successful() ? $respArchivos->json() : [];
+        }
+        unset($c);
+
         $campanias = $this->getCampanias();
         $responsables = $this->getPersonasPorRol('RESPVJ');
         $digitadores = $this->getPersonasPorRol('CTF');
