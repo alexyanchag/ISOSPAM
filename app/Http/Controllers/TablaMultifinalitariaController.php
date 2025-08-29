@@ -17,6 +17,13 @@ class TablaMultifinalitariaController extends Controller
         $response = $this->apiService->get("/tabla-multifinalitaria/campania/{$campania}");
         $campos = $response->successful() ? $response->json() : [];
 
+        $campos = collect($campos)->map(function ($c) {
+            $c['opciones'] = $c['opciones']
+                ? json_decode($c['opciones'], true)
+                : [];
+            return $c;
+        })->toArray();
+
         return view('campanias.tabla-multifinalitaria', [
             'campaniaId' => $campania,
             'campos' => $campos,
