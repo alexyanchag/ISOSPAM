@@ -1092,3 +1092,329 @@
 </script>
 @endsection
 
+@section('scripts')
+<script>
+    $(function () {
+        const ajaxBase = "{{ url('ajax') }}";
+
+        function renderCamposDinamicosCaptura(campos = [], respuestas = []) {
+            const row = $('#campos-dinamicos-captura').empty();
+            if (!campos.length) {
+                row.append('<p class="col-12 mb-0">No hay campos dinámicos para la campaña seleccionada.</p>');
+                return;
+            }
+            const respMap = {};
+            (respuestas || []).forEach(r => { respMap[r.tabla_multifinalitaria_id] = r; });
+            campos.forEach(function (campo, index) {
+                var control = '';
+                var resp = respMap[campo.id] || {};
+                var key = campo.id != null ? campo.id : index;
+                switch (campo.tipo_pregunta) {
+                    case 'COMBO':
+                        var opciones = [];
+                        try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
+                        control = '<select class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" disabled><option value="">Seleccione...</option>';
+                        opciones.forEach(function (opt) {
+                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var selected = (resp.respuesta || '') == value ? ' selected' : '';
+                            control += '<option value="' + value + '"' + selected + '>' + text + '</option>';
+                        });
+                        control += '</select>';
+                        break;
+                    case 'TEXTO':
+                        control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    case 'NUMERO':
+                        control = '<input type="number" step="any" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    case 'FECHA':
+                        control = '<input type="date" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    default:
+                        control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                }
+                row.append('<div class="form-group col-md-4"><label>' + (campo.nombre_pregunta || '') + '</label>' + control + '</div>');
+            });
+        }
+
+        function cargarUnidadesProfundidad(selected = '') {
+            const select = $('#sitio-unidad-profundidad');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-profundidad') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                });
+        }
+
+        let sitiosCache = [];
+        function cargarSitios(selected = '') {
+            const select = $('#sitio-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.sitios') }}")
+                .then(r => r.json())
+                .then(data => {
+                    sitiosCache = Array.isArray(data) ? data : [];
+                    sitiosCache.forEach(s => {
+                        const opt = new Option(s.nombre || '', s.id, false, String(s.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarTiposArte(selected = '') {
+            const select = $('#tipo-arte-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.tipos-arte') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(t => {
+                        const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                        if (t.tipo !== undefined && t.tipo !== null) { opt.dataset.tipo = t.tipo; }
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarTiposAnzuelo(selected = '') {
+            const select = $('#tipo-anzuelo-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.tipos-anzuelo') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(t => {
+                        const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarMaterialesMalla(selected = '') {
+            const select = $('#material-malla-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.materiales-malla') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(m => {
+                        const opt = new Option(m.nombre || m.descripcion || '', m.id, false, String(m.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarUnidadesVenta(selected = '') {
+            const select = $('#unidad-venta-id').empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-venta') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarEconomiaVenta(capturaId) {
+            return fetch(`${ajaxBase}/economia-ventas?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const ev = Array.isArray(data) && data.length ? data[0] : null;
+                    $('#economia-venta-id').val(ev?.id || '');
+                    $('#vendido-a').val(ev?.vendido_a || '');
+                    $('#destino').val(ev?.destino || '');
+                    $('#precio').val(ev?.precio || '');
+                    return cargarUnidadesVenta(ev?.unidad_venta_id || '');
+                })
+                .catch(() => cargarUnidadesVenta(''));
+        }
+
+        function cargarDatosBiologicos(capturaId) {
+            if (!capturaId) {
+                $('#datos-biologicos-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`${ajaxBase}/datos-biologicos?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#datos-biologicos-table tbody').empty();
+                    (data || []).forEach(d => {
+                        const row = `<tr>
+                                <td>${d.longitud ?? ''}</td>
+                                <td>${d.peso ?? ''}</td>
+                                <td>${d.sexo ?? ''}</td>
+                                <td>${d.ovada ? 'Sí' : 'No'}</td>
+                                <td>${d.estado_desarrollo_gonadal_descripcion ?? ''}</td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(() => { $('#datos-biologicos-table tbody').empty(); });
+        }
+
+        function cargarArchivos(capturaId) {
+            if (!capturaId) {
+                $('#archivos-captura-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`/ajax/capturas/${capturaId}/archivos`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#archivos-captura-table tbody').empty();
+                    (data || []).forEach(a => {
+                        const row = `<tr>
+                                <td><a href="${a.url}" target="_blank">${a.nombre_original}</a></td>
+                                <td>${a.tamano ?? ''}</td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(() => { $('#archivos-captura-table tbody').empty(); });
+        }
+
+        const ARTE_RULES = {
+            default: {
+                show: ['#tipo-arte-id'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: []
+            },
+            'LÍNEA MANO, PALANGRE': {
+                show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: []
+            },
+            'ENMALLE/TRASMALLO': {
+                show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                reset: []
+            }
+        };
+
+        function setFieldVisibility(selector, show) {
+            const $fg = $(selector).closest('.form-group');
+            if (show) {
+                $fg.removeClass('d-none');
+            } else {
+                $fg.addClass('d-none');
+            }
+        }
+
+        function changeArtePesca(id) {
+            const opt = $('#tipo-arte-id option').filter(function () { return String(this.value) === String(id); }).first();
+            const tipo = String(opt.data('tipo') || '').toUpperCase();
+            const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
+            ARTE_RULES.default.hide.forEach(s => setFieldVisibility(s, true));
+            rules.hide.forEach(s => setFieldVisibility(s, false));
+            rules.show.forEach(s => setFieldVisibility(s, true));
+        }
+
+        function abrirModal(data = {}) {
+            $('#captura-id').val(data.id || '');
+            $('#nombre_comun').val(data.nombre_comun || '');
+            const especieSelect = $('#especie_id');
+            if (data.especie_id) {
+                const opt = new Option(data.especie_nombre || '', data.especie_id, true, true);
+                especieSelect.append(opt).trigger('change');
+            } else {
+                especieSelect.val(null).trigger('change');
+            }
+            $('#tipo_numero_individuos').val(data.tipo_numero_individuos || '');
+            $('#numero_individuos').val(data.numero_individuos || '');
+            $('#tipo_peso').val(data.tipo_peso || '');
+            $('#peso_estimado').val(data.peso_estimado || '');
+            $('#estado_producto').val(data.estado_producto || '');
+            $('#es_incidental').val(data.es_incidental === undefined || data.es_incidental === null ? '' : (data.es_incidental ? '1' : '0'));
+            $('#es_descartada').val(data.es_descartada === undefined || data.es_descartada === null ? '' : (data.es_descartada ? '1' : '0'));
+
+            const promises = [];
+            if (data.id) {
+                promises.push(
+                    fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
+                        .then(r => r.ok ? r.json() : [])
+                        .then(sitios => {
+                            let s = sitios.length ? sitios[0] : {};
+                            $('#sitio-pesca-id').val(s.id || '');
+                            $('#sitio-id').val(s.sitio_id || '');
+                            $('#sitio-nombre').val(s.nombre || '');
+                            $('#sitio-profundidad').val(s.profundidad || '');
+                            $('#sitio-unidad-profundidad').val(s.unidad_profundidad_id || '');
+                            $('#sitio-latitud').val(s.latitud || '');
+                            $('#sitio-longitud').val(s.longitud || '');
+                            return Promise.all([
+                                cargarUnidadesProfundidad(s.unidad_profundidad_id || ''),
+                                cargarSitios(s.sitio_id || '')
+                            ]);
+                        })
+                        .catch(() => Promise.all([cargarUnidadesProfundidad(''), cargarSitios('')]))
+                );
+
+                promises.push(
+                    fetch(`${ajaxBase}/artes-pesca?captura_id=${data.id}`)
+                        .then(r => r.ok ? r.json() : [])
+                        .then(artes => {
+                            let a = artes.length ? artes[0] : {};
+                            $('#arte-pesca-id').val(a.id || '');
+                            $('#lineas-madre').val(a.lineas_madre || '');
+                            $('#anzuelos').val(a.anzuelos || '');
+                            $('#tamanio-anzuelo-pulg').val(a.tamanio_anzuelo_pulg || '');
+                            $('#largo-red-m').val(a.largo_red_m || '');
+                            $('#alto-red-m').val(a.alto_red_m || '');
+                            $('#ojo-malla-cm').val(a.ojo_malla_cm || '');
+                            $('#diametro').val(a.diametro || '');
+                            $('#especie-carnada').val(a.especiecarnada || '');
+                            $('#carnadaviva').val(a.carnadaviva === undefined || a.carnadaviva === null ? '' : (a.carnadaviva ? '1' : '0'));
+                            return Promise.all([
+                                cargarTiposArte(a.tipo_arte_id || ''),
+                                cargarTiposAnzuelo(a.tipo_anzuelo_id || ''),
+                                cargarMaterialesMalla(a.material_malla_id || '')
+                            ]);
+                        })
+                        .catch(() => Promise.all([cargarTiposArte(''), cargarTiposAnzuelo(''), cargarMaterialesMalla('')]))
+                );
+
+                promises.push(cargarEconomiaVenta(data.id));
+                promises.push(cargarDatosBiologicos(data.id));
+                promises.push(cargarArchivos(data.id));
+
+                const campos = (data.respuestas_multifinalitaria || []).map(r => ({
+                    id: r.tabla_multifinalitaria_id,
+                    nombre_pregunta: r.tabla_multifinalitaria_nombre_pregunta || r.nombre_pregunta,
+                    tipo_pregunta: r.tabla_multifinalitaria_tipo_pregunta || r.tipo_pregunta,
+                    opciones: r.tabla_multifinalitaria_opciones || r.opciones,
+                    requerido: r.tabla_multifinalitaria_requerido || r.requerido,
+                }));
+                renderCamposDinamicosCaptura(campos, data.respuestas_multifinalitaria || []);
+            }
+
+            Promise.all(promises).finally(() => {
+                $('#captura-form :input').not('[data-card-widget="collapse"]').not('[data-dismiss="modal"]').prop('disabled', true);
+                changeArtePesca($('#tipo-arte-id').val());
+                $('#captura-modal').one('shown.bs.modal', function () {
+                    $('.spinner-overlay').addClass('d-none');
+                }).modal('show');
+            });
+        }
+
+        function verCaptura(id) {
+            $('.spinner-overlay').removeClass('d-none');
+            $.ajax({
+                url: `${ajaxBase}/capturas/${id}`,
+                global: false,
+                success: data => abrirModal(data),
+                error: () => $('.spinner-overlay').addClass('d-none')
+            });
+        }
+
+        $('#capturas-table').on('click', '.ver-captura', function () { verCaptura($(this).data('id')); });
+    });
+</script>
+@endsection
+
