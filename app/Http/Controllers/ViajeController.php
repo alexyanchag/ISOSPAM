@@ -287,34 +287,60 @@ class ViajeController extends Controller
         ]);
 
         if ($data['fecha_arribo'] === $data['fecha_zarpe'] && $data['hora_arribo'] <= $data['hora_zarpe']) {
+            $msg = 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.';
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+
             return redirect()
                 ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-                ->withErrors([
-                    'error' => 'La hora de arribo debe ser mayor que la hora de zarpe cuando las fechas son iguales.',
-                ])
+                ->withErrors(['error' => $msg])
                 ->withInput();
         }
 
         $response = $this->apiService->put("/viajes/{$id}", $data);
         if ($response->failed()) {
+            $msg = 'Error al actualizar';
+
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 500);
+            }
+
             return redirect()
                 ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-                ->with('error', 'Error al actualizar')
-                ->withErrors(['error' => 'Error al actualizar'])
+                ->with('error', $msg)
+                ->withErrors(['error' => $msg])
                 ->withInput();
         }
 
         $final = $this->apiService->post("/viajes/{$id}/finalizar");
         if ($final->successful()) {
+            $msg = 'Viaje finalizado correctamente';
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $msg,
+                    'redirect' => route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']]),
+                ]);
+            }
+
             return redirect()
                 ->route('viajes.mis-por-finalizar', ['digitador_id' => $data['digitador_id']])
-                ->with('success', 'Viaje finalizado correctamente');
+                ->with('success', $msg);
+        }
+
+        $msg = 'Error al finalizar';
+
+        if ($request->ajax()) {
+            return response()->json(['success' => false, 'message' => $msg], 500);
         }
 
         return redirect()
             ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
-            ->with('error', 'Error al finalizar')
-            ->withErrors(['error' => 'Error al finalizar'])
+            ->with('error', $msg)
+            ->withErrors(['error' => $msg])
             ->withInput();
     }
 

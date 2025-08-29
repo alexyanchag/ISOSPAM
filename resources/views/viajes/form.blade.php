@@ -1141,9 +1141,25 @@
                 cancelButtonText: 'Cancelar'
             }).then(result => {
                 if (result.isConfirmed) {
-                    const form = document.getElementById('viaje-form');
-                    form.action = this.getAttribute('formaction');
-                    form.submit();
+                    const btn = this;
+                    const form = $('#viaje-form');
+                    $.ajax({
+                        url: btn.getAttribute('formaction'),
+                        method: 'POST',
+                        data: form.serialize(),
+                        success: resp => {
+                            Swal.fire({ icon: 'success', title: 'Éxito', text: resp.message || 'Viaje finalizado' })
+                                .then(() => { if (resp.redirect) window.location.href = resp.redirect; });
+                        },
+                        error: xhr => {
+                            const json = xhr.responseJSON || {};
+                            let msg = json.message || 'Error al finalizar';
+                            if (json.errors) {
+                                msg = Object.values(json.errors).flat().join(' ');
+                            }
+                            Swal.fire({ icon: 'error', title: 'Error', text: msg });
+                        }
+                    });
                 }
             });
         });
