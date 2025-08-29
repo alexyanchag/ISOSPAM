@@ -49,6 +49,18 @@ class ApiService
         return $this->withToken()->get($url, $query);
     }
 
+    public function getFile(string $path)
+    {
+        $base = str_replace('/isospam', '', $this->baseUrl);
+        $request = Http::baseUrl($base);
+
+        if (Session::has('token')) {
+            $request = $request->withToken(Session::get('token'));
+        }
+
+        return $request->get("/archivos/{$path}");
+    }
+
     public function post(string $url, array $data = [])
     {
         return $this->withToken()->post($url, $data);
