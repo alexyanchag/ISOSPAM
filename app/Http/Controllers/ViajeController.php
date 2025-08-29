@@ -399,6 +399,19 @@ class ViajeController extends Controller
             }
         }
 
+        $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
+
+        $camposDinamicos = collect($respuestasMulti)
+            ->map(fn($r) => [
+                'id' => $r['tabla_multifinalitaria_id'] ?? null,
+                'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
+                'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
+                'opciones' => is_array($r['opciones'] ?? null)
+                    ? json_encode($r['opciones'])
+                    : ($r['opciones'] ?? '[]'),
+                'requerido' => $r['requerido'] ?? false,
+            ])->all();
+
         return view('viajes.mostrar', [
             'viaje' => $viaje,
             'tripulantes' => $tripulantes,
@@ -412,6 +425,7 @@ class ViajeController extends Controller
             'observadores' => $observadores,
             'parametrosAmbientales' => $parametrosAmbientales,
             'economiaInsumos' => $economiaInsumos,
+            'camposDinamicos' => $camposDinamicos,
         ]);
     }
 
