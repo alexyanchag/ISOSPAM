@@ -1375,7 +1375,9 @@
             Promise.all(promises).finally(() => {
                 $('#captura-form :input').not('[data-card-widget="collapse"]').not('[data-dismiss="modal"]').prop('disabled', true);
                 changeArtePesca($('#tipo-arte-id').val());
-                $('#captura-modal').modal('show');
+                $('#captura-modal').one('shown.bs.modal', function () {
+                    $('.spinner-overlay').addClass('d-none');
+                }).modal('show');
             });
         }
 
@@ -1384,7 +1386,7 @@
             $.ajax({
                 url: `${ajaxBase}/capturas/${id}`,
                 success: data => abrirModal(data),
-                complete: () => $('.spinner-overlay').addClass('d-none')
+                error: () => $('.spinner-overlay').addClass('d-none')
             });
         }
 
