@@ -287,17 +287,14 @@
                         <td>{{ $c['tipo_peso'] ?? '' }}</td>
                         <td>{{ $c['estado_producto'] ?? '' }}</td>
                         <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-captura"
-                                data-id="{{ $c['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-captura"
-                                data-id="{{ $c['id'] }}">Eliminar</button>
+                            <button class="btn btn-xs btn-secondary ver-captura" data-id="{{ $c['id'] }}">Ver
+                                detalles</button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <button id="agregar-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
     </div>
 </div>
 
@@ -322,7 +319,6 @@
                     <tr>
                         <th>Tipo</th>
                         <th>Persona</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -330,55 +326,10 @@
                     <tr>
                         <td>{{ $t['tipo_tripulante_nombre'] ?? '' }}</td>
                         <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
-                        <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-tripulante"
-                                data-id="{{ $t['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-tripulante"
-                                data-id="{{ $t['id'] }}">Eliminar</button>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
-        <button id="agregar-tripulante" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
-    </div>
-</div>
-
-<div class="modal fade" id="tripulante-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="tripulante-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tripulante</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <input type="hidden" id="tripulante-id">
-
-                    <div class="form-group">
-                        <label>Tipo de Tripulante</label>
-                        <select class="form-control" id="tipo_tripulante_id">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Persona</label>
-                        <select class="form-control" id="persona_tripulante_idpersona">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
@@ -404,7 +355,6 @@
                     <tr>
                         <th>Tipo</th>
                         <th>Persona</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -412,55 +362,10 @@
                     <tr>
                         <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
                         <td>{{ $o['persona_nombres'] ?? '' }}</td>
-                        <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-observador"
-                                data-id="{{ $o['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-observador"
-                                data-id="{{ $o['id'] }}">Eliminar</button>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
-        <button id="agregar-observador" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
-    </div>
-</div>
-
-<div class="modal fade" id="observador-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="observador-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Observador</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <input type="hidden" id="observador-id">
-
-                    <div class="form-group">
-                        <label>Tipo de Observador</label>
-                        <select class="form-control" id="tipo_observador_id">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Persona</label>
-                        <select class="form-control" id="persona_idpersona">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
@@ -593,14 +498,6 @@
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Longitud <span class="text-danger">*</span></label>
                                         <input type="text" id="sitio-longitud" class="form-control" required readonly>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label d-block">&nbsp;</label>
-                                        <button type="button" id="btn-geolocalizar" class="btn btn-secondary btn-sm mr-2">Obtener ubicación <i class="fa-solid fa-location-crosshairs"></i></button>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label d-block">&nbsp;</label>
-                                        <button type="button" id="btn-mapa" class="btn btn-info btn-sm">Seleccionar en mapa <i class="fa-solid fa-map-location-dot"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -746,13 +643,11 @@
                                                 <th>Sexo</th>
                                                 <th>Ovada</th>
                                                 <th>Estado</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                                <button id="agregar-dato-biologico" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                             </div>
                         </div>
                         <div id="archivo-captura-card" class="card mb-3 collapsed-card">
@@ -771,13 +666,11 @@
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Tamaño</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                                <button id="agregar-archivo-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
                             </div>
                         </div>
                     </div>
@@ -785,85 +678,6 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="dato-biologico-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="dato-biologico-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Dato biológico</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="dato-biologico-id">
-                    <div class="form-group">
-                        <label>Unidad longitud</label>
-                        <select id="unidad_longitud_id" class="form-control">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Longitud</label>
-                        <input type="number" step="any" id="longitud" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Peso</label>
-                        <input type="number" step="any" id="peso" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Sexo</label>
-                        <select id="sexo" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="M">Macho</option>
-                            <option value="H">Hembra</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ovada</label>
-                        <select id="ovada" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Estado desarrollo gonadal</label>
-                        <select id="estado_desarrollo_gonadal_id" class="form-control">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="archivo-captura-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="archivo-captura-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Archivo de captura</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="file" id="archivo-input" multiple>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Cargar</button>
                 </div>
             </form>
         </div>
@@ -892,7 +706,6 @@
                         <th>Estado Marea</th>
                         <th>Condición Mar</th>
                         <th>Oxígeno mg/l</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -904,67 +717,10 @@
                         <td>{{ $p['estado_marea_descripcion'] ?? '' }}</td>
                         <td>{{ $p['condicion_mar_descripcion'] ?? '' }}</td>
                         <td>{{ $p['oxigeno_mg_l'] ?? '' }}</td>
-                        <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-parametro"
-                                data-id="{{ $p['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-parametro"
-                                data-id="{{ $p['id'] }}">Eliminar</button>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
-        <button id="agregar-parametro" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
-    </div>
-</div>
-
-<div class="modal fade" id="parametro-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="parametro-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Parámetro Ambiental</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="parametro-id">
-                    <div class="form-group">
-                        <label>Hora</label>
-                        <input type="time" class="form-control" id="hora">
-                    </div>
-                    <div class="form-group">
-                        <label>Sondeo PPT</label>
-                        <input type="number" step="any" class="form-control" id="sondeo_ppt">
-                    </div>
-                    <div class="form-group">
-                        <label>TSMP</label>
-                        <input type="number" step="any" class="form-control" id="tsmp">
-                    </div>
-                    <div class="form-group">
-                        <label>Estado Marea</label>
-                        <select class="form-control" id="estado_marea_id">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Condición Mar</label>
-                        <select class="form-control" id="condicion_mar_id">
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Oxígeno mg/l</label>
-                        <input type="number" step="any" class="form-control" id="oxigeno_mg_l">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
@@ -990,7 +746,6 @@
                         <th>Unidad</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1000,83 +755,340 @@
                         <td>{{ $e['nombre_unidad'] ?? '' }}</td>
                         <td>{{ $e['cantidad'] ?? '' }}</td>
                         <td>{{ $e['precio'] ?? '' }}</td>
-                        <td class="text-right">
-                            <button class="btn btn-xs btn-secondary editar-economia-insumo"
-                                data-id="{{ $e['id'] }}">Editar</button>
-                            <button class="btn btn-xs btn-danger eliminar-economia-insumo"
-                                data-id="{{ $e['id'] }}">Eliminar</button>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <button id="agregar-economia-insumo" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
-    </div>
-</div>
-
-<div class="modal fade" id="economia-insumo-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="economia-insumo-form">
-                <div class="modal-header">
-                    <h5 class="modal-title">Economía de Insumo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="economia-insumo-id">
-                    <div class="form-group">
-                        <label>Tipo de Insumo <span class="text-danger">*</span></label>
-                        <select class="form-control" id="tipo_insumo_id" required>
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Unidad de Insumo <span class="text-danger">*</span></label>
-                        <select class="form-control" id="unidad_insumo_id" required>
-                            <option value="">Seleccione...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Cantidad <span class="text-danger">*</span></label>
-                        <input type="number" step="any" class="form-control" id="cantidad" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Precio <span class="text-danger">*</span></label>
-                        <input type="number" step="any" class="form-control" id="precio_insumo" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="mapa-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Seleccionar ubicación</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="mapa-sitio" style="height: 400px;"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
-                <button type="button" class="btn btn-primary" id="guardar-mapa">Guardar</button>
-            </div>
-        </div>
     </div>
 </div>
 
 @endisset
+@endsection
+
+@section('scripts')
+<script>
+    $(function () {
+        const ajaxBase = "{{ url('ajax') }}";
+
+        function renderCamposDinamicosCaptura(campos = [], respuestas = []) {
+            const row = $('#campos-dinamicos-captura').empty();
+            if (!campos.length) {
+                row.append('<p class="col-12 mb-0">No hay campos dinámicos para la campaña seleccionada.</p>');
+                return;
+            }
+            const respMap = {};
+            (respuestas || []).forEach(r => { respMap[r.tabla_multifinalitaria_id] = r; });
+            campos.forEach(function (campo, index) {
+                var control = '';
+                var resp = respMap[campo.id] || {};
+                var key = campo.id != null ? campo.id : index;
+                switch (campo.tipo_pregunta) {
+                    case 'COMBO':
+                        var opciones = [];
+                        try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
+                        control = '<select class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" disabled><option value="">Seleccione...</option>';
+                        opciones.forEach(function (opt) {
+                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var selected = (resp.respuesta || '') == value ? ' selected' : '';
+                            control += '<option value="' + value + '"' + selected + '>' + text + '</option>';
+                        });
+                        control += '</select>';
+                        break;
+                    case 'TEXTO':
+                        control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    case 'NUMERO':
+                        control = '<input type="number" step="any" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    case 'FECHA':
+                        control = '<input type="date" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                        break;
+                    default:
+                        control = '<input type="text" class="form-control" name="respuestas_multifinalitaria[' + key + '][respuesta]" value="' + (resp.respuesta || '') + '" disabled>';
+                }
+                row.append('<div class="form-group col-md-4"><label>' + (campo.nombre_pregunta || '') + '</label>' + control + '</div>');
+            });
+        }
+
+        function cargarUnidadesProfundidad(selected = '') {
+            const select = $('#sitio-unidad-profundidad');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-profundidad') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                });
+        }
+
+        let sitiosCache = [];
+        function cargarSitios(selected = '') {
+            const select = $('#sitio-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.sitios') }}")
+                .then(r => r.json())
+                .then(data => {
+                    sitiosCache = Array.isArray(data) ? data : [];
+                    sitiosCache.forEach(s => {
+                        const opt = new Option(s.nombre || '', s.id, false, String(s.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarTiposArte(selected = '') {
+            const select = $('#tipo-arte-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.tipos-arte') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(t => {
+                        const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                        if (t.tipo !== undefined && t.tipo !== null) { opt.dataset.tipo = t.tipo; }
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarTiposAnzuelo(selected = '') {
+            const select = $('#tipo-anzuelo-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.tipos-anzuelo') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(t => {
+                        const opt = new Option(t.nombre || t.descripcion || '', t.id, false, String(t.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarMaterialesMalla(selected = '') {
+            const select = $('#material-malla-id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.materiales-malla') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(m => {
+                        const opt = new Option(m.nombre || m.descripcion || '', m.id, false, String(m.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarUnidadesVenta(selected = '') {
+            const select = $('#unidad-venta-id').empty().append('<option value="">Seleccione...</option>');
+            return fetch("{{ route('api.unidades-venta') }}")
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(u => {
+                        const opt = new Option(u.nombre || u.descripcion || '', u.id, false, String(u.id) === String(selected));
+                        select.append(opt);
+                    });
+                    select.val(selected);
+                });
+        }
+
+        function cargarEconomiaVenta(capturaId) {
+            return fetch(`${ajaxBase}/economia-ventas?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const ev = Array.isArray(data) && data.length ? data[0] : null;
+                    $('#economia-venta-id').val(ev?.id || '');
+                    $('#vendido-a').val(ev?.vendido_a || '');
+                    $('#destino').val(ev?.destino || '');
+                    $('#precio').val(ev?.precio || '');
+                    return cargarUnidadesVenta(ev?.unidad_venta_id || '');
+                })
+                .catch(() => cargarUnidadesVenta(''));
+        }
+
+        function cargarDatosBiologicos(capturaId) {
+            if (!capturaId) {
+                $('#datos-biologicos-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`${ajaxBase}/datos-biologicos?captura_id=${capturaId}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#datos-biologicos-table tbody').empty();
+                    (data || []).forEach(d => {
+                        const row = `<tr>
+                                <td>${d.longitud ?? ''}</td>
+                                <td>${d.peso ?? ''}</td>
+                                <td>${d.sexo ?? ''}</td>
+                                <td>${d.ovada ? 'Sí' : 'No'}</td>
+                                <td>${d.estado_desarrollo_gonadal_descripcion ?? ''}</td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(() => { $('#datos-biologicos-table tbody').empty(); });
+        }
+
+        function cargarArchivos(capturaId) {
+            if (!capturaId) {
+                $('#archivos-captura-table tbody').empty();
+                return Promise.resolve();
+            }
+            return fetch(`/ajax/capturas/${capturaId}/archivos`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    const tbody = $('#archivos-captura-table tbody').empty();
+                    (data || []).forEach(a => {
+                        const row = `<tr>
+                                <td><a href="${a.url}" target="_blank">${a.nombre_original}</a></td>
+                                <td>${a.tamano ?? ''}</td>
+                            </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(() => { $('#archivos-captura-table tbody').empty(); });
+        }
+
+        const ARTE_RULES = {
+            default: {
+                show: ['#tipo-arte-id'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: []
+            },
+            'LÍNEA MANO, PALANGRE': {
+                show: ['#tipo-arte-id', '#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                hide: ['#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                reset: []
+            },
+            'ENMALLE/TRASMALLO': {
+                show: ['#tipo-arte-id', '#material-malla-id', '#largo-red-m', '#alto-red-m', '#ojo-malla-cm', '#diametro'],
+                hide: ['#anzuelos', '#tamanio-anzuelo-pulg', '#tipo-anzuelo-id', '#carnadaviva', '#especie-carnada'],
+                reset: []
+            }
+        };
+
+        function setFieldVisibility(selector, show) {
+            const $fg = $(selector).closest('.form-group');
+            if (show) {
+                $fg.removeClass('d-none');
+            } else {
+                $fg.addClass('d-none');
+            }
+        }
+
+        function changeArtePesca(id) {
+            const opt = $('#tipo-arte-id option').filter(function () { return String(this.value) === String(id); }).first();
+            const tipo = String(opt.data('tipo') || '').toUpperCase();
+            const rules = ARTE_RULES[tipo] || ARTE_RULES.default;
+            ARTE_RULES.default.hide.forEach(s => setFieldVisibility(s, true));
+            rules.hide.forEach(s => setFieldVisibility(s, false));
+            rules.show.forEach(s => setFieldVisibility(s, true));
+        }
+
+        function abrirModal(data = {}) {
+            $('#captura-id').val(data.id || '');
+            $('#nombre_comun').val(data.nombre_comun || '');
+            const especieSelect = $('#especie_id');
+            if (data.especie_id) {
+                const opt = new Option(data.especie_nombre || '', data.especie_id, true, true);
+                especieSelect.append(opt).trigger('change');
+            } else {
+                especieSelect.val(null).trigger('change');
+            }
+            $('#tipo_numero_individuos').val(data.tipo_numero_individuos || '');
+            $('#numero_individuos').val(data.numero_individuos || '');
+            $('#tipo_peso').val(data.tipo_peso || '');
+            $('#peso_estimado').val(data.peso_estimado || '');
+            $('#estado_producto').val(data.estado_producto || '');
+            $('#es_incidental').val(data.es_incidental === undefined || data.es_incidental === null ? '' : (data.es_incidental ? '1' : '0'));
+            $('#es_descartada').val(data.es_descartada === undefined || data.es_descartada === null ? '' : (data.es_descartada ? '1' : '0'));
+
+            const promises = [];
+            if (data.id) {
+                promises.push(
+                    fetch(`${ajaxBase}/sitios-pesca?captura_id=${data.id}`)
+                        .then(r => r.ok ? r.json() : [])
+                        .then(sitios => {
+                            let s = sitios.length ? sitios[0] : {};
+                            $('#sitio-pesca-id').val(s.id || '');
+                            $('#sitio-id').val(s.sitio_id || '');
+                            $('#sitio-nombre').val(s.nombre || '');
+                            $('#sitio-profundidad').val(s.profundidad || '');
+                            $('#sitio-unidad-profundidad').val(s.unidad_profundidad_id || '');
+                            $('#sitio-latitud').val(s.latitud || '');
+                            $('#sitio-longitud').val(s.longitud || '');
+                            return Promise.all([
+                                cargarUnidadesProfundidad(s.unidad_profundidad_id || ''),
+                                cargarSitios(s.sitio_id || '')
+                            ]);
+                        })
+                        .catch(() => Promise.all([cargarUnidadesProfundidad(''), cargarSitios('')]))
+                );
+
+                promises.push(
+                    fetch(`${ajaxBase}/artes-pesca?captura_id=${data.id}`)
+                        .then(r => r.ok ? r.json() : [])
+                        .then(artes => {
+                            let a = artes.length ? artes[0] : {};
+                            $('#arte-pesca-id').val(a.id || '');
+                            $('#lineas-madre').val(a.lineas_madre || '');
+                            $('#anzuelos').val(a.anzuelos || '');
+                            $('#tamanio-anzuelo-pulg').val(a.tamanio_anzuelo_pulg || '');
+                            $('#largo-red-m').val(a.largo_red_m || '');
+                            $('#alto-red-m').val(a.alto_red_m || '');
+                            $('#ojo-malla-cm').val(a.ojo_malla_cm || '');
+                            $('#diametro').val(a.diametro || '');
+                            $('#especie-carnada').val(a.especiecarnada || '');
+                            $('#carnadaviva').val(a.carnadaviva === undefined || a.carnadaviva === null ? '' : (a.carnadaviva ? '1' : '0'));
+                            return Promise.all([
+                                cargarTiposArte(a.tipo_arte_id || ''),
+                                cargarTiposAnzuelo(a.tipo_anzuelo_id || ''),
+                                cargarMaterialesMalla(a.material_malla_id || '')
+                            ]);
+                        })
+                        .catch(() => Promise.all([cargarTiposArte(''), cargarTiposAnzuelo(''), cargarMaterialesMalla('')]))
+                );
+
+                promises.push(cargarEconomiaVenta(data.id));
+                promises.push(cargarDatosBiologicos(data.id));
+                promises.push(cargarArchivos(data.id));
+
+                const campos = (data.respuestas_multifinalitaria || []).map(r => ({
+                    id: r.tabla_multifinalitaria_id,
+                    nombre_pregunta: r.tabla_multifinalitaria_nombre_pregunta || r.nombre_pregunta,
+                    tipo_pregunta: r.tabla_multifinalitaria_tipo_pregunta || r.tipo_pregunta,
+                    opciones: r.tabla_multifinalitaria_opciones || r.opciones,
+                    requerido: r.tabla_multifinalitaria_requerido || r.requerido,
+                }));
+                renderCamposDinamicosCaptura(campos, data.respuestas_multifinalitaria || []);
+            }
+
+            Promise.all(promises).finally(() => {
+                $('#captura-form :input').not('[data-card-widget="collapse"]').not('[data-dismiss="modal"]').prop('disabled', true);
+                changeArtePesca($('#tipo-arte-id').val());
+                $('#captura-modal').one('shown.bs.modal', function () {
+                    $('.spinner-overlay').addClass('d-none');
+                }).modal('show');
+            });
+        }
+
+        function verCaptura(id) {
+            $('.spinner-overlay').removeClass('d-none');
+            $.ajax({
+                url: `${ajaxBase}/capturas/${id}`,
+                global: false,
+                success: data => abrirModal(data),
+                error: () => $('.spinner-overlay').addClass('d-none')
+            });
+        }
+
+        $('#capturas-table').on('click', '.ver-captura', function () { verCaptura($(this).data('id')); });
+    });
+</script>
 @endsection
 
