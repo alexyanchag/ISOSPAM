@@ -399,7 +399,9 @@ class ViajeController extends Controller
             }
         }
 
-        $camposDinamicos = collect($viaje['respuestas_multifinalitaria'] ?? [])
+        $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
+
+        $camposDinamicos = collect($respuestasMulti)
             ->map(fn($r) => [
                 'id' => $r['tabla_multifinalitaria_id'] ?? null,
                 'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
@@ -408,8 +410,7 @@ class ViajeController extends Controller
                     ? json_encode($r['opciones'])
                     : ($r['opciones'] ?? '[]'),
                 'requerido' => $r['requerido'] ?? false,
-            ])
-            ->all();
+            ])->all();
 
         return view('viajes.mostrar', [
             'viaje' => $viaje,
