@@ -48,6 +48,7 @@ class TablaMultifinalitariaController extends Controller
     public function update(Request $request, $campania, $id)
     {
         $data = $this->validateData($request);
+        $data['campania_id'] = $campania;
 
         $response = $this->apiService->put("/tabla-multifinalitaria/{$id}", $data);
 
