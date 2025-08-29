@@ -17,7 +17,7 @@
     <thead>
         <tr>
             <th>Tabla relacionada</th>
-            <th>Campo</th>
+            <th>Nombre de pregunta</th>
             <th>Tipo</th>
             <th>Opciones</th>
             <th>Acciones</th>
@@ -27,7 +27,7 @@
         @forelse($campos as $campo)
             <tr>
                 <td>{{ $campo['tabla_relacionada'] ?? '' }}</td>
-                <td>{{ $campo['campo'] ?? '' }}</td>
+                <td>{{ $campo['nombre_pregunta'] ?? '' }}</td>
                 <td>{{ $campo['tipo_pregunta'] ?? '' }}</td>
                 <td>
                     @if(isset($campo['opciones']) && is_array($campo['opciones']))
@@ -38,7 +38,7 @@
                     <button type="button" class="btn btn-sm btn-primary btn-edit"
                         data-id="{{ $campo['id'] }}"
                         data-tabla="{{ $campo['tabla_relacionada'] }}"
-                        data-campo="{{ $campo['campo'] }}"
+                        data-nombre_pregunta="{{ $campo['nombre_pregunta'] }}"
                         data-tipo="{{ $campo['tipo_pregunta'] }}"
                         data-opciones='{{ json_encode(array_map(fn($o) => $o['value'] ?? $o['key'] ?? '', $campo['opciones'] ?? [])) }}'>Editar</button>
                     <form method="POST" action="{{ route('campanias.tabla-multifinalitaria.destroy', [$campaniaId, $campo['id']]) }}" style="display:inline">
@@ -64,7 +64,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Campo</label>
-        <input type="text" name="campo" class="form-control" id="campo">
+        <input type="text" name="nombre_pregunta" class="form-control" id="nombre_pregunta">
     </div>
     <div class="mb-3">
         <label class="form-label">Tipo de Pregunta</label>
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             form.action = `${baseUpdateUrl}/${data.id}`;
             methodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
             document.getElementById('tabla_relacionada').value = data.tabla;
-            document.getElementById('campo').value = data.campo;
+            document.getElementById('nombre_pregunta').value = data.nombre_pregunta;
             document.getElementById('tipo_pregunta').value = data.tipo;
             const opciones = JSON.parse(data.opciones || '[]');
             container.innerHTML = '';
