@@ -217,8 +217,8 @@
                         <option value="">Seleccione...</option>
                         @foreach($opciones as $opt)
                         @php
-                        $value = is_array($opt) ? ($opt['valor'] ?? '') : (string) $opt;
-                        $text = is_array($opt) ? ($opt['texto'] ?? '') : (string) $opt;
+                        $value = is_array($opt) ? ($opt['value'] ?? '') : (string) $opt;
+                        $text = is_array($opt) ? ($opt['key'] ?? $opt['value'] ?? '') : (string) $opt;
                         @endphp
                         <option value="{{ $value }}" @selected(($resp['respuesta'] ?? '' )==$value)>{{ $text }}</option>
                         @endforeach
@@ -1312,8 +1312,8 @@
                         try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
                         control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + index + '][respuesta]"><option value="">Seleccione...</option>';
                         opciones.forEach(function (opt) {
-                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
-                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var value = (typeof opt === 'object') ? (opt.value || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.key || opt.value || '') : String(opt);
                             control += '<option value="' + value + '">' + text + '</option>';
                         });
                         control += '</select>';
@@ -1364,8 +1364,8 @@
                         try { opciones = JSON.parse(campo.opciones || '[]'); } catch (e) { }
                         control = '<select class="form-control" ' + requerido + ' name="respuestas_multifinalitaria[' + key + '][respuesta]"><option value="">Seleccione...</option>';
                         opciones.forEach(function (opt) {
-                            var value = (typeof opt === 'object') ? (opt.valor || '') : String(opt);
-                            var text = (typeof opt === 'object') ? (opt.texto || '') : String(opt);
+                            var value = (typeof opt === 'object') ? (opt.value || '') : String(opt);
+                            var text = (typeof opt === 'object') ? (opt.key || opt.value || '') : String(opt);
                             var selected = (resp.respuesta || '') == value ? ' selected' : '';
                             control += '<option value="' + value + '"' + selected + '>' + text + '</option>';
                         });
