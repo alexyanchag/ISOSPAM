@@ -7,9 +7,7 @@
 
 @section('content')
 <form id="viaje-form">
-<fieldset disabled>
-    <div class="card">
-        <div class="card-header">
+    <div class="card-header">
             <h3 class="card-title">Detalle del Viaje</h3>
             <div class="card-tools">
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary mr-2">Volver</a>
@@ -18,6 +16,8 @@
                 @endisset
             </div>
         </div>
+<fieldset disabled>
+    <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3 mb-3">
