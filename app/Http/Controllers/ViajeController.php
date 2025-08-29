@@ -299,6 +299,7 @@ class ViajeController extends Controller
         if ($response->failed()) {
             return redirect()
                 ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+                ->with('error', 'Error al actualizar')
                 ->withErrors(['error' => 'Error al actualizar'])
                 ->withInput();
         }
@@ -312,6 +313,7 @@ class ViajeController extends Controller
 
         return redirect()
             ->route('viajes.edit', ['viaje' => $id, 'por_finalizar' => 1])
+            ->with('error', 'Error al finalizar')
             ->withErrors(['error' => 'Error al finalizar'])
             ->withInput();
     }
