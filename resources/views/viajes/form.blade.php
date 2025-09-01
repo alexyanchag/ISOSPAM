@@ -355,6 +355,7 @@
                     <tr>
                         <th>Tipo</th>
                         <th>Persona</th>
+                        <th>Organización</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -363,6 +364,7 @@
                     <tr>
                         <td>{{ $t['tipo_tripulante_nombre'] ?? '' }}</td>
                         <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
+                        <td>{{ $t['organizacion_pesquera_nombre'] ?? '' }}</td>
                         <td class="text-right">
                             <button class="btn btn-xs btn-secondary editar-tripulante"
                                 data-id="{{ $t['id'] }}">Editar</button>
@@ -402,6 +404,13 @@
                     <div class="form-group">
                         <label>Persona</label>
                         <select class="form-control" id="persona_tripulante_idpersona">
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Organización Pesquera</label>
+                        <select class="form-control" id="organizacion_pesquera_id" required>
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
@@ -1470,6 +1479,20 @@
                 .catch(err => console.error('Error al cargar tipos de tripulante:', err));
         }
 
+        function cargarOrganizacionesPesqueras(selected = '') {
+            const select = $('#organizacion_pesquera_id');
+            select.empty().append('<option value="">Seleccione...</option>');
+            fetch("{{ route('api.organizacion-pesquera') }}")
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(o => {
+                        const opt = new Option(o.nombre ?? o.id, o.id, false, String(o.id) === String(selected));
+                        select.append(opt);
+                    });
+                })
+                .catch(err => console.error('Error al cargar organizaciones pesqueras:', err));
+        }
+
         function cargarUnidadesProfundidad(selected = '') {
             const select = $('#sitio-unidad-profundidad');
             select.empty().append('<option value="">Seleccione...</option>');
@@ -1580,6 +1603,7 @@
                         const row = `<tr>
                                 <td>${t.tipo_tripulante_nombre ?? ''}</td>
                                 <td>${t.tripulante_nombres ?? ''}</td>
+                                <td>${t.organizacion_pesquera_nombre ?? ''}</td>
                                 <td class=\"text-right\">
                                     <button class=\"btn btn-xs btn-secondary editar-tripulante\" data-id=\"${t.id}\">Editar</button>
                                     <button class=\"btn btn-xs btn-danger eliminar-tripulante\" data-id=\"${t.id}\">Eliminar</button>
@@ -2334,6 +2358,7 @@
         function abrirTripulanteModal(data = {}) {
             $('#tripulante-id').val(data.id || '');
             cargarTiposTripulante(data.tipo_tripulante_id || '');
+            cargarOrganizacionesPesqueras(data.organizacion_pesquera_id || '');
             const personaSelect = $('#persona_tripulante_idpersona');
             if (data.persona_idpersona) {
                 const opt = new Option(data.tripulante_nombres || '', data.persona_idpersona, true, true);
@@ -2674,7 +2699,8 @@
             const payload = {
                 viaje_id: viajeId,
                 tipo_tripulante_id: $('#tipo_tripulante_id').val(),
-                persona_idpersona: $('#persona_tripulante_idpersona').val()
+                persona_idpersona: $('#persona_tripulante_idpersona').val(),
+                organizacion_pesquera_id: $('#organizacion_pesquera_id').val()
             };
             const url = id ? `${ajaxBase}/tripulantes-viaje/${id}` : `${ajaxBase}/tripulantes-viaje`;
             const method = id ? 'PUT' : 'POST';

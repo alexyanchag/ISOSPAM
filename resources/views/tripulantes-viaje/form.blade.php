@@ -25,6 +25,12 @@
             <option value="">Seleccione...</option>
         </select>
     </div>
+    <div class="mb-3">
+        <label class="form-label">Organización Pesquera</label>
+        <select name="organizacion_pesquera_id" id="organizacion_pesquera_id" class="form-control" required>
+            <option value="">Seleccione...</option>
+        </select>
+    </div>
     @if($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
@@ -38,6 +44,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tipoSelect = document.getElementById('tipo_tripulante_id');
     const personaSelect = $('#persona_idpersona');
+    const orgSelect = document.getElementById('organizacion_pesquera_id');
     const selectedTipo = @json(old('tipo_tripulante_id', $tripulante['tipo_tripulante_id'] ?? ''));
     fetch('{{ route('api.tipos-tripulante') }}')
         .then(r => r.json())
@@ -45,6 +52,15 @@ document.addEventListener('DOMContentLoaded', function() {
             data.forEach(t => {
                 const opt = new Option(t.descripcion, t.id, false, String(t.id) === String(selectedTipo));
                 tipoSelect.appendChild(opt);
+            });
+        });
+    const selectedOrg = @json(old('organizacion_pesquera_id', $tripulante['organizacion_pesquera_id'] ?? ''));
+    fetch('{{ route('api.organizacion-pesquera') }}')
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(o => {
+                const opt = new Option(o.nombre ?? o.id, o.id, false, String(o.id) === String(selectedOrg));
+                orgSelect.appendChild(opt);
             });
         });
     personaSelect.select2({
