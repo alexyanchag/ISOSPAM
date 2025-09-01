@@ -12,7 +12,10 @@
             <div class="card-tools">
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary mr-2">Volver</a>
                 @isset($viaje)
-                <a href="#" id="seleccionar-viaje-btn" class="btn btn-primary">Seleccionar viaje</a>
+                <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}" class="d-inline seleccionar-form">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Seleccionar viaje</button>
+                </form>
                 @endisset
             </div>
         </div>
@@ -239,12 +242,6 @@
     </div>
 </fieldset>
 </form>
-
-@isset($viaje)
-<form id="seleccionar-viaje-form" method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}" class="d-none seleccionar-form">
-    @csrf
-</form>
-@endisset
 
 @isset($viaje)
 
@@ -778,8 +775,9 @@
 @section('scripts')
 <script>
     $(function () {
-        $('#seleccionar-viaje-btn').on('click', function (e) {
+        $('.seleccionar-form').on('submit', function (e) {
             e.preventDefault();
+            const form = this;
             Swal.fire({
                 title: '¿Seleccionar viaje?',
                 icon: 'question',
@@ -788,7 +786,7 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#seleccionar-viaje-form').submit();
+                    form.submit();
                 }
             });
         });
