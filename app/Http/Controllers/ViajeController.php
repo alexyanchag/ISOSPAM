@@ -449,6 +449,7 @@ class ViajeController extends Controller
             'economiaInsumos' => $economiaInsumos,
             'camposDinamicos' => $camposDinamicos,
             'soloLectura' => true,
+            'mostrarSeleccion' => true,
         ]);
     }
 

@@ -40,6 +40,15 @@
                 @endif
                 @endisset
                 @endempty
+                @isset($viaje)
+                @if(!empty($mostrarSeleccion))
+                <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}"
+                    class="seleccionar-form d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Seleccionar viaje</button>
+                </form>
+                @endif
+                @endisset
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </div>
@@ -2991,6 +3000,24 @@
                 $('#archivos-captura-table').on('click', '.eliminar-archivo-captura', function () { eliminarArchivoCaptura($(this).data('id')); });
             }
         }
+    });
+</script>
+<script>
+    document.querySelectorAll('.seleccionar-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Seleccionar viaje?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, seleccionar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 @parent
