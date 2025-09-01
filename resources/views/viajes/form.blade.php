@@ -335,7 +335,9 @@
                 </tbody>
             </table>
         </div>
+        @empty($soloLectura)
         <button id="agregar-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+        @endempty
     </div>
 </div>
 
@@ -386,7 +388,9 @@
                 </tbody>
             </table>
         </div>
+        @empty($soloLectura)
         <button id="agregar-tripulante" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+        @endempty
     </div>
 </div>
 
@@ -480,7 +484,9 @@
                 </tbody>
             </table>
         </div>
+        @empty($soloLectura)
         <button id="agregar-observador" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+        @endempty
     </div>
 </div>
 
@@ -809,7 +815,9 @@
                                         <tbody></tbody>
                                     </table>
                                 </div>
+                                @empty($soloLectura)
                                 <button id="agregar-dato-biologico" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+                                @endempty
                             </div>
                         </div>
                         <div id="archivo-captura-card" class="card mb-3 collapsed-card">
@@ -834,7 +842,9 @@
                                         <tbody></tbody>
                                     </table>
                                 </div>
+                                @empty($soloLectura)
                                 <button id="agregar-archivo-captura" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+                                @endempty
                             </div>
                         </div>
                     </div>
@@ -977,7 +987,9 @@
                 </tbody>
             </table>
         </div>
+        @empty($soloLectura)
         <button id="agregar-parametro" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+        @endempty
     </div>
 </div>
 
@@ -1078,7 +1090,9 @@
                 </tbody>
             </table>
         </div>
+        @empty($soloLectura)
         <button id="agregar-economia-insumo" type="button" class="btn btn-primary btn-xs mt-2">Agregar</button>
+        @endempty
     </div>
 </div>
 
