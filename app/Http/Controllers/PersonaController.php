@@ -115,4 +115,17 @@ class PersonaController extends Controller
 
         return response()->json($data);
     }
+
+    public function buscar(Request $request)
+    {
+        $filtro = $request->query('filtro');
+
+        $resp = $this->apiService->get('/personas/buscar', [
+            'filtro' => $filtro,
+        ]);
+
+        $data = $resp->successful() ? $resp->json() : [];
+
+        return response()->json($data);
+    }
 }

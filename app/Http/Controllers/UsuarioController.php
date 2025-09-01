@@ -34,35 +34,19 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'identificacion' => ['required', 'string'],
-            'nombres' => ['required', 'string'],
-            'apellidos' => ['required', 'string'],
-            'direccion' => ['nullable', 'string'],
-            'celular' => ['nullable', 'string'],
-            'email' => ['nullable', 'email'],
+            'idpersona' => ['required', 'integer'],
             'usuario' => ['required', 'string'],
             'clave' => ['required', 'string'],
             'activo' => ['nullable', 'boolean'],
         ]);
 
         try {
-            DB::connection('reportes')->transaction(function () use ($data) {
-                $personaId = DB::connection('reportes')->table('persona')->insertGetId([
-                    'identificacion' => $data['identificacion'],
-                    'nombres' => $data['nombres'],
-                    'apellidos' => $data['apellidos'],
-                    'direccion' => $data['direccion'] ?? null,
-                    'celular' => $data['celular'] ?? null,
-                    'email' => $data['email'] ?? null,
-                ]);
-
-                DB::connection('reportes')->table('usuario')->insert([
-                    'idpersona' => $personaId,
-                    'usuario' => $data['usuario'],
-                    'clave' => $data['clave'],
-                    'activo' => $data['activo'] ?? false,
-                ]);
-            });
+            DB::connection('reportes')->table('usuario')->insert([
+                'idpersona' => $data['idpersona'],
+                'usuario' => $data['usuario'],
+                'clave' => $data['clave'],
+                'activo' => $data['activo'] ?? false,
+            ]);
 
             return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente');
         } catch (\Throwable $e) {
@@ -76,11 +60,9 @@ class UsuarioController extends Controller
         if (! $usuario) {
             abort(404);
         }
-        $persona = $this->conn->table('persona')->where('idpersona', $usuario->idpersona)->first();
 
         return view('usuarios.form', [
             'usuario' => $usuario,
-            'persona' => $persona,
         ]);
     }
 
@@ -92,34 +74,19 @@ class UsuarioController extends Controller
         }
 
         $data = $request->validate([
-            'identificacion' => ['required', 'string'],
-            'nombres' => ['required', 'string'],
-            'apellidos' => ['required', 'string'],
-            'direccion' => ['nullable', 'string'],
-            'celular' => ['nullable', 'string'],
-            'email' => ['nullable', 'email'],
+            'idpersona' => ['required', 'integer'],
             'usuario' => ['required', 'string'],
             'clave' => ['required', 'string'],
             'activo' => ['nullable', 'boolean'],
         ]);
 
         try {
-            DB::connection('reportes')->transaction(function () use ($data, $usuario, $id) {
-                DB::connection('reportes')->table('persona')->where('idpersona', $usuario->idpersona)->update([
-                    'identificacion' => $data['identificacion'],
-                    'nombres' => $data['nombres'],
-                    'apellidos' => $data['apellidos'],
-                    'direccion' => $data['direccion'] ?? null,
-                    'celular' => $data['celular'] ?? null,
-                    'email' => $data['email'] ?? null,
-                ]);
-
-                DB::connection('reportes')->table('usuario')->where('idpersona', $id)->update([
-                    'usuario' => $data['usuario'],
-                    'clave' => $data['clave'],
-                    'activo' => $data['activo'] ?? false,
-                ]);
-            });
+            DB::connection('reportes')->table('usuario')->where('idpersona', $id)->update([
+                'idpersona' => $data['idpersona'],
+                'usuario' => $data['usuario'],
+                'clave' => $data['clave'],
+                'activo' => $data['activo'] ?? false,
+            ]);
 
             return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente');
         } catch (\Throwable $e) {
