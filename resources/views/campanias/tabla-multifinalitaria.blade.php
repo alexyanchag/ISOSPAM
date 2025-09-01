@@ -13,6 +13,8 @@
     <div class="alert alert-danger">{{ $errors->first() }}</div>
 @endif
 
+<button type="button" class="btn btn-success mb-3" id="btn-add">Nuevo</button>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -53,49 +55,66 @@
         @endforelse
     </tbody>
 </table>
+<a href="{{ route('campanias.index') }}" class="btn btn-secondary">Volver</a>
 
-<h4 id="form-title">Nuevo Campo</h4>
-<form method="POST" id="campo-form" action="{{ route('campanias.tabla-multifinalitaria.store', $campaniaId) }}">
-    @csrf
-    <div id="method-field"></div>
-    <div class="mb-3">
-        <label class="form-label">Tabla Relacionada</label>
-        <select name="tabla_relacionada" class="form-control" id="tabla_relacionada">
-            <option value="">Seleccione</option>
-            <option value="captura">Captura</option>
-            <option value="viaje">Viaje</option>
-        </select>
+<!-- Modal -->
+<div class="modal fade" id="campoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" id="campo-form" action="{{ route('campanias.tabla-multifinalitaria.store', $campaniaId) }}">
+            @csrf
+            <div id="method-field"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="campoModalLabel">Nuevo Campo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="campo_id" id="campo_id">
+                    <div class="mb-3">
+                        <label class="form-label">Tabla Relacionada</label>
+                        <select name="tabla_relacionada" class="form-control" id="tabla_relacionada">
+                            <option value="">Seleccione</option>
+                            <option value="captura">Captura</option>
+                            <option value="viaje">Viaje</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Campo</label>
+                        <input type="text" name="nombre_pregunta" class="form-control" id="nombre_pregunta">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Pregunta</label>
+                        <select name="tipo_pregunta" class="form-control" id="tipo_pregunta">
+                            <option value="">Seleccione</option>
+                            <option value="COMBO">COMBO</option>
+                            <option value="INTEGER">INTEGER</option>
+                            <option value="DATE">DATE</option>
+                            <option value="TIME">TIME</option>
+                            <option value="INPUT">INPUT</option>
+                        </select>
+                    </div>
+                    <div id="opciones-section" class="mb-3 d-none">
+                        <label class="form-label">Opciones</label>
+                        <div id="opciones-container"></div>
+                        <button type="button" class="btn btn-sm btn-secondary" id="add-opcion">Agregar opción</button>
+                        <input type="hidden" name="opciones" id="opciones-input">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Campo</label>
-        <input type="text" name="nombre_pregunta" class="form-control" id="nombre_pregunta">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Tipo de Pregunta</label>
-        <select name="tipo_pregunta" class="form-control" id="tipo_pregunta">
-            <option value="">Seleccione</option>
-            <option value="COMBO">COMBO</option>
-            <option value="INTEGER">INTEGER</option>
-            <option value="DATE">DATE</option>
-            <option value="TIME">TIME</option>
-            <option value="INPUT">INPUT</option>
-        </select>
-    </div>
-    <div id="opciones-section" class="mb-3 d-none">
-        <label class="form-label">Opciones</label>
-        <div id="opciones-container"></div>
-        <button type="button" class="btn btn-sm btn-secondary" id="add-opcion">Agregar opción</button>
-        <input type="hidden" name="opciones" id="opciones-input">
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <button type="button" class="btn btn-secondary" id="cancel-edit" style="display:none">Cancelar</button>
-    <a href="{{ route('campanias.index') }}" class="btn btn-secondary">Volver</a>
-</form>
+</div>
 @endsection
 
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const campoModalEl = document.getElementById('campoModal');
+    const campoModal = new bootstrap.Modal(campoModalEl);
     const form = document.getElementById('campo-form');
     const methodField = document.getElementById('method-field');
     const tipo = document.getElementById('tipo_pregunta');
@@ -103,8 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const addBtn = document.getElementById('add-opcion');
     const container = document.getElementById('opciones-container');
     const opcionesInput = document.getElementById('opciones-input');
-    const cancelBtn = document.getElementById('cancel-edit');
-    const formTitle = document.getElementById('form-title');
+    const formTitle = document.getElementById('campoModalLabel');
+    const campoIdInput = document.getElementById('campo_id');
     const baseUpdateUrl = "{{ url('campanias/'.$campaniaId.'/tabla-multifinalitaria') }}";
 
     function refreshOpciones() {
@@ -138,45 +157,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
     form.addEventListener('submit', function () {
         refreshOpciones();
+        campoModal.hide();
     });
 
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const data = this.dataset;
+    function resetModal() {
+        form.action = "{{ route('campanias.tabla-multifinalitaria.store', $campaniaId) }}";
+        methodField.innerHTML = '';
+        form.reset();
+        campoIdInput.value = '';
+        container.innerHTML = '';
+        opcionesSection.classList.add('d-none');
+        opcionesInput.value = '';
+        formTitle.textContent = 'Nuevo Campo';
+    }
+
+    function openModal(isEdit = false, data = {}) {
+        resetModal();
+        if (isEdit) {
             form.action = `${baseUpdateUrl}/${data.id}`;
             methodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+            campoIdInput.value = data.id;
             document.getElementById('tabla_relacionada').value = data.tabla;
             document.getElementById('nombre_pregunta').value = data.nombre_pregunta;
             document.getElementById('tipo_pregunta').value = data.tipo;
             const opciones = JSON.parse(data.opciones || '[]');
-            container.innerHTML = '';
             if (data.tipo === 'COMBO') {
                 opcionesSection.classList.remove('d-none');
                 opciones.forEach(o => {
                     const val = o.value ?? o.key ?? '';
                     const div = document.createElement('div');
                     div.classList.add('input-group','mb-2');
-                    div.innerHTML = `<input type="text" class="form-control opcion" value="${val}"><div class="input-group-append"><button class="btn btn-danger remove-opcion" type="button"><i class="fas fa-times"></i></button></div>`;
+                    div.innerHTML = `<input type=\"text\" class=\"form-control opcion\" value=\"${val}\"><div class=\"input-group-append\"><button class=\"btn btn-danger remove-opcion\" type=\"button\"><i class=\"fas fa-times\"></i></button></div>`;
                     container.appendChild(div);
                 });
-            } else {
-                opcionesSection.classList.add('d-none');
+                opcionesInput.value = JSON.stringify(opciones.map(o => o.value ?? o.key ?? ''));
             }
-            opcionesInput.value = JSON.stringify(opciones.map(o => o.value ?? o.key ?? ''));
-            cancelBtn.style.display = 'inline-block';
             formTitle.textContent = 'Editar Campo';
-        });
-    });
+        }
+        campoModal.show();
+    }
 
-    cancelBtn.addEventListener('click', function () {
-        form.action = "{{ route('campanias.tabla-multifinalitaria.store', $campaniaId) }}";
-        methodField.innerHTML = '';
-        form.reset();
-        container.innerHTML = '';
-        opcionesSection.classList.add('d-none');
-        opcionesInput.value = '';
-        cancelBtn.style.display = 'none';
-        formTitle.textContent = 'Nuevo Campo';
+    document.getElementById('btn-add').addEventListener('click', () => openModal(false));
+
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => openModal(true, btn.dataset));
     });
 });
 </script>
