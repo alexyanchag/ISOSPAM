@@ -320,10 +320,15 @@
                         <td>{{ $c['tipo_peso'] ?? '' }}</td>
                         <td>{{ $c['estado_producto'] ?? '' }}</td>
                         <td class="text-right">
+                            @if(!empty($soloLectura))
+                            <button class="btn btn-xs btn-secondary ver-captura" type="button"
+                                data-id="{{ $c['id'] }}">Ver detalles</button>
+                            @else
                             <button class="btn btn-xs btn-secondary editar-captura"
                                 data-id="{{ $c['id'] }}">Editar</button>
                             <button class="btn btn-xs btn-danger eliminar-captura"
                                 data-id="{{ $c['id'] }}">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -2147,9 +2152,11 @@
                 });
         }
 
-        function abrirModal(data = {}) {
+        function abrirModal(data = {}, soloLecturaModal = false) {
             mostrarTodasLasCards();
             $('.spinner-overlay').removeClass('d-none');
+            $('#captura-form :input').prop('disabled', false);
+            $('#captura-modal .modal-footer .btn-primary').show();
             const campaniaId = $('select[name="campania_id"]').val();
             const promises = [];
             $('#captura-id').val(data.id || '');
@@ -2336,10 +2343,14 @@
                     changeArtePesca($('#tipo-arte-id').val(), !!data.id);
                 })
                 .finally(() => {
-                    $('.spinner-overlay').addClass('d-none');
+                    if (soloLecturaModal) {
+                        $('#captura-form :input').not('[data-card-widget="collapse"]').not('[data-dismiss="modal"]').prop('disabled', true);
+                        $('#captura-modal .modal-footer .btn-primary').hide();
+                    }
+                    $('#captura-modal').one('shown.bs.modal', function () {
+                        $('.spinner-overlay').addClass('d-none');
+                    }).modal('show');
                 });
-
-            $('#captura-modal').modal('show');
         }
 
         function abrirObservadorModal(data = {}) {
@@ -2374,7 +2385,16 @@
             $.ajax({
                 url: `${ajaxBase}/capturas/${id}`,
                 success: data => abrirModal(data),
-                complete: () => $('.spinner-overlay').addClass('d-none')
+                error: () => $('.spinner-overlay').addClass('d-none')
+            });
+        }
+
+        function verCaptura(id) {
+            $('.spinner-overlay').removeClass('d-none');
+            $.ajax({
+                url: `${ajaxBase}/capturas/${id}`,
+                success: data => abrirModal(data, true),
+                error: () => $('.spinner-overlay').addClass('d-none')
             });
         }
 
@@ -2846,6 +2866,8 @@
             cargarTripulantes();
             cargarParametrosAmbientales();
             cargarEconomiaInsumo();
+
+            $('#capturas-table').on('click', '.ver-captura', function () { verCaptura($(this).data('id')); });
 
             if (!soloLectura) {
                 $('#agregar-captura').on('click', () => abrirModal());
