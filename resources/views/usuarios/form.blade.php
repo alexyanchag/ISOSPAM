@@ -57,15 +57,15 @@ document.addEventListener('DOMContentLoaded', function() {
             processResults: data => ({
                 results: $.map(data, p => ({
                     id: p.idpersona,
-                    text: `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim(),
-                    cedula: p.cedula
+                    text: `${p.identificacion ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim(),
+                    identificacion: p.identificacion
                 }))
             }),
             cache: true
         }
     });
     personaSelect.on('select2:select', e => {
-        usuarioInput.val(e.params.data.cedula || '').prop('readonly', true);
+        usuarioInput.val(e.params.data.identificacion || '').prop('readonly', true);
     }).on('select2:clear', () => {
         usuarioInput.val('').prop('readonly', false);
     });
@@ -74,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`{{ route('api.personas') }}/${selectedPersona}`)
             .then(r => r.json())
             .then(p => {
-                const text = `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim();
+                const text = `${p.identificacion ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim();
                 const opt = new Option(text, p.idpersona, true, true);
                 personaSelect.append(opt).trigger('change');
-                usuarioInput.val(p.cedula || '').prop('readonly', true);
+                usuarioInput.val(p.identificacion || '').prop('readonly', true);
             });
     }
 });
