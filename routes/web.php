@@ -32,6 +32,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\RolMenuController;
 use App\Http\Controllers\RolPersonaController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ViajeController;
 use App\Http\Controllers\CapturaController;
 use App\Http\Controllers\CapturaAjaxController;
@@ -175,6 +176,7 @@ Route::middleware('ensure.logged.in')->group(function () {
 
     Route::delete('rolpersona/{idpersona}/{idrol}', [RolPersonaController::class, 'destroy'])->name('rolpersona.destroy');
     Route::resource('rolpersona', RolPersonaController::class)->only(['index', 'create', 'store']);
+    Route::resource('usuarios', UsuarioController::class)->except(['show']);
 });
 
 
