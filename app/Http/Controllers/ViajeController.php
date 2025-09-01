@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class ViajeController extends Controller
 {
-    public function __construct(private ApiService $apiService)
-    {
-    }
+    public function __construct(private ApiService $apiService) {}
 
     public function index(Request $request)
     {
@@ -65,7 +63,7 @@ class ViajeController extends Controller
         ];
 
         foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = ! empty($campo['requerido'])
                 ? ['required']
                 : ['nullable'];
             $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
@@ -139,7 +137,7 @@ class ViajeController extends Controller
         $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
 
         $camposDinamicos = collect($respuestasMulti)
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'id' => $r['tabla_multifinalitaria_id'] ?? null,
                 'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
                 'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
@@ -189,7 +187,7 @@ class ViajeController extends Controller
         ];
 
         foreach ($campos as $i => $campo) {
-            $rules["respuestas_multifinalitaria.$i.respuesta"] = !empty($campo['requerido'])
+            $rules["respuestas_multifinalitaria.$i.respuesta"] = ! empty($campo['requerido'])
                 ? ['required']
                 : ['nullable'];
             $rules["respuestas_multifinalitaria.$i.tabla_multifinalitaria_id"] = ['nullable', 'integer'];
@@ -203,6 +201,7 @@ class ViajeController extends Controller
                 $campo = (array) $campoMap->get($resp['tabla_multifinalitaria_id'], []);
                 $campo['tabla_multifinalitaria_id'] = $campo['tabla_multifinalitaria_id']
                     ?? $resp['tabla_multifinalitaria_id'];
+
                 return array_merge($campo, [
                     'id' => $resp['id'] ?? ($campo['id'] ?? null),
                     'respuesta' => $resp['respuesta'] ?? null,
@@ -354,7 +353,7 @@ class ViajeController extends Controller
         ]);
     }
 
-    public function mostrar(string $id)
+    public function mostrar(Request $request, string $id)
     {
         $response = $this->apiService->get("/viajes/{$id}");
         if (! $response->successful()) {
@@ -412,7 +411,7 @@ class ViajeController extends Controller
         $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
 
         $camposDinamicos = collect($respuestasMulti)
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'id' => $r['tabla_multifinalitaria_id'] ?? null,
                 'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
                 'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
@@ -424,7 +423,7 @@ class ViajeController extends Controller
 
         $respuestasMulti = $viaje['respuestas_multifinalitaria'] ?? [];
         $camposDinamicos = collect($respuestasMulti)
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'id' => $r['tabla_multifinalitaria_id'] ?? null,
                 'nombre_pregunta' => $r['nombre_pregunta'] ?? '',
                 'tipo_pregunta' => $r['tipo_pregunta'] ?? 'INPUT',
@@ -449,7 +448,7 @@ class ViajeController extends Controller
             'economiaInsumos' => $economiaInsumos,
             'camposDinamicos' => $camposDinamicos,
             'soloLectura' => true,
-            'mostrarSeleccion' => true,
+            'mostrarSeleccion' => $request->boolean('seleccionable', true),
         ]);
     }
 
@@ -473,30 +472,35 @@ class ViajeController extends Controller
     private function getMuelles(): array
     {
         $response = $this->apiService->get('/muelles');
+
         return $response->successful() ? $response->json() : [];
     }
 
     private function getPuertos(): array
     {
         $response = $this->apiService->get('/puertos');
+
         return $response->successful() ? $response->json() : [];
     }
 
     private function getEmbarcaciones(): array
     {
         $response = $this->apiService->get('/embarcaciones');
+
         return $response->successful() ? $response->json() : [];
     }
 
     private function getCampanias(): array
     {
         $response = $this->apiService->get('/campanias');
+
         return $response->successful() ? $response->json() : [];
     }
 
     private function getPersonasPorRol(string $codigoRol): array
     {
         $response = $this->apiService->get("/buscar-personas/{$codigoRol}");
+
         return $response->successful() ? $response->json() : [];
     }
 
@@ -511,11 +515,12 @@ class ViajeController extends Controller
         $campos = $campania['campos'] ?? [];
 
         return collect($campos)
-            ->filter(fn($c) => ($c['tabla_relacionada'] ?? '') === 'viaje')
+            ->filter(fn ($c) => ($c['tabla_relacionada'] ?? '') === 'viaje')
             ->map(function ($c) {
                 $c['opciones'] = is_array($c['opciones'] ?? null)
                     ? json_encode($c['opciones'])
                     : ($c['opciones'] ?? '[]');
+
                 return $c;
             })
             ->values()
