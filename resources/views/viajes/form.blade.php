@@ -15,7 +15,7 @@
     </ul>
 </div>
 @endif
-@empty($soloLectura)
+@if(empty($soloLectura))
 <form id="viaje-form" method="POST"
     action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
     @csrf
@@ -36,11 +36,12 @@
         @endif
     @endisset
     <fieldset disabled>
+@endif
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
             <div class="card-tools">
-                @empty($soloLectura)
+                @if(empty($soloLectura))
                 <button type="submit" class="btn btn-primary">{{ isset($viaje) ? 'Actualizar' : 'Guardar' }}</button>
                 @isset($viaje)
                 @if(request()->boolean('por_finalizar'))
@@ -48,7 +49,7 @@
                     class="btn btn-warning" id="btn-finalizar">Finalizar</button>
                 @endif
                 @endisset
-                @endempty
+                @endif
                 
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
@@ -274,11 +275,11 @@
             </div>
         </div>
     </div>
-    @empty($soloLectura)
+    @if(empty($soloLectura))
     </form>
     @else
     </fieldset>
-    @endempty
+    @endif
 
 @isset($viaje)
 @if(request()->boolean('por_finalizar') || !empty($soloLectura))
