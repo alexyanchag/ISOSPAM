@@ -28,8 +28,8 @@
             <td>{{ $u->apellidos }}</td>
             <td>{{ $u->activo ? 'Sí' : 'No' }}</td>
             <td class="text-right">
-                <a href="{{ route('usuarios.edit', $u->idusuario) }}" class="btn btn-xs btn-secondary">Editar</a>
-                <form action="{{ route('usuarios.destroy', $u->idusuario) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                <a href="{{ route('usuarios.edit', $u->idpersona) }}" class="btn btn-xs btn-secondary">Editar</a>
+                <form action="{{ route('usuarios.destroy', $u->idpersona) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>

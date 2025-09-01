@@ -18,7 +18,7 @@ class UsuarioController extends Controller
     {
         $usuarios = $this->conn->table('usuario')
             ->join('persona', 'persona.idpersona', '=', 'usuario.idpersona')
-            ->select('usuario.idusuario', 'usuario.usuario', 'usuario.activo', 'persona.nombres', 'persona.apellidos')
+            ->select('usuario.idpersona', 'usuario.usuario', 'usuario.activo', 'persona.nombres', 'persona.apellidos')
             ->get();
 
         return view('usuarios.index', [
@@ -72,7 +72,7 @@ class UsuarioController extends Controller
 
     public function edit(int $id)
     {
-        $usuario = $this->conn->table('usuario')->where('idusuario', $id)->first();
+        $usuario = $this->conn->table('usuario')->where('idpersona', $id)->first();
         if (! $usuario) {
             abort(404);
         }
@@ -86,7 +86,7 @@ class UsuarioController extends Controller
 
     public function update(Request $request, int $id)
     {
-        $usuario = $this->conn->table('usuario')->where('idusuario', $id)->first();
+        $usuario = $this->conn->table('usuario')->where('idpersona', $id)->first();
         if (! $usuario) {
             abort(404);
         }
@@ -114,7 +114,7 @@ class UsuarioController extends Controller
                     'email' => $data['email'] ?? null,
                 ]);
 
-                DB::connection('reportes')->table('usuario')->where('idusuario', $id)->update([
+                DB::connection('reportes')->table('usuario')->where('idpersona', $id)->update([
                     'usuario' => $data['usuario'],
                     'clave' => $data['clave'],
                     'activo' => $data['activo'] ?? false,
@@ -131,10 +131,10 @@ class UsuarioController extends Controller
     {
         try {
             DB::connection('reportes')->transaction(function () use ($id) {
-                $usuario = DB::connection('reportes')->table('usuario')->where('idusuario', $id)->first();
+                $usuario = DB::connection('reportes')->table('usuario')->where('idpersona', $id)->first();
                 if ($usuario) {
-                    DB::connection('reportes')->table('usuario')->where('idusuario', $id)->delete();
-                    DB::connection('reportes')->table('persona')->where('idpersona', $usuario->idpersona)->delete();
+                    DB::connection('reportes')->table('usuario')->where('idpersona', $id)->delete();
+                    DB::connection('reportes')->table('persona')->where('idpersona', $id)->delete();
                 }
             });
 
