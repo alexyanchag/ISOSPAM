@@ -23,7 +23,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Clave</label>
-        <input type="text" name="clave" class="form-control" value="{{ old('clave', $usuario->clave ?? '') }}" required>
+        <input type="password" name="clave" class="form-control" value="{{ old('clave', $usuario->clave ?? '') }}" required>
     </div>
     <div class="mb-3">
         <label class="form-label">Activo</label>
