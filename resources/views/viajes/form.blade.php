@@ -270,7 +270,7 @@
 </form>
 
 @isset($viaje)
-@if(request()->boolean('por_finalizar'))
+@if(request()->boolean('por_finalizar') || !empty($soloLectura))
 
 
 <div class="card mt-3">
@@ -1152,41 +1152,41 @@
     $(function () {
         if (soloLectura) {
             $('.select2').prop('disabled', true);
-            return;
-        }
-        document.getElementById('btn-finalizar')?.addEventListener('click', function (e) {
-            e.preventDefault();
-            Swal.fire({
-                title: '¿Finalizar viaje?',
-                text: 'Esta acción no se puede deshacer',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, finalizar',
-                cancelButtonText: 'Cancelar'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    const btn = this;
-                    const form = $('#viaje-form');
-                    $.ajax({
-                        url: btn.getAttribute('formaction'),
-                        method: 'POST',
-                        data: form.serialize(),
-                        success: resp => {
-                            Swal.fire({ icon: 'success', title: 'Éxito', text: resp.message || 'Viaje finalizado' })
-                                .then(() => { if (resp.redirect) window.location.href = resp.redirect; });
-                        },
-                        error: xhr => {
-                            const json = xhr.responseJSON || {};
-                            let msg = json.message || 'Error al finalizar';
-                            if (json.errors) {
-                                msg = Object.values(json.errors).flat().join(' ');
+        } else {
+            document.getElementById('btn-finalizar')?.addEventListener('click', function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Finalizar viaje?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, finalizar',
+                    cancelButtonText: 'Cancelar'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        const btn = this;
+                        const form = $('#viaje-form');
+                        $.ajax({
+                            url: btn.getAttribute('formaction'),
+                            method: 'POST',
+                            data: form.serialize(),
+                            success: resp => {
+                                Swal.fire({ icon: 'success', title: 'Éxito', text: resp.message || 'Viaje finalizado' })
+                                    .then(() => { if (resp.redirect) window.location.href = resp.redirect; });
+                            },
+                            error: xhr => {
+                                const json = xhr.responseJSON || {};
+                                let msg = json.message || 'Error al finalizar';
+                                if (json.errors) {
+                                    msg = Object.values(json.errors).flat().join(' ');
+                                }
+                                Swal.fire({ icon: 'error', title: 'Error', text: msg });
                             }
-                            Swal.fire({ icon: 'error', title: 'Error', text: msg });
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
-        });
+        }
         // Validación de fechas y horas de zarpe y arribo
         const fechaZarpe = document.getElementById('fecha_zarpe');
         const fechaArribo = document.getElementById('fecha_arribo');
@@ -2840,32 +2840,35 @@
             $('#mapa-modal').modal('hide');
         });
 
-        if (viajeId && "{{ request()->boolean('por_finalizar') ? 'true' : 'false' }}" === 'true') {
+        if (viajeId) {
             cargarCapturas();
             cargarObservadores();
             cargarTripulantes();
             cargarParametrosAmbientales();
             cargarEconomiaInsumo();
-            $('#agregar-captura').on('click', () => abrirModal());
-            $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
-            $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
-            $('#agregar-observador').on('click', () => abrirObservadorModal());
-            $('#observadores-table').on('click', '.editar-observador', function () { editarObservador($(this).data('id')); });
-            $('#observadores-table').on('click', '.eliminar-observador', function () { eliminarObservador($(this).data('id')); });
-            $('#agregar-tripulante').on('click', () => abrirTripulanteModal());
-            $('#tripulantes-table').on('click', '.editar-tripulante', function () { editarTripulante($(this).data('id')); });
-            $('#tripulantes-table').on('click', '.eliminar-tripulante', function () { eliminarTripulante($(this).data('id')); });
-            $('#agregar-parametro').on('click', () => abrirParametroModal());
-            $('#parametros-ambientales-table').on('click', '.editar-parametro', function () { editarParametro($(this).data('id')); });
-            $('#parametros-ambientales-table').on('click', '.eliminar-parametro', function () { eliminarParametro($(this).data('id')); });
-            $('#agregar-economia-insumo').on('click', () => abrirEconomiaInsumoModal());
-            $('#economia-insumo-table').on('click', '.editar-economia-insumo', function () { editarEconomiaInsumo($(this).data('id')); });
-            $('#economia-insumo-table').on('click', '.eliminar-economia-insumo', function () { eliminarEconomiaInsumo($(this).data('id')); });
-            $('#agregar-dato-biologico').on('click', () => abrirDatoBiologicoModal());
-            $('#datos-biologicos-table').on('click', '.editar-dato-biologico', function () { editarDatoBiologico($(this).data('id')); });
-            $('#datos-biologicos-table').on('click', '.eliminar-dato-biologico', function () { eliminarDatoBiologico($(this).data('id')); });
-            $('#agregar-archivo-captura').on('click', () => abrirArchivoCapturaModal());
-            $('#archivos-captura-table').on('click', '.eliminar-archivo-captura', function () { eliminarArchivoCaptura($(this).data('id')); });
+
+            if (!soloLectura) {
+                $('#agregar-captura').on('click', () => abrirModal());
+                $('#capturas-table').on('click', '.editar-captura', function () { editarCaptura($(this).data('id')); });
+                $('#capturas-table').on('click', '.eliminar-captura', function () { eliminarCaptura($(this).data('id')); });
+                $('#agregar-observador').on('click', () => abrirObservadorModal());
+                $('#observadores-table').on('click', '.editar-observador', function () { editarObservador($(this).data('id')); });
+                $('#observadores-table').on('click', '.eliminar-observador', function () { eliminarObservador($(this).data('id')); });
+                $('#agregar-tripulante').on('click', () => abrirTripulanteModal());
+                $('#tripulantes-table').on('click', '.editar-tripulante', function () { editarTripulante($(this).data('id')); });
+                $('#tripulantes-table').on('click', '.eliminar-tripulante', function () { eliminarTripulante($(this).data('id')); });
+                $('#agregar-parametro').on('click', () => abrirParametroModal());
+                $('#parametros-ambientales-table').on('click', '.editar-parametro', function () { editarParametro($(this).data('id')); });
+                $('#parametros-ambientales-table').on('click', '.eliminar-parametro', function () { eliminarParametro($(this).data('id')); });
+                $('#agregar-economia-insumo').on('click', () => abrirEconomiaInsumoModal());
+                $('#economia-insumo-table').on('click', '.editar-economia-insumo', function () { editarEconomiaInsumo($(this).data('id')); });
+                $('#economia-insumo-table').on('click', '.eliminar-economia-insumo', function () { eliminarEconomiaInsumo($(this).data('id')); });
+                $('#agregar-dato-biologico').on('click', () => abrirDatoBiologicoModal());
+                $('#datos-biologicos-table').on('click', '.editar-dato-biologico', function () { editarDatoBiologico($(this).data('id')); });
+                $('#datos-biologicos-table').on('click', '.eliminar-dato-biologico', function () { eliminarDatoBiologico($(this).data('id')); });
+                $('#agregar-archivo-captura').on('click', () => abrirArchivoCapturaModal());
+                $('#archivos-captura-table').on('click', '.eliminar-archivo-captura', function () { eliminarArchivoCaptura($(this).data('id')); });
+            }
         }
     });
 </script>
