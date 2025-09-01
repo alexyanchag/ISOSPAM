@@ -62,8 +62,8 @@
         <label class="form-label">Tabla Relacionada</label>
         <select name="tabla_relacionada" class="form-control" id="tabla_relacionada">
             <option value="">Seleccione</option>
-            <option value="captura">captura</option>
-            <option value="viaje">viaje</option>
+            <option value="captura">Captura</option>
+            <option value="viaje">Viaje</option>
         </select>
     </div>
     <div class="mb-3">
