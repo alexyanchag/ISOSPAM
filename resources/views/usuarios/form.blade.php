@@ -8,32 +8,14 @@
 <h3>{{ isset($usuario) ? 'Editar' : 'Nuevo' }} Usuario</h3>
 <form method="POST" action="{{ isset($usuario) ? route('usuarios.update', $usuario->idpersona) : route('usuarios.store') }}">
     @csrf
-    @if(isset($usuario))
+    @isset($usuario)
         @method('PUT')
-    @endif
+    @endisset
     <div class="mb-3">
-        <label class="form-label">Identificación</label>
-        <input type="text" name="identificacion" class="form-control" value="{{ old('identificacion', $persona->identificacion ?? '') }}" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Nombres</label>
-        <input type="text" name="nombres" class="form-control" value="{{ old('nombres', $persona->nombres ?? '') }}" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Apellidos</label>
-        <input type="text" name="apellidos" class="form-control" value="{{ old('apellidos', $persona->apellidos ?? '') }}" required>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Dirección</label>
-        <input type="text" name="direccion" class="form-control" value="{{ old('direccion', $persona->direccion ?? '') }}">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Celular</label>
-        <input type="text" name="celular" class="form-control" value="{{ old('celular', $persona->celular ?? '') }}">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" name="email" class="form-control" value="{{ old('email', $persona->email ?? '') }}">
+        <label class="form-label">Persona</label>
+        <select id="persona_id" name="idpersona" class="form-control">
+            <option value="">Seleccione...</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Usuario</label>
@@ -56,4 +38,48 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const personaSelect = $('#persona_id');
+    const usuarioInput = $('input[name="usuario"]');
+    personaSelect.select2({
+        width: '100%',
+        placeholder: 'Seleccione...',
+        allowClear: true,
+        ajax: {
+            url: "{{ route('ajax.personas.buscar') }}",
+            dataType: 'json',
+            delay: 250,
+            data: params => ({ filtro: params.term }),
+            processResults: data => ({
+                results: $.map(data, p => ({
+                    id: p.idpersona,
+                    text: `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim(),
+                    cedula: p.cedula
+                }))
+            }),
+            cache: true
+        }
+    });
+    personaSelect.on('select2:select', e => {
+        usuarioInput.val(e.params.data.cedula || '').prop('readonly', true);
+    }).on('select2:clear', () => {
+        usuarioInput.val('').prop('readonly', false);
+    });
+    const selectedPersona = @json(old('idpersona', $usuario->idpersona ?? ''));
+    if (selectedPersona) {
+        fetch(`{{ route('api.personas') }}/${selectedPersona}`)
+            .then(r => r.json())
+            .then(p => {
+                const text = `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim();
+                const opt = new Option(text, p.idpersona, true, true);
+                personaSelect.append(opt).trigger('change');
+                usuarioInput.val(p.cedula || '').prop('readonly', true);
+            });
+    }
+});
+</script>
 @endsection
