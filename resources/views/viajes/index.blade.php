@@ -51,7 +51,7 @@
             <td>{{ $v['campania_descripcion'] ?? '' }}</td>
             <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
             <td class="text-right">
-                <a href="{{ route('viajes.edit', $v['id']) }}" class="btn btn-xs btn-secondary">Ver</a>
+                <a href="{{ route('viajes.mostrar', ['viaje' => $v['id'], 'seleccionable' => 0]) }}" class="btn btn-xs btn-secondary">Ver</a>
                 <form action="{{ route('viajes.destroy', $v['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
                     @csrf
                     @method('DELETE')
