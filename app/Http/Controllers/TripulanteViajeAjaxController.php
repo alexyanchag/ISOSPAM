@@ -33,6 +33,7 @@ class TripulanteViajeAjaxController extends Controller
             'viaje_id' => ['required', 'integer'],
             'tipo_tripulante_id' => ['required', 'integer'],
             'persona_idpersona' => ['required', 'integer'],
+            'organizacion_pesquera_id' => ['required', 'integer'],
         ]);
 
         $resp = $this->apiService->post('/tripulantes-viaje', $data);
@@ -46,6 +47,7 @@ class TripulanteViajeAjaxController extends Controller
             'viaje_id' => ['required', 'integer'],
             'tipo_tripulante_id' => ['required', 'integer'],
             'persona_idpersona' => ['required', 'integer'],
+            'organizacion_pesquera_id' => ['required', 'integer'],
         ]);
 
         $resp = $this->apiService->put("/tripulantes-viaje/{$id}", $data);
