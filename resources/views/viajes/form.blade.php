@@ -371,10 +371,15 @@
                         <td>{{ $t['tripulante_nombres'] ?? '' }}</td>
                         <td>{{ $t['organizacion_pesquera_nombre'] ?? '' }}</td>
                         <td class="text-right">
+                            @if(!empty($soloLectura))
+                            <button class="btn btn-xs btn-secondary ver-tripulante" type="button"
+                                data-id="{{ $t['id'] }}">Ver detalles</button>
+                            @else
                             <button class="btn btn-xs btn-secondary editar-tripulante"
                                 data-id="{{ $t['id'] }}">Editar</button>
                             <button class="btn btn-xs btn-danger eliminar-tripulante"
                                 data-id="{{ $t['id'] }}">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -460,10 +465,15 @@
                         <td>{{ $o['tipo_observador_descripcion'] ?? '' }}</td>
                         <td>{{ $o['persona_nombres'] ?? '' }}</td>
                         <td class="text-right">
+                            @if(!empty($soloLectura))
+                            <button class="btn btn-xs btn-secondary ver-observador" type="button"
+                                data-id="{{ $o['id'] }}">Ver detalles</button>
+                            @else
                             <button class="btn btn-xs btn-secondary editar-observador"
                                 data-id="{{ $o['id'] }}">Editar</button>
                             <button class="btn btn-xs btn-danger eliminar-observador"
                                 data-id="{{ $o['id'] }}">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -952,10 +962,15 @@
                         <td>{{ $p['condicion_mar_descripcion'] ?? '' }}</td>
                         <td>{{ $p['oxigeno_mg_l'] ?? '' }}</td>
                         <td class="text-right">
+                            @if(!empty($soloLectura))
+                            <button class="btn btn-xs btn-secondary ver-parametro" type="button"
+                                data-id="{{ $p['id'] }}">Ver detalles</button>
+                            @else
                             <button class="btn btn-xs btn-secondary editar-parametro"
                                 data-id="{{ $p['id'] }}">Editar</button>
                             <button class="btn btn-xs btn-danger eliminar-parametro"
                                 data-id="{{ $p['id'] }}">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -1048,10 +1063,15 @@
                         <td>{{ $e['cantidad'] ?? '' }}</td>
                         <td>{{ $e['precio'] ?? '' }}</td>
                         <td class="text-right">
+                            @if(!empty($soloLectura))
+                            <button class="btn btn-xs btn-secondary ver-economia-insumo" type="button"
+                                data-id="{{ $e['id'] }}">Ver detalles</button>
+                            @else
                             <button class="btn btn-xs btn-secondary editar-economia-insumo"
                                 data-id="{{ $e['id'] }}">Editar</button>
                             <button class="btn btn-xs btn-danger eliminar-economia-insumo"
                                 data-id="{{ $e['id'] }}">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -1605,14 +1625,15 @@
                 success: data => {
                     const tbody = $('#tripulantes-table tbody').empty();
                     data.forEach(t => {
+                        const buttons = soloLectura
+                            ? `<button class="btn btn-xs btn-secondary ver-tripulante" type="button" data-id="${t.id}">Ver detalles</button>`
+                            : `<button class="btn btn-xs btn-secondary editar-tripulante" data-id="${t.id}">Editar</button>` +
+                              `<button class="btn btn-xs btn-danger eliminar-tripulante" data-id="${t.id}">Eliminar</button>`;
                         const row = `<tr>
                                 <td>${t.tipo_tripulante_nombre ?? ''}</td>
                                 <td>${t.tripulante_nombres ?? ''}</td>
                                 <td>${t.organizacion_pesquera_nombre ?? ''}</td>
-                                <td class=\"text-right\">
-                                    <button class=\"btn btn-xs btn-secondary editar-tripulante\" data-id=\"${t.id}\">Editar</button>
-                                    <button class=\"btn btn-xs btn-danger eliminar-tripulante\" data-id=\"${t.id}\">Eliminar</button>
-                                </td>
+                                <td class="text-right">${buttons}</td>
                             </tr>`;
                         tbody.append(row);
                     });
@@ -1627,6 +1648,10 @@
                 success: data => {
                     const tbody = $('#capturas-table tbody').empty();
                     data.forEach(c => {
+                        const buttons = soloLectura
+                            ? `<button class="btn btn-xs btn-secondary ver-captura" type="button" data-id="${c.id}">Ver detalles</button>`
+                            : `<button class="btn btn-xs btn-secondary editar-captura" data-id="${c.id}">Editar</button>` +
+                              `<button class="btn btn-xs btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>`;
                         const row = `<tr>
                                 <td>${c.nombre_comun ?? ''}</td>
                                 <td>${c.especie_nombre ?? ''}</td>
@@ -1638,10 +1663,7 @@
                                 <td>${c.tipo_numero_individuos ?? ''}</td>
                                 <td>${c.tipo_peso ?? ''}</td>
                                 <td>${c.estado_producto ?? ''}</td>
-                                <td class="text-right">
-                                    <button class="btn btn-xs btn-secondary editar-captura" data-id="${c.id}">Editar</button>
-                                    <button class="btn btn-xs btn-danger eliminar-captura" data-id="${c.id}">Eliminar</button>
-                                </td>
+                                <td class="text-right">${buttons}</td>
                             </tr>`;
                         tbody.append(row);
                     });
@@ -1656,13 +1678,14 @@
                 success: data => {
                     const tbody = $('#observadores-table tbody').empty();
                     data.forEach(o => {
+                        const buttons = soloLectura
+                            ? `<button class="btn btn-xs btn-secondary ver-observador" type="button" data-id="${o.id}">Ver detalles</button>`
+                            : `<button class="btn btn-xs btn-secondary editar-observador" data-id="${o.id}">Editar</button>` +
+                              `<button class="btn btn-xs btn-danger eliminar-observador" data-id="${o.id}">Eliminar</button>`;
                         const row = `<tr>
                                 <td>${o.tipo_observador_descripcion ?? ''}</td>
                                 <td>${o.persona_nombres ?? ''}</td>
-                                <td class="text-right">
-                                    <button class="btn btn-xs btn-secondary editar-observador" data-id="${o.id}">Editar</button>
-                                    <button class="btn btn-xs btn-danger eliminar-observador" data-id="${o.id}">Eliminar</button>
-                                </td>
+                                <td class="text-right">${buttons}</td>
                             </tr>`;
                         tbody.append(row);
                     });
@@ -1705,6 +1728,10 @@
                 success: data => {
                     const tbody = $('#parametros-ambientales-table tbody').empty();
                     data.forEach(p => {
+                        const buttons = soloLectura
+                            ? `<button class="btn btn-xs btn-secondary ver-parametro" type="button" data-id="${p.id}">Ver detalles</button>`
+                            : `<button class="btn btn-xs btn-secondary editar-parametro" data-id="${p.id}">Editar</button>` +
+                              `<button class="btn btn-xs btn-danger eliminar-parametro" data-id="${p.id}">Eliminar</button>`;
                         const row = `<tr>
                                 <td>${p.hora ?? ''}</td>
                                 <td>${p.sondeo_ppt ?? ''}</td>
@@ -1712,10 +1739,7 @@
                                 <td>${p.estado_marea_descripcion ?? ''}</td>
                                 <td>${p.condicion_mar_descripcion ?? ''}</td>
                                 <td>${p.oxigeno_mg_l ?? ''}</td>
-                                <td class="text-right">
-                                    <button class="btn btn-xs btn-secondary editar-parametro" data-id="${p.id}">Editar</button>
-                                    <button class="btn btn-xs btn-danger eliminar-parametro" data-id="${p.id}">Eliminar</button>
-                                </td>
+                                <td class="text-right">${buttons}</td>
                             </tr>`;
                         tbody.append(row);
                     });
@@ -1723,7 +1747,9 @@
             });
         }
 
-        function abrirParametroModal(data = {}) {
+        function abrirParametroModal(data = {}, soloLecturaModal = false) {
+            $('#parametro-form :input').prop('disabled', false);
+            $('#parametro-modal .modal-footer .btn-primary').show();
             $('#parametro-id').val(data.id || '');
             $('#hora').val(data.hora || '');
             $('#sondeo_ppt').val(data.sondeo_ppt || '');
@@ -1731,6 +1757,10 @@
             cargarEstadosMarea(data.estado_marea_id || '');
             cargarCondicionesMar(data.condicion_mar_id || '');
             $('#oxigeno_mg_l').val(data.oxigeno_mg_l || '');
+            if (soloLecturaModal) {
+                $('#parametro-form :input').not('[data-dismiss="modal"]').prop('disabled', true);
+                $('#parametro-modal .modal-footer .btn-primary').hide();
+            }
             $('#parametro-modal').modal('show');
         }
 
@@ -1738,6 +1768,13 @@
             $.ajax({
                 url: `${ajaxBase}/parametros-ambientales/${id}`,
                 success: data => abrirParametroModal(data)
+            });
+        }
+
+        function verParametro(id) {
+            $.ajax({
+                url: `${ajaxBase}/parametros-ambientales/${id}`,
+                success: data => abrirParametroModal(data, true)
             });
         }
 
@@ -1757,15 +1794,16 @@
                 success: data => {
                     const tbody = $('#economia-insumo-table tbody').empty();
                     data.forEach(e => {
+                        const buttons = soloLectura
+                            ? `<button class="btn btn-xs btn-secondary ver-economia-insumo" type="button" data-id="${e.id}">Ver detalles</button>`
+                            : `<button class="btn btn-xs btn-secondary editar-economia-insumo" data-id="${e.id}">Editar</button>` +
+                              `<button class="btn btn-xs btn-danger eliminar-economia-insumo" data-id="${e.id}">Eliminar</button>`;
                         const row = `<tr>
                                 <td>${e.nombre_tipo ?? ''}</td>
                                 <td>${e.nombre_unidad ?? ''}</td>
                                 <td>${e.cantidad ?? ''}</td>
                                 <td>${e.precio ?? ''}</td>
-                                <td class="text-right">
-                                    <button class=\"btn btn-xs btn-secondary editar-economia-insumo\" data-id=\"${e.id}\">Editar</button>
-                                    <button class=\"btn btn-xs btn-danger eliminar-economia-insumo\" data-id=\"${e.id}\">Eliminar</button>
-                                </td>
+                                <td class="text-right">${buttons}</td>
                             </tr>`;
                         tbody.append(row);
                     });
@@ -1831,12 +1869,18 @@
                 });
         }
 
-        function abrirEconomiaInsumoModal(data = {}) {
+        function abrirEconomiaInsumoModal(data = {}, soloLecturaModal = false) {
+            $('#economia-insumo-form :input').prop('disabled', false);
+            $('#economia-insumo-modal .modal-footer .btn-primary').show();
             $('#economia-insumo-id').val(data.id || '');
             $('#cantidad').val(data.cantidad || '');
             $('#precio_insumo').val(data.precio || '');
             cargarTiposInsumo(data.tipo_insumo_id || '');
             cargarUnidadesInsumo(data.unidad_insumo_id || '');
+            if (soloLecturaModal) {
+                $('#economia-insumo-form :input').not('[data-dismiss="modal"]').prop('disabled', true);
+                $('#economia-insumo-modal .modal-footer .btn-primary').hide();
+            }
             $('#economia-insumo-modal').modal('show');
         }
 
@@ -1844,6 +1888,13 @@
             $.ajax({
                 url: `${ajaxBase}/economia-insumo/${id}`,
                 success: data => abrirEconomiaInsumoModal(data)
+            });
+        }
+
+        function verEconomiaInsumo(id) {
+            $.ajax({
+                url: `${ajaxBase}/economia-insumo/${id}`,
+                success: data => abrirEconomiaInsumoModal(data, true)
             });
         }
 
@@ -2353,7 +2404,9 @@
                 });
         }
 
-        function abrirObservadorModal(data = {}) {
+        function abrirObservadorModal(data = {}, soloLecturaModal = false) {
+            $('#observador-form :input').prop('disabled', false);
+            $('#observador-modal .modal-footer .btn-primary').show();
             $('#observador-id').val(data.id || '');
             cargarTiposObservador(data.tipo_observador_id || '');
             const personaSelect = $('#persona_idpersona');
@@ -2363,10 +2416,16 @@
             } else {
                 personaSelect.val(null).trigger('change');
             }
+            if (soloLecturaModal) {
+                $('#observador-form :input').not('[data-dismiss="modal"]').prop('disabled', true);
+                $('#observador-modal .modal-footer .btn-primary').hide();
+            }
             $('#observador-modal').modal('show');
         }
 
-        function abrirTripulanteModal(data = {}) {
+        function abrirTripulanteModal(data = {}, soloLecturaModal = false) {
+            $('#tripulante-form :input').prop('disabled', false);
+            $('#tripulante-modal .modal-footer .btn-primary').show();
             $('#tripulante-id').val(data.id || '');
             cargarTiposTripulante(data.tipo_tripulante_id || '');
             cargarOrganizacionesPesqueras(data.organizacion_pesquera_id || '');
@@ -2376,6 +2435,10 @@
                 personaSelect.append(opt).trigger('change');
             } else {
                 personaSelect.val(null).trigger('change');
+            }
+            if (soloLecturaModal) {
+                $('#tripulante-form :input').not('[data-dismiss="modal"]').prop('disabled', true);
+                $('#tripulante-modal .modal-footer .btn-primary').hide();
             }
             $('#tripulante-modal').modal('show');
         }
@@ -2409,6 +2472,20 @@
             $.ajax({
                 url: `${ajaxBase}/tripulantes-viaje/${id}`,
                 success: data => abrirTripulanteModal(data)
+            });
+        }
+
+        function verObservador(id) {
+            $.ajax({
+                url: `${ajaxBase}/observadores-viaje/${id}`,
+                success: data => abrirObservadorModal(data, true)
+            });
+        }
+
+        function verTripulante(id) {
+            $.ajax({
+                url: `${ajaxBase}/tripulantes-viaje/${id}`,
+                success: data => abrirTripulanteModal(data, true)
             });
         }
 
@@ -2868,6 +2945,10 @@
             cargarEconomiaInsumo();
 
             $('#capturas-table').on('click', '.ver-captura', function () { verCaptura($(this).data('id')); });
+            $('#observadores-table').on('click', '.ver-observador', function () { verObservador($(this).data('id')); });
+            $('#tripulantes-table').on('click', '.ver-tripulante', function () { verTripulante($(this).data('id')); });
+            $('#parametros-ambientales-table').on('click', '.ver-parametro', function () { verParametro($(this).data('id')); });
+            $('#economia-insumo-table').on('click', '.ver-economia-insumo', function () { verEconomiaInsumo($(this).data('id')); });
 
             if (!soloLectura) {
                 $('#agregar-captura').on('click', () => abrirModal());
