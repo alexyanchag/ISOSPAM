@@ -99,6 +99,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::resource('estadodesarrollogonadal', EstadoDesarrolloGonadalController::class)->except(['show']);
     Route::resource('personas', PersonaController::class)->except(['show']);
     Route::get('ajax/personas', [PersonaController::class, 'buscarPorRol'])->name('ajax.personas');
+    Route::get('ajax/personas/buscar', [PersonaController::class, 'buscar'])->name('ajax.personas.buscar');
     Route::resource('familias', FamiliaController::class)->except(['show']);
     Route::resource('especies', EspecieController::class)->except(['show']);
     Route::resource('organizacionpesquera', OrganizacionPesqueraController::class)->except(['show']);
