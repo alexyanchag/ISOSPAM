@@ -44,6 +44,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const personaSelect = $('#persona_id');
+    const usuarioInput = $('input[name="usuario"]');
     personaSelect.select2({
         width: '100%',
         placeholder: 'Seleccione...',
@@ -54,18 +55,29 @@ document.addEventListener('DOMContentLoaded', function() {
             delay: 250,
             data: params => ({ filtro: params.term }),
             processResults: data => ({
-                results: $.map(data, p => ({ id: p.idpersona, text: `${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim() }))
+                results: $.map(data, p => ({
+                    id: p.idpersona,
+                    text: `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim(),
+                    cedula: p.cedula
+                }))
             }),
             cache: true
         }
+    });
+    personaSelect.on('select2:select', e => {
+        usuarioInput.val(e.params.data.cedula || '').prop('readonly', true);
+    }).on('select2:clear', () => {
+        usuarioInput.val('').prop('readonly', false);
     });
     const selectedPersona = @json(old('idpersona', $usuario->idpersona ?? ''));
     if (selectedPersona) {
         fetch(`{{ route('api.personas') }}/${selectedPersona}`)
             .then(r => r.json())
             .then(p => {
-                const opt = new Option(`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim(), p.idpersona, true, true);
+                const text = `${p.cedula ?? ''} - ${`${p.nombres ?? ''} ${p.apellidos ?? ''}`.trim()}`.trim();
+                const opt = new Option(text, p.idpersona, true, true);
                 personaSelect.append(opt).trigger('change');
+                usuarioInput.val(p.cedula || '').prop('readonly', true);
             });
     }
 });
