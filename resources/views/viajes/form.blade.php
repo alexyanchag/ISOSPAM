@@ -25,7 +25,16 @@
     <input type="hidden" name="por_finalizar" value="1">
     @endif
     @if(!empty($soloLectura))
-    <fieldset disabled>
+        @isset($viaje)
+        @if(!empty($mostrarSeleccion))
+        <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}"
+            class="seleccionar-form d-inline">
+            @csrf
+            <button type="submit" class="btn btn-primary">Seleccionar viaje</button>
+        </form>
+        @endif
+        @endisset
+        <fieldset disabled>
     @endif
     <div class="card">
         <div class="card-header">
@@ -40,15 +49,7 @@
                 @endif
                 @endisset
                 @endempty
-                @isset($viaje)
-                @if(!empty($mostrarSeleccion))
-                <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}"
-                    class="seleccionar-form d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Seleccionar viaje</button>
-                </form>
-                @endif
-                @endisset
+                
                 <a href="{{ route('viajes.index') }}" class="btn btn-secondary">Cancelar</a>
             </div>
         </div>
