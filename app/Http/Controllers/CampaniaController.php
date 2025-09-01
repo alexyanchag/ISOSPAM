@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CampaniaController extends Controller
 {
@@ -29,8 +30,16 @@ class CampaniaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'fechainicio' => ['nullable', 'date', 'before_or_equal:fechafin'],
-            'fechafin' => ['nullable', 'date', 'after_or_equal:fechainicio'],
+            'fechainicio' => [
+                'nullable',
+                'date',
+                Rule::when($request->filled('fechafin'), 'before_or_equal:fechafin'),
+            ],
+            'fechafin' => [
+                'nullable',
+                'date',
+                Rule::when($request->filled('fechainicio'), 'after_or_equal:fechainicio'),
+            ],
             'descripcion' => ['nullable', 'string'],
         ], [
             'fechainicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha fin.',
@@ -61,8 +70,16 @@ class CampaniaController extends Controller
     public function update(Request $request, string $id)
     {
         $data = $request->validate([
-            'fechainicio' => ['nullable', 'date', 'before_or_equal:fechafin'],
-            'fechafin' => ['nullable', 'date', 'after_or_equal:fechainicio'],
+            'fechainicio' => [
+                'nullable',
+                'date',
+                Rule::when($request->filled('fechafin'), 'before_or_equal:fechafin'),
+            ],
+            'fechafin' => [
+                'nullable',
+                'date',
+                Rule::when($request->filled('fechainicio'), 'after_or_equal:fechainicio'),
+            ],
             'descripcion' => ['nullable', 'string'],
         ], [
             'fechainicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha fin.',
