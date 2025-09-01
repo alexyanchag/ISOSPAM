@@ -2445,20 +2445,24 @@
 
         function editarCaptura(id) {
             $('.spinner-overlay').removeClass('d-none');
-            $.ajax({
-                url: `${ajaxBase}/capturas/${id}`,
-                success: data => abrirModal(data),
-                error: () => $('.spinner-overlay').addClass('d-none')
-            });
+            fetch(`${ajaxBase}/capturas/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => abrirModal(data))
+                .catch(() => $('.spinner-overlay').addClass('d-none'));
         }
 
         function verCaptura(id) {
             $('.spinner-overlay').removeClass('d-none');
-            $.ajax({
-                url: `${ajaxBase}/capturas/${id}`,
-                success: data => abrirModal(data, true),
-                error: () => $('.spinner-overlay').addClass('d-none')
-            });
+            fetch(`${ajaxBase}/capturas/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => abrirModal(data, true))
+                .catch(() => $('.spinner-overlay').addClass('d-none'));
         }
 
         function editarObservador(id) {
