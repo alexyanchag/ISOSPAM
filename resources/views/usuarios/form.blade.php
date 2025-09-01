@@ -6,7 +6,7 @@
 
 @section('content')
 <h3>{{ isset($usuario) ? 'Editar' : 'Nuevo' }} Usuario</h3>
-<form method="POST" action="{{ isset($usuario) ? route('usuarios.update', $usuario->idusuario) : route('usuarios.store') }}">
+<form method="POST" action="{{ isset($usuario) ? route('usuarios.update', $usuario->idpersona) : route('usuarios.store') }}">
     @csrf
     @if(isset($usuario))
         @method('PUT')
