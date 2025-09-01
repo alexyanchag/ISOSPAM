@@ -6,17 +6,18 @@
 
 
 @section('content')
+@if($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+@empty($soloLectura)
 <form id="viaje-form" method="POST"
     action="{{ isset($viaje) ? route('viajes.update', $viaje['id']) : route('viajes.store') }}">
-    @if($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
     @csrf
     @if(isset($viaje))
     @method('PUT')
@@ -24,8 +25,8 @@
     @if(request()->boolean('por_finalizar'))
     <input type="hidden" name="por_finalizar" value="1">
     @endif
-    @if(!empty($soloLectura))
-        @isset($viaje)
+@else
+    @isset($viaje)
         @if(!empty($mostrarSeleccion))
         <form method="POST" action="{{ route('viajes.seleccionar', $viaje['id']) }}"
             class="seleccionar-form d-inline">
@@ -33,9 +34,8 @@
             <button type="submit" class="btn btn-primary">Seleccionar viaje</button>
         </form>
         @endif
-        @endisset
-        <fieldset disabled>
-    @endif
+    @endisset
+    <fieldset disabled>
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">{{ isset($viaje) ? 'Editar' : 'Nuevo' }} Viaje</h3>
@@ -274,10 +274,11 @@
             </div>
         </div>
     </div>
-    @if(!empty($soloLectura))
+    @empty($soloLectura)
+    </form>
+    @else
     </fieldset>
-    @endif
-</form>
+    @endempty
 
 @isset($viaje)
 @if(request()->boolean('por_finalizar') || !empty($soloLectura))
