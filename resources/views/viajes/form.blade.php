@@ -1278,6 +1278,7 @@
         fechaArribo.addEventListener('change', actualizarRestricciones);
         horaZarpe.addEventListener('change', actualizarRestricciones);
         horaArribo.addEventListener('change', actualizarRestricciones);
+        if (form)
         form.addEventListener('submit', function (e) {
             if (fechaZarpe.value && fechaArribo.value) {
                 if (fechaZarpe.value > fechaArribo.value) {
@@ -3009,6 +3010,10 @@
     document.querySelectorAll('.seleccionar-form').forEach(form => {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+            setTimeout(() => {
+                $('.spinner-overlay').addClass('d-none');
+            }, 500);
+            
             Swal.fire({
                 title: '¿Seleccionar viaje?',
                 icon: 'question',
