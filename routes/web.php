@@ -168,6 +168,7 @@ Route::middleware('ensure.logged.in')->group(function () {
     Route::post('ajax/economia-ventas', [EconomiaVentaAjaxController::class, 'store'])->name('ajax.economia-ventas.store');
     Route::put('ajax/economia-ventas/{id}', [EconomiaVentaAjaxController::class, 'update'])->name('ajax.economia-ventas.update');
 
+    Route::patch('menus/{menu}/toggle', [MenuController::class, 'toggle'])->name('menus.toggle');
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::resource('roles', RolController::class)->except(['show']);
     Route::get('rolmenu/{idrol}/{idmenu}/edit', [RolMenuController::class, 'edit'])->name('rolmenu.edit');

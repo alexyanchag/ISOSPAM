@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ApiService;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    public function __construct(private ApiService $apiService)
-    {
-    }
-
     public function index()
     {
-        $response = $this->apiService->get('/menus');
-        $menus = $response->successful() ? $response->json() : [];
-        return view('menus.index', [
-            'menus' => $menus,
-        ]);
+        $menus = Menu::whereNull('idmenupadre')->with('children')->get();
+        return view('menus.index', compact('menus'));
     }
 
     public function create()
     {
         return view('menus.form', [
-            'menus' => $this->getMenus(),
+            'menus' => Menu::all(),
         ]);
     }
 
@@ -32,72 +25,72 @@ class MenuController extends Controller
         $data = $request->validate([
             'url' => ['nullable', 'string'],
             'opcion' => ['required', 'string'],
-            'nivel' => ['nullable', 'string'],
             'icono' => ['nullable', 'string'],
-            'url2' => ['nullable', 'string'],
-            'icono2' => ['nullable', 'string'],
-            'idmenupadre' => ['nullable', 'integer'],
+            'idmenupadre' => ['nullable', 'integer', 'exists:menu,id'],
             'activo' => ['nullable', 'boolean'],
         ]);
+        $data['activo'] = $request->boolean('activo');
 
-        $response = $this->apiService->post('/menus', $data);
+        Menu::create($data);
 
-        if ($response->successful()) {
-            return redirect()->route('menus.index')->with('success', 'Menú creado correctamente');
-        }
-
-        return back()->withErrors(['error' => 'Error al crear'])->withInput();
+        return redirect()->route('menus.index')->with('success', 'Menú creado correctamente');
     }
 
-    public function edit(string $id)
+    public function edit(Menu $menu)
     {
-        $response = $this->apiService->get("/menus/{$id}");
-        if (! $response->successful()) {
-            abort(404);
-        }
-        $menu = $response->json();
         return view('menus.form', [
             'menu' => $menu,
-            'menus' => $this->getMenus(),
+            'menus' => Menu::where('id', '!=', $menu->id)->get(),
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Menu $menu)
     {
         $data = $request->validate([
             'url' => ['nullable', 'string'],
             'opcion' => ['required', 'string'],
-            'nivel' => ['nullable', 'string'],
             'icono' => ['nullable', 'string'],
-            'url2' => ['nullable', 'string'],
-            'icono2' => ['nullable', 'string'],
-            'idmenupadre' => ['nullable', 'integer'],
+            'idmenupadre' => ['nullable', 'integer', 'exists:menu,id'],
             'activo' => ['nullable', 'boolean'],
         ]);
+        $data['activo'] = $request->boolean('activo');
 
-        $response = $this->apiService->put("/menus/{$id}", $data);
-
-        if ($response->successful()) {
-            return redirect()->route('menus.index')->with('success', 'Menú actualizado correctamente');
+        if (! empty($data['idmenupadre'])) {
+            $menu->load('children');
+            if ($data['idmenupadre'] == $menu->id || $this->isDescendant($data['idmenupadre'], $menu)) {
+                return back()->withErrors(['idmenupadre' => 'El menú padre no puede ser el mismo ni un descendiente'])->withInput();
+            }
         }
 
-        return back()->withErrors(['error' => 'Error al actualizar'])->withInput();
+        $menu->update($data);
+
+        return redirect()->route('menus.index')->with('success', 'Menú actualizado correctamente');
     }
 
-    public function destroy(string $id)
+    public function destroy(Menu $menu)
     {
-        $response = $this->apiService->delete("/menus/{$id}");
-
-        if ($response->successful()) {
-            return redirect()->route('menus.index')->with('success', 'Menú eliminado');
+        if ($menu->children()->exists()) {
+            return back()->withErrors(['error' => 'No se puede eliminar un menú con hijos']);
         }
-
-        return back()->withErrors(['error' => 'Error al eliminar']);
+        $menu->delete();
+        return redirect()->route('menus.index')->with('success', 'Menú eliminado');
     }
 
-    private function getMenus(): array
+    public function toggle(Menu $menu)
     {
-        $response = $this->apiService->get('/menus');
-        return $response->successful() ? $response->json() : [];
+        $menu->activo = ! $menu->activo;
+        $menu->save();
+        return back()->with('success', 'Estado actualizado');
+    }
+
+    private function isDescendant(int $parentId, Menu $menu): bool
+    {
+        foreach ($menu->children as $child) {
+            if ($child->id == $parentId || $this->isDescendant($parentId, $child)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
+
