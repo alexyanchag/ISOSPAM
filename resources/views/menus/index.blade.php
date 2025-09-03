@@ -5,44 +5,19 @@
 @endsection
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/menus.css') }}">
 <div class="d-flex justify-content-between mb-3">
     <h3>Menús</h3>
     <a href="{{ route('menus.create') }}" class="btn btn-primary">Nuevo</a>
 </div>
 
-
-<table class="table table-dark table-striped table-compact">
-    <thead>
-        <tr>
-            <th>Opción</th>
-            <th>Nivel</th>
-            <th>Padre</th>
-            <th>Activo</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach($menus as $menu)
-        <tr>
-            <td>{{ $menu['opcion'] ?? '' }}</td>
-            <td>{{ $menu['nivel'] ?? '' }}</td>
-            <td>{{ $menu['idmenupadre'] ?? '' }}</td>
-            <td>{{ isset($menu['activo']) && $menu['activo'] ? 'Sí' : 'No' }}</td>
-            <td class="text-right">
-                <a href="{{ route('menus.edit', $menu['id']) }}" class="btn btn-xs btn-secondary">Editar</a>
-                <form action="{{ route('menus.destroy', $menu['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+<ul class="menu-tree list-unstyled">
+    @include('menus.tree', ['menus' => $menus])
+</ul>
 @endsection
 
 @section('scripts')
+<script src="{{ asset('js/menus.js') }}"></script>
 @if(session('success'))
     <script>
         Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
