@@ -37,7 +37,13 @@ class LoginController extends Controller
         $id = $request->input('id');
         $roles = session('roles', []);
         $selected = collect($roles)->firstWhere('id', $id);
+
         if ($selected) {
+            $menuResponse = $this->apiService->get('/rolmenu', ['idrol' => $id]);
+            if ($menuResponse->successful()) {
+                $selected['menu'] = $menuResponse->json();
+            }
+
             session(['active_role' => $selected]);
         }
 
