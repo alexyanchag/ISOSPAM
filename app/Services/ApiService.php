@@ -21,11 +21,9 @@ class ApiService
         $response = Http::post($this->baseUrl . '/login', $credentials);
 
         if ($response->successful()) {
-            Session::forget('active_role');
             $json = $response->json();
             Session::put('user', $json['persona'] ?? null);
             Session::put('token', $json['access_token'] ?? null);
-            Session::put('roles', $json['roles'] ?? []);
         }
 
         return $response;
