@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use App\Services\ApiService;
 
 class LoginController extends Controller
@@ -11,26 +13,29 @@ class LoginController extends Controller
     public function __construct(private ApiService $apiService)
     {
     }
-    public function showLoginForm()
+    public function showLoginForm(): View
     {
         return view('login');
     }
 
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
 
-        Session::forget('active_role');
+        Session::forget('current_role_id');
 
         $response = $this->apiService->login($data);
 
         if ($response->successful()) {
             $json = $response->json();
-            Session::put('roles', $json['roles'] ?? []);
-            Session::put('active_role', $json['roles'][0] ?? null);
+            $roles = $json['roles'] ?? [];
+            Session::put('roles', $roles);
+            if ($roles !== []) {
+                Session::put('current_role_id', $roles[0]['id'] ?? null);
+            }
 
             return redirect('/');
         }
@@ -38,64 +43,22 @@ class LoginController extends Controller
         return back()->withErrors(['username' => 'Credenciales incorrectas'])->withInput();
     }
 
-    public function selectRole(Request $request)
+    public function selectRole(Request $request): RedirectResponse
     {
-        $id = $request->input('id');
+        $id = (int) $request->input('id');
         $roles = session('roles', []);
-        $selected = collect($roles)->firstWhere('id', $id);
+        $exists = collect($roles)->contains(fn ($r) => ($r['id'] ?? null) === $id);
 
-        if ($selected) {
-            // Try to use menus already present in the login response
-            $menus = $selected['menu'] ?? [];
-
-            // If no menu information, request it from the API
-            if (empty($menus)) {
-                $menuResponse = $this->apiService->get('/rolmenu', ['idrol' => $id]);
-                if ($menuResponse->successful()) {
-                    $menus = $menuResponse->json();
-                }
-            }
-
-            $selected['menu'] = $this->normalizeMenus($menus);
-
-            // Update roles array so future switches use cached menus
-            foreach ($roles as &$rol) {
-                if (($rol['id'] ?? null) == $id) {
-                    $rol['menu'] = $selected['menu'];
-                    break;
-                }
-            }
-
-            session(['active_role' => $selected, 'roles' => $roles]);
+        if ($exists) {
+            Session::put('current_role_id', $id);
         }
 
         return redirect('/');
     }
 
-    public function logout()
+    public function logout(): RedirectResponse
     {
         Session::flush();
         return redirect('/login');
-    }
-
-    private function normalizeMenus(array $menus): array
-    {
-        return array_map(function ($item) {
-            $item = (array) $item;
-
-            foreach (['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre', 'parent_id', 'parentId'] as $key) {
-                if (array_key_exists($key, $item)) {
-                    $item[$key] = $item[$key] === 0 ? null : $item[$key];
-                }
-            }
-
-            foreach (['children', 'hijos', 'menu_hijos', 'menu_hijo', 'submenu', 'submenus', 'childs', 'items'] as $childKey) {
-                if (!empty($item[$childKey]) && is_array($item[$childKey])) {
-                    $item[$childKey] = $this->normalizeMenus($item[$childKey]);
-                }
-            }
-
-            return $item;
-        }, $menus);
     }
 }
