@@ -17,6 +17,10 @@ class EnsureLoggedIn
             return redirect()->route('login');
         }
 
+        if (!session()->has('active_role') && !$request->is('roles/seleccionar')) {
+            return redirect()->route('roles.seleccionar');
+        }
+
         return $next($request);
     }
 }
