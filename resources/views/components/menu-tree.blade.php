@@ -1,52 +1,48 @@
-@props(['menus', 'parentId' => null])
+@props(['menus'])
 
 @php
     use Illuminate\Support\Str;
-
-    $children = $menus->where('idmenupadre', $parentId);
+    use Illuminate\Support\Facades\Route;
 @endphp
 
-@foreach ($children as $menu)
+@foreach ($menus as $menu)
     @php
-        $hasChildren = $menus->where('idmenupadre', $menu->id)->isNotEmpty();
-
+        $children = $menu['children'] ?? [];
+        $hasChildren = !empty($children);
+        $url = $menu['url'] ?? '#';
         $href = '#';
-        if ($menu->url && $menu->url !== '#') {
-            $href = Route::has($menu->url) ? route($menu->url) : url($menu->url);
-        }
-
-        $icon = trim($menu->icono);
-        if ($icon) {
-            if (!Str::contains($icon, 'fa-')) {
-                $icon = 'fas fa-' . $icon;
-            } elseif (!Str::startsWith($icon, ['fas', 'far', 'fab', 'fal', 'fad'])) {
-                $icon = 'fas ' . $icon;
+        if ($url !== '#') {
+            if (Str::startsWith($url, '/')) {
+                $href = $url;
+            } else {
+                $href = Route::has($url) ? route($url) : url($url);
             }
         }
+        $isActive = $menu['active'] ?? false;
     @endphp
 
     @if ($hasChildren)
-        <li class="nav-item has-treeview">
-            <a href="{{ $href }}" class="nav-link">
-                @if($icon)
-                    <i class="nav-icon {{ $icon }}"></i>
+        <li class="nav-item has-treeview {{ $isActive ? 'menu-open' : '' }}">
+            <a href="{{ $href }}" class="nav-link {{ $isActive ? 'active' : '' }}">
+                @if(!empty($menu['icono']))
+                    <i class="nav-icon {{ $menu['icono'] }}"></i>
                 @endif
                 <p>
-                    {{ $menu->opcion }}
+                    {{ $menu['opcion'] }}
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <x-menu-tree :menus="$menus" :parent-id="$menu->id" />
+                <x-menu-tree :menus="$children" />
             </ul>
         </li>
     @else
         <li class="nav-item">
-            <a href="{{ $href }}" class="nav-link">
-                @if($icon)
-                    <i class="nav-icon {{ $icon }}"></i>
+            <a href="{{ $href }}" class="nav-link {{ $isActive ? 'active' : '' }}">
+                @if(!empty($menu['icono']))
+                    <i class="nav-icon {{ $menu['icono'] }}"></i>
                 @endif
-                <p>{{ $menu->opcion }}</p>
+                <p>{{ $menu['opcion'] }}</p>
             </a>
         </li>
     @endif

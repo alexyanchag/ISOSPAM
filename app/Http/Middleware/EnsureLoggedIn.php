@@ -13,12 +13,8 @@ class EnsureLoggedIn
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('user')) {
+        if (!session()->has('persona')) {
             return redirect()->route('login');
-        }
-
-        if (!session()->has('active_role') && !$request->is('roles/seleccionar')) {
-            return redirect()->route('roles.seleccionar');
         }
 
         return $next($request);

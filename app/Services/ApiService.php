@@ -22,8 +22,8 @@ class ApiService
 
         if ($response->successful()) {
             $json = $response->json();
-            Session::put('user', $json['persona'] ?? null);
-            Session::put('token', $json['access_token'] ?? null);
+            Session::put('persona', $json['persona'] ?? null);
+            Session::put('access_token', $json['access_token'] ?? null);
         }
 
         return $response;
@@ -36,8 +36,8 @@ class ApiService
     {
         $request = Http::baseUrl($this->baseUrl);
 
-        if (Session::has('token')) {
-            $request = $request->withToken(Session::get('token'));
+        if (Session::has('access_token')) {
+            $request = $request->withToken(Session::get('access_token'));
         }
 
         return $request;
@@ -53,8 +53,8 @@ class ApiService
         $base = str_replace('/isospam', '', $this->baseUrl);
         $request = Http::baseUrl($base);
 
-        if (Session::has('token')) {
-            $request = $request->withToken(Session::get('token'));
+        if (Session::has('access_token')) {
+            $request = $request->withToken(Session::get('access_token'));
         }
 
         return $request->get("/archivos/{$path}");

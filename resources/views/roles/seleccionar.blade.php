@@ -17,7 +17,9 @@
                 <label for="id">Rol</label>
                 <select name="id" id="id" class="form-control" required>
                     @foreach(session('roles', []) as $rol)
-                        <option value="{{ $rol['id'] }}">{{ $rol['nombrerol'] ?? $rol['id'] }}</option>
+                        <option value="{{ $rol['id'] }}" {{ session('current_role_id') == $rol['id'] ? 'selected' : '' }}>
+                            {{ $rol['nombrerol'] ?? $rol['id'] }}
+                        </option>
                     @endforeach
                 </select>
             </div>

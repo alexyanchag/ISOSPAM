@@ -30,7 +30,7 @@
                             @csrf
                             <select name="id" class="form-control form-control-sm" onchange="this.form.submit()">
                                 @foreach(session('roles', []) as $rol)
-                                    <option value="{{ $rol['id'] }}" {{ session('active_role.id') == $rol['id'] ? 'selected' : '' }}>
+                                    <option value="{{ $rol['id'] }}" {{ session('current_role_id') == $rol['id'] ? 'selected' : '' }}>
                                         {{ $rol['nombrerol'] ?? $rol['id'] }}
                                     </option>
                                 @endforeach
@@ -38,7 +38,7 @@
                         </form>
                     </li>
                 @endif
-                @if(session('user'))
+                @if(session('persona'))
                     <li class="nav-item ml-2"><a class="btn btn-xs btn-primary" href="{{ url('/logout') }}">Cerrar sesión</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
@@ -54,10 +54,21 @@
                     alt="{{ config('app.name', 'Laravel') }}" class="img-fluid" style="max-height: 40px;">
             </a>
             <div class="sidebar">
+                @php
+                    use App\Support\MenuBuilder;
+                    $roles = session('roles', []);
+                    $currentRoleId = session('current_role_id');
+                    if ($currentRoleId === null && $roles !== []) {
+                        $currentRoleId = $roles[0]['id'] ?? null;
+                        session(['current_role_id' => $currentRoleId]);
+                    }
+                    $activeRole = collect($roles)->firstWhere('id', $currentRoleId);
+                    $menuTree = MenuBuilder::build($activeRole['menu'] ?? []);
+                @endphp
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                        @if(session('active_role.menu'))
-                            <x-menu-tree :menus="session('active_role.menu')" />
+                        @if($menuTree)
+                            <x-menu-tree :menus="$menuTree" />
                         @endif
                     </ul>
                 </nav>

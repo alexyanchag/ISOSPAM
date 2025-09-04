@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
-class LoginClearsActiveRoleTest extends TestCase
+class LoginStoresRolesTest extends TestCase
 {
-    public function test_active_role_is_cleared_on_login(): void
+    public function test_roles_and_tokens_are_stored_on_login(): void
     {
         Session::start();
-        Session::put('active_role', ['menus' => ['old']]);
+        Session::put('current_role_id', 99);
 
         $roles = [
             ['id' => 1],
@@ -35,6 +35,8 @@ class LoginClearsActiveRoleTest extends TestCase
         $response->assertRedirect('/');
 
         $this->assertSame($roles, Session::get('roles'));
-        $this->assertSame($roles[0], Session::get('active_role'));
+        $this->assertSame($roles[0]['id'], Session::get('current_role_id'));
+        $this->assertSame(['name' => 'User'], Session::get('persona'));
+        $this->assertSame('token', Session::get('access_token'));
     }
 }
