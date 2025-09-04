@@ -7,7 +7,8 @@
 
 @foreach ($menus as $menu)
     @php
-        $children = $menu['children'] ?? [];
+        $menu = (array) $menu;
+        $children = (array) ($menu['children'] ?? []);
         $hasChildren = !empty($children);
         $url = $menu['url'] ?? '#';
         $href = '#';
