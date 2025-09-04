@@ -1,18 +1,20 @@
 @foreach($menus as $menu)
-    <li>
-        <div class="d-flex align-items-center mb-1">
+    <tr data-menu-id="{{ $menu->id }}" class="{{ isset($parent) ? 'd-none parent-'.$parent : '' }}">
+        <td style="padding-left: {{ ($level ?? 0) * 20 }}px;">
             @if($menu->children->isNotEmpty())
-                <button class="btn btn-sm btn-link p-0 me-1 menu-toggle" data-target="#children-{{ $menu->id }}">-</button>
+                <button class="btn btn-sm btn-link p-0 me-1 menu-toggle" data-id="{{ $menu->id }}">-</button>
             @else
                 <span class="me-3"></span>
             @endif
-            <span class="flex-grow-1 {{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
+            <span class="{{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
+        </td>
+        <td class="text-end">
             <div class="btn-group btn-group-sm">
                 <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary">Editar</a>
-                <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline delete-menu-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger delete-menu-btn">Eliminar</button>
                 </form>
                 <form action="{{ route('menus.toggle', $menu) }}" method="POST" class="d-inline">
                     @csrf
@@ -20,11 +22,9 @@
                     <button type="submit" class="btn btn-{{ $menu->activo ? 'warning' : 'success' }}">{{ $menu->activo ? 'Desactivar' : 'Activar' }}</button>
                 </form>
             </div>
-        </div>
-        @if($menu->children->isNotEmpty())
-            <ul id="children-{{ $menu->id }}" class="ms-4">
-                @include('menus.tree', ['menus' => $menu->children])
-            </ul>
-        @endif
-    </li>
+        </td>
+    </tr>
+    @if($menu->children->isNotEmpty())
+        @include('menus.tree', ['menus' => $menu->children, 'parent' => $menu->id, 'level' => ($level ?? 0) + 1])
+    @endif
 @endforeach

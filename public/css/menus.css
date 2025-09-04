@@ -1,7 +1,3 @@
-.menu-tree ul {
-    list-style: none;
-    padding-left: 1rem;
-}
-.menu-tree li {
-    margin: 0.25rem 0;
+.menu-tree .menu-toggle {
+    width: 1.5rem;
 }
