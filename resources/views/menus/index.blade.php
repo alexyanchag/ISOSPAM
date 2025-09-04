@@ -15,6 +15,13 @@
     </div>
     <div class="card-body">
         <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Menú</th>
+                    <th>URL</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
             <tbody class="menu-tree">
                 @include('menus.tree', ['menus' => $menus, 'level' => 0])
             </tbody>

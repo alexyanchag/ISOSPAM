@@ -8,18 +8,19 @@
             @endif
             <span class="{{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
         </td>
+        <td>{{ $menu->url }}</td>
         <td class="text-end" style="width: 200px;">
-            <div class="btn-group btn-group-sm">
-                <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary">Editar</a>
+            <div class="btn-group">
+                <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary btn-xs">Editar</a>
                 <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline delete-menu-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger delete-menu-btn">Eliminar</button>
+                    <button type="submit" class="btn btn-danger btn-xs delete-menu-btn">Eliminar</button>
                 </form>
                 <form action="{{ route('menus.toggle', $menu) }}" method="POST" class="d-inline">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="btn btn-{{ $menu->activo ? 'warning' : 'success' }}">{{ $menu->activo ? 'Desactivar' : 'Activar' }}</button>
+                    <button type="submit" class="btn btn-{{ $menu->activo ? 'warning' : 'success' }} btn-xs">{{ $menu->activo ? 'Desactivar' : 'Activar' }}</button>
                 </form>
             </div>
         </td>
