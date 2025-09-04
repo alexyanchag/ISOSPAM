@@ -39,13 +39,28 @@ class LoginController extends Controller
         $selected = collect($roles)->firstWhere('id', $id);
 
         if ($selected) {
-            $menuResponse = $this->apiService->get('/rolmenu', ['idrol' => $id]);
-            if ($menuResponse->successful()) {
-                $menus = $menuResponse->json();
-                $selected['menu'] = $this->normalizeMenus($menus);
+            // Try to use menus already present in the login response
+            $menus = $selected['menu'] ?? [];
+
+            // If no menu information, request it from the API
+            if (empty($menus)) {
+                $menuResponse = $this->apiService->get('/rolmenu', ['idrol' => $id]);
+                if ($menuResponse->successful()) {
+                    $menus = $menuResponse->json();
+                }
             }
 
-            session(['active_role' => $selected]);
+            $selected['menu'] = $this->normalizeMenus($menus);
+
+            // Update roles array so future switches use cached menus
+            foreach ($roles as &$rol) {
+                if (($rol['id'] ?? null) == $id) {
+                    $rol['menu'] = $selected['menu'];
+                    break;
+                }
+            }
+
+            session(['active_role' => $selected, 'roles' => $roles]);
         }
 
         return redirect('/');
