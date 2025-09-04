@@ -37,34 +37,46 @@ class MenuTree extends Component
         foreach ($menus as $item) {
             $item = (array) $item;
 
-            $id = isset($item['id']) ? (int) $item['id'] : (isset($item['idmenu']) ? (int) $item['idmenu'] : null);
-            $parent = isset($item['idmenupadre'])
-                ? (int) $item['idmenupadre']
-                : (isset($item['idmenu_padre']) ? (int) $item['idmenu_padre'] : $parentId);
+            $id = $this->firstValue($item, ['id', 'idmenu', 'id_menu', 'idMenu']);
+            $id = $id !== null ? (int) $id : null;
+
+            $parent = $this->firstValue(
+                $item,
+                ['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre']
+            );
+            $parent = $parent !== null ? (int) $parent : $parentId;
             $parent = $parent === 0 ? null : $parent;
 
             $menu = (object) [
                 'id' => $id,
-                'opcion' => $item['opcion'] ?? $item['opcion_menu'] ?? null,
-                'url' => $item['url'] ?? $item['url_menu'] ?? null,
-                'icono' => $item['icono'] ?? $item['icono_menu'] ?? null,
+                'opcion' => $this->firstValue($item, ['opcion', 'opcion_menu']),
+                'url' => $this->firstValue($item, ['url', 'url_menu']),
+                'icono' => $this->firstValue($item, ['icono', 'icono_menu', 'icon']),
                 'idmenupadre' => $parent,
             ];
 
             $this->menus->push($menu);
 
-            $children = $item['children']
-                ?? $item['hijos']
-                ?? $item['menu_hijos']
-                ?? $item['menu_hijo']
-                ?? $item['submenu']
-                ?? $item['submenus']
-                ?? [];
+            $children = $this->firstValue(
+                $item,
+                ['children', 'hijos', 'menu_hijos', 'menu_hijo', 'submenu', 'submenus']
+            ) ?? [];
 
             if (is_iterable($children)) {
                 $this->flattenMenus($children, $id);
             }
         }
+    }
+
+    private function firstValue(array $item, array $keys)
+    {
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $item)) {
+                return $item[$key];
+            }
+        }
+
+        return null;
     }
 
     /**
