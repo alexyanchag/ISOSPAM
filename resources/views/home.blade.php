@@ -25,11 +25,6 @@
                             @foreach(session('roles') as $rol)
                                 <div class="mb-3">
                                     <strong>{{ $rol['nombrerol'] ?? '' }}</strong>
-                                    @if(!empty($rol['menu']))
-                                        <ul class="ml-3 mt-1">
-                                            <x-menu-tree :menus="$rol['menu']" />
-                                        </ul>
-                                    @endif
                                 </div>
                             @endforeach
                         @endif
