@@ -54,7 +54,7 @@
             <td>{{ ($v['pescador_nombres'] ?? '') . ' ' . ($v['pescador_apellidos'] ?? '') }}</td>
             <td class="text-right">
                 <a href="{{ route('viajes.mostrar', ['viaje' => $v['id'], 'seleccionable' => 0]) }}" class="btn btn-xs btn-secondary">Ver</a>
-                <form action="{{ route('viajes.destroy', $v['id']) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                <form action="{{ route('viajes.destroy', $v['id']) }}" method="POST" class="d-inline delete-form">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-xs btn-danger">Eliminar</button>
@@ -69,6 +69,28 @@
 </div>
 @endsection
 @section('scripts')
+    <script>
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                Swal.fire({
+                    title: '¿Eliminar?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.querySelector('.spinner-overlay').classList.remove('d-none');
+                        form.submit();
+                    } else {
+                        document.querySelector('.spinner-overlay').classList.add('d-none');
+                    }
+                });
+            });
+        });
+    </script>
     @if(session('success'))
         <script>
             Swal.fire({icon: 'success', title: 'Éxito', text: @json(session('success'))});
