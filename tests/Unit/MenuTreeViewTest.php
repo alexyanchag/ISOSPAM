@@ -34,4 +34,21 @@ class MenuTreeViewTest extends TestCase
 
         $this->assertSame($arrayHtml, $objectHtml);
     }
+
+    public function test_renders_sublevels_when_menu_has_children(): void
+    {
+        $menus = [
+            [
+                'opcion' => 'Parent',
+                'url' => '#',
+                'children' => [
+                    ['opcion' => 'Child', 'url' => '/child'],
+                ],
+            ],
+        ];
+
+        $html = view('components.menu-tree', ['menus' => $menus])->render();
+
+        $this->assertStringContainsString('<ul class="nav nav-treeview">', $html);
+    }
 }
