@@ -11,7 +11,7 @@ class ApiService
     /**
      * Base URL for API requests.
      */
-    protected string $baseUrl = 'http://179.49.62.100:9090/isospam';
+    protected string $baseUrl = 'http://localhost:9090/isospam';
 
     /**
      * Perform login and store token in the session.

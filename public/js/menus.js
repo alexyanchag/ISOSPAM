@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll(`.parent-${id}`).forEach(row => {
             row.classList.add('d-none');
             const toggle = row.querySelector('.menu-toggle');
-            if (toggle) toggle.textContent = '+';
+            if (toggle) toggle.innerHTML = '<i class="fa-solid fa-plus"></i>';
             hideChildren(row.dataset.menuId);
         });
     }
@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const anyVisible = Array.from(children).some(row => !row.classList.contains('d-none'));
             if (anyVisible) {
                 hideChildren(id);
-                this.textContent = '+';
+                this.innerHTML = '<i class="fa-solid fa-plus"></i>';
             } else {
                 children.forEach(row => row.classList.remove('d-none'));
-                this.textContent = '-';
+                this.innerHTML = '<i class="fa-solid fa-minus"></i>';
             }
         });
     });

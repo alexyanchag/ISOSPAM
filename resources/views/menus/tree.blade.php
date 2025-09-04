@@ -1,14 +1,14 @@
 @foreach($menus as $menu)
     <tr data-menu-id="{{ $menu->id }}" class="{{ isset($parent) ? 'd-none parent-'.$parent : '' }}">
-        <td style="padding-left: {{ ($level ?? 0) * 20 }}px;">
+        <td style="padding-left: {{ ($level ?? 0) * 20 }}px; white-space: nowrap;">
             @if($menu->children->isNotEmpty())
-                <button class="btn btn-sm btn-link p-0 me-1 menu-toggle" data-id="{{ $menu->id }}">-</button>
+                <button class="btn btn-sm btn-link p-0 me-1 menu-toggle" data-id="{{ $menu->id }}"><i class="fa-solid fa-plus"></i></button>
             @else
                 <span class="me-3"></span>
             @endif
             <span class="{{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
         </td>
-        <td class="text-end">
+        <td class="text-end" style="width: 200px;">
             <div class="btn-group btn-group-sm">
                 <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary">Editar</a>
                 <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline delete-menu-form">

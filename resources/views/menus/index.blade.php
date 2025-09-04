@@ -7,9 +7,11 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/menus.css') }}">
 <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="mb-0">Menús</h3>
-        <a href="{{ route('menus.create') }}" class="btn btn-primary">Nuevo</a>
+    <div class="card-header">
+        <h3 class="card-title">Menús</h3>
+        <div class="card-tools">
+            <a href="{{ route('menus.create') }}" class="btn btn-primary">Nuevo</a>
+        </div>
     </div>
     <div class="card-body">
         <table class="table table-sm">
