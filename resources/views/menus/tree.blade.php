@@ -9,10 +9,10 @@
             <span class="flex-grow-1 {{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
             <div class="btn-group btn-group-sm">
                 <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary">Editar</a>
-                <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?');">
+                <form action="{{ route('menus.destroy', $menu) }}" method="POST" class="d-inline delete-menu-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger delete-menu-btn">Eliminar</button>
                 </form>
                 <form action="{{ route('menus.toggle', $menu) }}" method="POST" class="d-inline">
                     @csrf
