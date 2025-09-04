@@ -251,7 +251,7 @@ class ViajeController extends Controller
 
     public function misPorFinalizar(Request $request)
     {
-        $digitadorId = $request->query('digitador_id', session('user.idpersona'));
+        $digitadorId = $request->query('digitador_id', session('persona.idpersona'));
 
         $digitadores = $this->getPersonasPorRol('CTF');
 
@@ -454,7 +454,7 @@ class ViajeController extends Controller
 
     public function seleccionar(string $id)
     {
-        $digitadorId = session('user.idpersona');
+        $digitadorId = session('persona.idpersona');
 
         $response = $this->apiService->post(
             "/viajes/{$id}/seleccionar?viaje_id={$id}&digitador_id={$digitadorId}"

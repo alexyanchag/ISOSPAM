@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-    @if(session('user'))
+    @if(session('persona'))
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm h-100">
@@ -10,8 +10,8 @@
                         <h5 class="card-title mb-3">Usuario</h5>
                     </div>
                     <div class="card-body">
-                        <p class="mb-1 font-weight-bold">{{ session('user.nombres') }} {{ session('user.apellidos') }}</p>
-                        <p class="mb-0 text-muted">{{ session('user.email') }}</p>
+                        <p class="mb-1 font-weight-bold">{{ session('persona.nombres') }} {{ session('persona.apellidos') }}</p>
+                        <p class="mb-0 text-muted">{{ session('persona.email') }}</p>
                     </div>
                 </div>
             </div>
