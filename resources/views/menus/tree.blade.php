@@ -8,6 +8,7 @@
             @endif
             <span class="{{ $menu->activo ? '' : 'text-muted' }}">{{ $menu->opcion }}</span>
         </td>
+        <td>{{ $menu->url }}</td>
         <td class="text-end" style="width: 200px;">
             <div class="btn-group">
                 <a href="{{ route('menus.edit', $menu) }}" class="btn btn-secondary btn-xs">Editar</a>
