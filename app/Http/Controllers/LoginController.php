@@ -62,13 +62,13 @@ class LoginController extends Controller
         return array_map(function ($item) {
             $item = (array) $item;
 
-            foreach (['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre'] as $key) {
+            foreach (['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre', 'parent_id', 'parentId'] as $key) {
                 if (array_key_exists($key, $item)) {
                     $item[$key] = $item[$key] === 0 ? null : $item[$key];
                 }
             }
 
-            foreach (['children', 'hijos', 'menu_hijos', 'menu_hijo', 'submenu', 'submenus'] as $childKey) {
+            foreach (['children', 'hijos', 'menu_hijos', 'menu_hijo', 'submenu', 'submenus', 'childs', 'items'] as $childKey) {
                 if (!empty($item[$childKey]) && is_array($item[$childKey])) {
                     $item[$childKey] = $this->normalizeMenus($item[$childKey]);
                 }

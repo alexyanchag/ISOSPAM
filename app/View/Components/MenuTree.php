@@ -37,12 +37,12 @@ class MenuTree extends Component
         foreach ($menus as $item) {
             $item = (array) $item;
 
-            $id = $this->firstValue($item, ['id', 'idmenu', 'id_menu', 'idMenu']);
+            $id = $this->firstValue($item, ['id', 'idmenu', 'id_menu', 'idMenu', 'menu_id']);
             $id = $id !== null ? (int) $id : null;
 
             $parent = $this->firstValue(
                 $item,
-                ['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre']
+                ['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre', 'parent_id', 'parentId']
             );
             $parent = $parent !== null ? (int) $parent : $parentId;
             $parent = $parent === 0 ? null : $parent;
@@ -50,8 +50,8 @@ class MenuTree extends Component
             $menu = (object) [
                 'id' => $id,
                 'opcion' => $this->firstValue($item, ['opcion', 'opcion_menu']),
-                'url' => $this->firstValue($item, ['url', 'url_menu']),
-                'icono' => $this->firstValue($item, ['icono', 'icono_menu', 'icon']),
+                'url' => $this->firstValue($item, ['url', 'url_menu', 'route']),
+                'icono' => $this->firstValue($item, ['icono', 'icono_menu', 'icon', 'icon_class']),
                 'idmenupadre' => $parent,
             ];
 
