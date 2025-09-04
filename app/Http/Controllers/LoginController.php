@@ -41,7 +41,8 @@ class LoginController extends Controller
         if ($selected) {
             $menuResponse = $this->apiService->get('/rolmenu', ['idrol' => $id]);
             if ($menuResponse->successful()) {
-                $selected['menu'] = $menuResponse->json();
+                $menus = $menuResponse->json();
+                $selected['menu'] = $this->normalizeMenus($menus);
             }
 
             session(['active_role' => $selected]);
@@ -54,5 +55,26 @@ class LoginController extends Controller
     {
         Session::flush();
         return redirect('/login');
+    }
+
+    private function normalizeMenus(array $menus): array
+    {
+        return array_map(function ($item) {
+            $item = (array) $item;
+
+            foreach (['idmenupadre', 'idmenu_padre', 'idMenuPadre', 'id_menu_padre'] as $key) {
+                if (array_key_exists($key, $item)) {
+                    $item[$key] = $item[$key] === 0 ? null : $item[$key];
+                }
+            }
+
+            foreach (['children', 'hijos', 'menu_hijos', 'menu_hijo', 'submenu', 'submenus'] as $childKey) {
+                if (!empty($item[$childKey]) && is_array($item[$childKey])) {
+                    $item[$childKey] = $this->normalizeMenus($item[$childKey]);
+                }
+            }
+
+            return $item;
+        }, $menus);
     }
 }
