@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Services\ApiService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
@@ -14,18 +13,28 @@ class LoginClearsActiveRoleTest extends TestCase
         Session::start();
         Session::put('active_role', ['menus' => ['old']]);
 
+        $roles = [
+            ['id' => 1],
+            ['id' => 2],
+        ];
+
         Http::fake([
             'http://localhost:9090/isospam/login' => Http::response([
                 'persona' => ['name' => 'User'],
                 'access_token' => 'token',
-                'roles' => [],
+                'roles' => $roles,
             ], 200),
         ]);
 
-        $service = new ApiService();
-        $service->login(['email' => 'a', 'password' => 'b']);
+        $response = $this->post('/login', [
+            'username' => 'a',
+            'password' => 'b',
+            '_token' => csrf_token(),
+        ]);
 
-        $this->assertFalse(Session::has('active_role'));
-        $this->assertSame([], Session::get('roles'));
+        $response->assertRedirect('/');
+
+        $this->assertSame($roles, Session::get('roles'));
+        $this->assertSame($roles[0], Session::get('active_role'));
     }
 }

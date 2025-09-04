@@ -23,9 +23,15 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        Session::forget('active_role');
+
         $response = $this->apiService->login($data);
 
         if ($response->successful()) {
+            $json = $response->json();
+            Session::put('roles', $json['roles'] ?? []);
+            Session::put('active_role', $json['roles'][0] ?? null);
+
             return redirect('/');
         }
 
