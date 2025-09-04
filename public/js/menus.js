@@ -1,10 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
+    function hideChildren(id) {
+        document.querySelectorAll(`.parent-${id}`).forEach(row => {
+            row.classList.add('d-none');
+            const toggle = row.querySelector('.menu-toggle');
+            if (toggle) toggle.textContent = '+';
+            hideChildren(row.dataset.menuId);
+        });
+    }
+
     document.querySelectorAll('.menu-toggle').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            const target = document.querySelector(this.dataset.target);
-            if (target) {
-                target.classList.toggle('d-none');
-                this.textContent = target.classList.contains('d-none') ? '+' : '-';
+            const id = this.dataset.id;
+            const children = document.querySelectorAll(`.parent-${id}`);
+            if (children.length === 0) return;
+            const anyVisible = Array.from(children).some(row => !row.classList.contains('d-none'));
+            if (anyVisible) {
+                hideChildren(id);
+                this.textContent = '+';
+            } else {
+                children.forEach(row => row.classList.remove('d-none'));
+                this.textContent = '-';
             }
         });
     });
