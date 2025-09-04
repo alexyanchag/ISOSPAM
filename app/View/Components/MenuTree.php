@@ -33,12 +33,15 @@ class MenuTree extends Component
         $this->menus = collect($menus)->map(function ($item) {
             $item = (array) $item;
 
+            $id = $item['id'] ?? $item['idmenu'] ?? null;
+            $idmenupadre = $item['idmenupadre'] ?? $item['idmenu_padre'] ?? null;
+
             return (object) [
-                'id' => $item['id'] ?? $item['idmenu'] ?? null,
+                'id' => is_numeric($id) ? (int) $id : null,
                 'opcion' => $item['opcion'] ?? $item['opcion_menu'] ?? null,
                 'url' => $item['url'] ?? $item['url_menu'] ?? null,
                 'icono' => $item['icono'] ?? $item['icono_menu'] ?? null,
-                'idmenupadre' => $item['idmenupadre'] ?? $item['idmenu_padre'] ?? null,
+                'idmenupadre' => is_numeric($idmenupadre) ? (int) $idmenupadre : null,
             ];
         });
         $this->parentId = $parentId;
