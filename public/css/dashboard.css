@@ -33,3 +33,8 @@ body.sidebar-collapsed .menu-text {
 {
     height: 35px;
 }
+
+.btn-xs {
+    padding: 0.15rem 0.35rem;
+    font-size: 0.75rem;
+}
