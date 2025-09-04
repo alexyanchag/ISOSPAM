@@ -62,8 +62,12 @@ class RolMenuController extends Controller
     public function update(Request $request, int $idrol, int $idmenu)
     {
         $data = $request->validate([
+            'idrol' => ['required', 'integer'],
+            'idmenu' => ['required', 'integer'],
             'acceso' => ['required', 'integer'],
         ]);
+
+        //return json_encode($data); 
 
         $response = $this->apiService->put("/rolmenu/{$idrol}/{$idmenu}", $data);
 
