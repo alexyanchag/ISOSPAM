@@ -34,9 +34,9 @@ class LoginController extends Controller
 
     public function selectRole(Request $request)
     {
-        $idrol = $request->input('idrol');
+        $id = $request->input('id');
         $roles = session('roles', []);
-        $selected = collect($roles)->firstWhere('idrol', $idrol);
+        $selected = collect($roles)->firstWhere('id', $id);
         if ($selected) {
             session(['active_role' => $selected]);
         }

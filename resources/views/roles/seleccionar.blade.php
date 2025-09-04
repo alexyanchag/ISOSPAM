@@ -14,10 +14,10 @@
         <form method="POST" action="{{ url('roles/seleccionar') }}">
             @csrf
             <div class="form-group">
-                <label for="idrol">Rol</label>
-                <select name="idrol" id="idrol" class="form-control" required>
+                <label for="id">Rol</label>
+                <select name="id" id="id" class="form-control" required>
                     @foreach(session('roles', []) as $rol)
-                        <option value="{{ $rol['idrol'] }}">{{ $rol['nombrerol'] ?? $rol['idrol'] }}</option>
+                        <option value="{{ $rol['id'] }}">{{ $rol['nombrerol'] ?? $rol['id'] }}</option>
                     @endforeach
                 </select>
             </div>
