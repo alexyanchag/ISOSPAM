@@ -32,6 +32,18 @@ class LoginController extends Controller
         return back()->withErrors(['username' => 'Credenciales incorrectas'])->withInput();
     }
 
+    public function selectRole(Request $request)
+    {
+        $idrol = $request->input('idrol');
+        $roles = session('roles', []);
+        $selected = collect($roles)->firstWhere('idrol', $idrol);
+        if ($selected) {
+            session(['active_role' => $selected]);
+        }
+
+        return redirect('/');
+    }
+
     public function logout()
     {
         Session::flush();
