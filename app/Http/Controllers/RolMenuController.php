@@ -11,12 +11,19 @@ class RolMenuController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $response = $this->apiService->get('/rolmenu');
+        $roleId = $request->query('idrol');
+        $query = $roleId ? ['idrol' => $roleId] : [];
+        $response = $this->apiService->get('/rolmenu', $query);
         $items = $response->successful() ? $response->json() : [];
+        if ($roleId) {
+            $items = array_filter($items, fn($item) => ($item['idrol'] ?? null) == $roleId);
+        }
         return view('rolmenu.index', [
             'items' => $items,
+            'roles' => $this->getRoles(),
+            'selectedRole' => $roleId,
         ]);
     }
 
