@@ -28,7 +28,9 @@
     @if ($hasChildren)
         <li class="nav-item has-treeview">
             <a href="{{ $href }}" class="nav-link">
-                <i class="nav-icon {{ $icon }}"></i>
+                @if($icon)
+                    <i class="nav-icon {{ $icon }}"></i>
+                @endif
                 <p>
                     {{ $menu->opcion }}
                     <i class="right fas fa-angle-left"></i>
@@ -41,7 +43,9 @@
     @else
         <li class="nav-item">
             <a href="{{ $href }}" class="nav-link">
-                <i class="nav-icon {{ $icon }}"></i>
+                @if($icon)
+                    <i class="nav-icon {{ $icon }}"></i>
+                @endif
                 <p>{{ $menu->opcion }}</p>
             </a>
         </li>

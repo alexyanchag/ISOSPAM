@@ -23,9 +23,23 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto align-items-center">
+                @if(session('roles'))
+                    <li class="nav-item">
+                        <form id="role-switcher" method="POST" action="{{ url('roles/seleccionar') }}" class="mb-0">
+                            @csrf
+                            <select name="id" class="form-control form-control-sm" onchange="this.form.submit()">
+                                @foreach(session('roles', []) as $rol)
+                                    <option value="{{ $rol['id'] }}" {{ session('active_role.id') == $rol['id'] ? 'selected' : '' }}>
+                                        {{ $rol['nombrerol'] ?? $rol['id'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </li>
+                @endif
                 @if(session('user'))
-                    <li class="nav-item"><a class="btn btn-xs btn-primary" href="{{ url('/logout') }}">Cerrar sesión</a></li>
+                    <li class="nav-item ml-2"><a class="btn btn-xs btn-primary" href="{{ url('/logout') }}">Cerrar sesión</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
                 @endif
