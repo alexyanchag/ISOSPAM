@@ -27,9 +27,7 @@
                                     <strong>{{ $rol['nombrerol'] ?? '' }}</strong>
                                     @if(!empty($rol['menu']))
                                         <ul class="ml-3 mt-1">
-                                            @foreach($rol['menu'] as $menu)
-                                                <li>{{ $menu['opcion'] ?? '' }}</li>
-                                            @endforeach
+                                            <x-menu-tree :menus="$rol['menu']" />
                                         </ul>
                                     @endif
                                 </div>
