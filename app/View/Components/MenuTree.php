@@ -30,7 +30,17 @@ class MenuTree extends Component
      */
     public function __construct(iterable $menus, $parentId = null)
     {
-        $this->menus = collect($menus)->map(fn ($item) => (object) $item);
+        $this->menus = collect($menus)->map(function ($item) {
+            $item = (array) $item;
+
+            return (object) [
+                'id' => $item['id'] ?? $item['idmenu'] ?? null,
+                'opcion' => $item['opcion'] ?? $item['opcion_menu'] ?? null,
+                'url' => $item['url'] ?? $item['url_menu'] ?? null,
+                'icono' => $item['icono'] ?? $item['icono_menu'] ?? null,
+                'idmenupadre' => $item['idmenupadre'] ?? $item['idmenu_padre'] ?? null,
+            ];
+        });
         $this->parentId = $parentId;
     }
 
