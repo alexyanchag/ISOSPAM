@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MenuController extends Controller
 {
@@ -26,7 +27,7 @@ class MenuController extends Controller
             'url' => ['nullable', 'string'],
             'opcion' => ['required', 'string'],
             'icono' => ['nullable', 'string'],
-            'idmenupadre' => ['nullable', 'integer', 'exists:menu,id'],
+            'idmenupadre' => ['nullable', 'integer', Rule::exists('menu', 'id')->connection('reportes')],
             'activo' => ['nullable', 'boolean'],
         ]);
         $data['activo'] = $request->boolean('activo');
@@ -50,7 +51,7 @@ class MenuController extends Controller
             'url' => ['nullable', 'string'],
             'opcion' => ['required', 'string'],
             'icono' => ['nullable', 'string'],
-            'idmenupadre' => ['nullable', 'integer', 'exists:menu,id'],
+            'idmenupadre' => ['nullable', 'integer', Rule::exists('menu', 'id')->connection('reportes')],
             'activo' => ['nullable', 'boolean'],
         ]);
         $data['activo'] = $request->boolean('activo');
