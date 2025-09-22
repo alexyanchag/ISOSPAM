@@ -30,6 +30,7 @@ class EconomiaVentaAjaxController extends Controller
             'vendido_a' => ['required', 'string'],
             'destino' => ['required', 'string'],
             'precio' => ['required', 'numeric'],
+            'cantidad' => ['required', 'integer'],
             'unidad_venta_id' => ['required', 'integer'],
             'captura_id' => ['required', 'integer'],
         ]);
@@ -43,6 +44,7 @@ class EconomiaVentaAjaxController extends Controller
             'vendido_a' => ['required', 'string'],
             'destino' => ['required', 'string'],
             'precio' => ['required', 'numeric'],
+            'cantidad' => ['required', 'integer'],
             'unidad_venta_id' => ['required', 'integer'],
             'captura_id' => ['required', 'integer'],
         ]);

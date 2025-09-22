@@ -794,6 +794,10 @@
                                         <input type="number" step="any" id="precio" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
+                                        <label>Cantidad</label>
+                                        <input type="number" step="1" min="0" id="cantidad-venta" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         <label>Unidad de venta</label>
                                         <select id="unidad-venta-id" class="form-control">
                                             <option value="">Seleccione...</option>
@@ -1884,6 +1888,7 @@
                     $('#vendido-a').val(ev?.vendido_a || '');
                     $('#destino').val(ev?.destino || '');
                     $('#precio').val(ev?.precio || '');
+                    $('#cantidad-venta').val(ev?.cantidad || '');
                     return cargarUnidadesVenta(ev?.unidad_venta_id || '');
                 })
                 .catch(err => {
@@ -1892,6 +1897,7 @@
                     $('#vendido-a').val('');
                     $('#destino').val('');
                     $('#precio').val('');
+                    $('#cantidad-venta').val('');
                     return cargarUnidadesVenta('');
                 });
         }
@@ -2292,6 +2298,7 @@
             $('#vendido-a').val('');
             $('#destino').val('');
             $('#precio').val('');
+            $('#cantidad-venta').val('');
             $('#unidad-venta-id').val('');
 
             $('#datos-biologicos-table tbody').empty();
@@ -2721,6 +2728,7 @@
                     vendido_a: $('#vendido-a').val(),
                     destino: $('#destino').val(),
                     precio: $('#precio').val(),
+                    cantidad: $('#cantidad-venta').val(),
                     unidad_venta_id: $('#unidad-venta-id').val(),
                     captura_id: capturaId
                 };
