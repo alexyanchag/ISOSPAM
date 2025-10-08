@@ -258,3 +258,4 @@ Route::get('/api/sitios', [ApiProxyController::class, 'getSitios'])->name('api.s
 Route::get('/api/personas', [ApiProxyController::class, 'getPersonas'])->name('api.personas');
 Route::get('/api/personas/{id}', [ApiProxyController::class, 'getPersona'])->name('api.personas.show');
 Route::get('/api/organizacion-pesquera', [ApiProxyController::class, 'getOrganizacionesPesquera'])->name('api.organizacion-pesquera');
+Route::view('/powerbi/reporte', '/powerbi/reporte')->name('reporte');
